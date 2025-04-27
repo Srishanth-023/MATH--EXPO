@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request, jsonify
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
 
 #FOR ALGEBRA----------------------------------------------------------------------------------------------------------------------------
 from flask import Flask, render_template, request
@@ -21,6 +24,18 @@ transformations = standard_transformations + (implicit_multiplication,)
 
 
 app = Flask(__name__)
+
+# LOAD ENV-VARIABLE FROM .env file
+load_dotenv()
+
+# GETTING API KEY
+api_key = os.getenv("API_KEY")
+genai.configure(api_key=api_key)
+
+#LOADING MODEL
+model = genai.GenerativeModel("gemini-1.5-pro")
+chat = model.start_chat(history=[])
+
 
 @app.route('/')
 def home():
@@ -66,6 +81,16 @@ def about():
 def contact():
     return render_template('contact.html')
 
+@app.route('/chat')
+def chat_page():
+    return render_template('chat.html')
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    user_message = request.json['message']
+    response = chat.send_message(user_message)
+    bot_message = response.text
+    return jsonify({'response': bot_message})
 
 #---------------------------------------------------------- ALGEBRA ROUTES START------------------------------------------------------------------
 

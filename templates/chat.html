@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Gemini AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-purple: #8a2be2;
+            --neon-pink: #ff2d75;
+            --deep-space: #0a0e17;
+            --cosmic-purple: #3d1a68;
+            --void-black: #050510;
+            --starlight: #e0e0e8;
+            --plasma: #ff4d79;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void-black);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--starlight);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Cosmic Background Animation */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, var(--deep-space) 0%, var(--void-black) 100%);
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--opacity); transform: scale(1); }
+        }
+
+        /* Nebula Animation */
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            animation: drift var(--duration) infinite linear;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(var(--tx), var(--ty)) rotate(360deg); }
+        }
+
+        .chat-container {
+            background: rgba(10, 14, 23, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5),
+                        0 0 60px rgba(15, 240, 252, 0.3),
+                        inset 0 0 10px rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 800px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                        var(--neon-blue), 
+                        var(--neon-purple), 
+                        var(--neon-pink));
+            z-index: -1;
+            border-radius: 22px;
+            animation: borderGlow 8s linear infinite;
+            background-size: 400%;
+            opacity: 0.7;
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .chat-header {
+            background: linear-gradient(to right, 
+                        rgba(61, 26, 104, 0.8), 
+                        rgba(10, 14, 23, 0.9));
+            color: var(--neon-blue);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, 
+                        transparent, 
+                        var(--neon-blue), 
+                        var(--neon-pink), 
+                        transparent);
+            animation: headerUnderline 3s infinite linear;
+        }
+
+        @keyframes headerUnderline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .chat-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--neon-blue),
+                         0 0 20px rgba(15, 240, 252, 0.5);
+            background: linear-gradient(to right, 
+                        var(--neon-blue), 
+                        var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px var(--neon-blue); }
+            100% { text-shadow: 0 0 20px var(--neon-pink); }
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-controls button {
+            background: rgba(15, 240, 252, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 0 10px rgba(15, 240, 252, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-controls button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent,
+                transparent,
+                transparent,
+                var(--neon-blue)
+            );
+            transform: rotate(30deg);
+            transition: all 0.6s ease;
+        }
+
+        .chat-controls button:hover {
+            background: rgba(15, 240, 252, 0.2);
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 0 20px var(--neon-blue);
+            color: white;
+        }
+
+        .chat-controls button:hover::before {
+            animation: buttonGlow 1.5s linear infinite;
+        }
+
+        @keyframes buttonGlow {
+            0% { transform: rotate(30deg) translate(-30%, -30%); }
+            100% { transform: rotate(30deg) translate(30%, 30%); }
+        }
+
+        #chat-box {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: rgba(5, 5, 16, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* Holographic Grid Effect */
+        #chat-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(15, 240, 252, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 240, 252, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 18px 22px;
+            border-radius: 20px;
+            line-height: 1.5;
+            position: relative;
+            word-wrap: break-word;
+            animation: messageAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform-origin: bottom;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid transparent;
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes messageAppear {
+            0% { 
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, 
+                        rgba(15, 240, 252, 0.15), 
+                        rgba(138, 43, 226, 0.25));
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            border: 1px solid rgba(15, 240, 252, 0.3);
+            animation-delay: 0.1s;
+        }
+
+        .user-message::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(15, 240, 252, 0.1),
+                transparent 70%
+            );
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .bot-message {
+            background: linear-gradient(135deg, 
+                        rgba(61, 26, 104, 0.3), 
+                        rgba(10, 14, 23, 0.5));
+            color: var(--starlight);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .bot-message::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(
+                45deg,
+                var(--neon-blue),
+                var(--neon-purple),
+                var(--neon-pink),
+                var(--neon-blue)
+            );
+            z-index: -1;
+            border-radius: 25px;
+            filter: blur(10px);
+            opacity: 0.3;
+            animation: botMessageGlow 6s linear infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes botMessageGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .message-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 8px;
+            text-align: right;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            color: var(--neon-blue);
+        }
+
+        .input-area {
+            display: flex;
+            padding: 20px;
+            background: rgba(10, 14, 23, 0.9);
+            border-top: 1px solid rgba(138, 43, 226, 0.3);
+            gap: 15px;
+            position: relative;
+        }
+
+        .input-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, 
+                        transparent, 
+                        var(--neon-blue), 
+                        var(--neon-pink), 
+                        transparent);
+            animation: inputUnderline 3s infinite linear;
+        }
+
+        @keyframes inputUnderline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(5, 5, 16, 0.7);
+            color: var(--starlight);
+            font-family: 'Rajdhani', sans-serif;
+            box-shadow: inset 0 0 10px rgba(138, 43, 226, 0.2);
+        }
+
+        #user-input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(15, 240, 252, 0.5),
+                        inset 0 0 10px rgba(15, 240, 252, 0.2);
+        }
+
+        #user-input::placeholder {
+            color: rgba(224, 224, 232, 0.5);
+            font-style: italic;
+        }
+
+        #send-button {
+            background: linear-gradient(135deg, 
+                        var(--neon-blue), 
+                        var(--neon-purple));
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 0 20px rgba(15, 240, 252, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: sendButtonPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes sendButtonPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(15, 240, 252, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(15, 240, 252, 0.8); }
+        }
+
+        #send-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent,
+                transparent,
+                transparent,
+                white
+            );
+            transform: rotate(30deg);
+            animation: sendButtonGlow 3s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes sendButtonGlow {
+            0% { transform: rotate(30deg) translate(-30%, -30%); }
+            100% { transform: rotate(30deg) translate(30%, 30%); }
+        }
+
+        #send-button:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-self: flex-start;
+            padding: 15px 25px;
+            background: rgba(61, 26, 104, 0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 5px;
+            animation: typingPulse 1.5s infinite ease-in-out;
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes typingPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.02); opacity: 1; }
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+            border-radius: 50%;
+            margin: 0 4px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            margin: auto;
+            padding: 30px;
+            color: var(--starlight);
+            max-width: 600px;
+            animation: welcomeFadeIn 1.5s ease-out forwards;
+            background: rgba(10, 14, 23, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes welcomeFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .welcome-message h3 {
+            color: transparent;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, 
+                        var(--neon-blue), 
+                        var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 10px rgba(15, 240, 252, 0.3);
+            animation: titleGradient 5s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes titleGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .welcome-message p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Scrollbar Styling */
+        #chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-box::-webkit-scrollbar-track {
+            background: rgba(5, 5, 16, 0.3);
+            border-radius: 10px;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, 
+                        var(--neon-blue), 
+                        var(--neon-purple));
+            border-radius: 10px;
+            border: 1px solid rgba(15, 240, 252, 0.3);
+        }
+
+        #chat-box::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-pink);
+        }
+
+        /* Floating AI Particles */
+        .ai-particle {
+            position: absolute;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: floatParticle linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatParticle {
+            0% { 
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { 
+                transform: translate(var(--tx), var(--ty)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Connection Status Indicator */
+        .connection-status {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            margin-right: 5px;
+            box-shadow: 0 0 5px var(--neon-blue);
+            animation: statusPulse 2s infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 0.5; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cosmic Background -->
+    <div class="cosmic-bg" id="cosmic-bg"></div>
+
+    <!-- Main Chat Container -->
+    <div class="chat-container" style="width: 800px;">
+        <div class="chat-header">
+            <div style="display: flex; flex-direction: column; width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 style="margin: 0;">Math X</h2>
+                    <div class="chat-controls">
+                        <button id="new-chat" title="New Chat">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button id="clear-chat" title="Clear Chat">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
+                    <div class="connection-status" style="display: flex; align-items: center;">
+                        <div class="status-dot" style="width: 10px; height: 10px; background-color: #00ffcc; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite;"></div>
+                        <span style="font-size: 12px;">QUANTUM LINK ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div id="chat-box" style="height: 500px;">
+            <div class="welcome-message">
+                <h3>SYSTEM INITIALIZED</h3>
+                <p>Welcome to Neon Gemini AI interface. Ready for quantum communication.</p>
+                <p>Ask me anything about technology, science, or the cosmos.</p>
+            </div>
+        </div>
+    
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Enter quantum query..." autocomplete="off" style="width: 90%;">
+            <button id="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    
+    <!-- AI Particles Container -->
+    <div id="ai-particles"></div>
+
+    <script>
+        // DOM Elements
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const newChatButton = document.getElementById('new-chat');
+        const clearChatButton = document.getElementById('clear-chat');
+        const cosmicBg = document.getElementById('cosmic-bg');
+        const aiParticles = document.getElementById('ai-particles');
+        
+        // State variables
+        let currentChatId = Date.now().toString();
+        let isWaitingForResponse = false;
+
+        // Initialize cosmic background
+        function initCosmicBackground() {
+            // Create stars
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.setProperty('--opacity', Math.random());
+                star.style.setProperty('--duration', `${Math.random() * 5 + 3}s`);
+                cosmicBg.appendChild(star);
+            }
+
+            // Create nebulas
+            for (let i = 0; i < 5; i++) {
+                const nebula = document.createElement('div');
+                nebula.classList.add('nebula');
+                nebula.style.left = `${Math.random() * 100}%`;
+                nebula.style.top = `${Math.random() * 100}%`;
+                nebula.style.width = `${Math.random() * 300 + 100}px`;
+                nebula.style.height = nebula.style.width;
+                nebula.style.background = `radial-gradient(circle, 
+                    rgba(${Math.random() * 155 + 100}, ${Math.random() * 100}, ${Math.random() * 155 + 100}, 0.8), 
+                    transparent 70%)`;
+                nebula.style.setProperty('--duration', `${Math.random() * 60 + 30}s`);
+                nebula.style.setProperty('--tx', `${Math.random() * 200 - 100}px`);
+                nebula.style.setProperty('--ty', `${Math.random() * 200 - 100}px`);
+                cosmicBg.appendChild(nebula);
+            }
+        }
+
+        // Create AI particles
+        function createAIParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('ai-particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.width = `${Math.random() * 4 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.setProperty('--tx', `${Math.random() * 200 - 100}px`);
+                particle.style.setProperty('--ty', `${Math.random() * 200 - 100}px`);
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                aiParticles.appendChild(particle);
+            }
+        }
+
+        // Get current time in HH:MM format
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typingElement = document.createElement('div');
+            typingElement.className = 'typing-indicator';
+            typingElement.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatBox.appendChild(typingElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return typingElement;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator(typingElement) {
+            if (typingElement && typingElement.parentNode) {
+                typingElement.remove();
+            }
+        }
+
+        // Append message to chat with exotic effects
+        function appendMessage(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `${sender}-message message`;
+            
+            const time = getCurrentTime();
+            messageElement.innerHTML = `
+                <div class="message-content">${message}</div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            // Add special effect for AI messages
+            if (sender === 'bot') {
+                const words = message.split(' ');
+                if (words.length > 15) {
+                    messageElement.style.animationDuration = '0.8s';
+                }
+                
+                // Add occasional glitch effect
+                if (Math.random() > 0.8) {
+                    messageElement.style.animationName = 'messageAppear, glitchEffect';
+                    messageElement.style.animationDuration = '0.6s, 0.3s';
+                    messageElement.style.animationDelay = '0s, 0.6s';
+                }
+            }
+            
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Add particle effect for user messages
+            if (sender === 'user') {
+                createMessageParticles(messageElement);
+            }
+        }
+
+        // Create particles for message effects
+        function createMessageParticles(element) {
+            const rect = element.getBoundingClientRect();
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('ai-particle');
+                particle.style.left = `${rect.left + rect.width/2}px`;
+                particle.style.top = `${rect.top}px`;
+                particle.style.width = `${Math.random() * 3 + 1}px`;
+                particle.style.height = particle.style.width;
+                particle.style.backgroundColor = `hsl(${Math.random() * 60 + 180}, 100%, 70%)`;
+                particle.style.setProperty('--tx', `${Math.random() * 100 - 50}px`);
+                particle.style.setProperty('--ty', `${Math.random() * -100 - 50}px`);
+                particle.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                document.body.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+
+        // Clear the chat
+        function clearChat() {
+            // Add disintegration effect
+            const messages = chatBox.querySelectorAll('.message');
+            messages.forEach((msg, i) => {
+                setTimeout(() => {
+                    msg.style.animation = 'messageDisintegrate 0.5s forwards';
+                    setTimeout(() => msg.remove(), 500);
+                }, i * 50);
+            });
+
+            setTimeout(() => {
+                chatBox.innerHTML = `
+                    <div class="welcome-message">
+                        <h3>SYSTEM RESET</h3>
+                        <p>Quantum memory cleared. Ready for new transmission.</p>
+                    </div>
+                `;
+                currentChatId = Date.now().toString();
+            }, messages.length * 50 + 500);
+        }
+
+        // Start new chat
+        function startNewChat() {
+            // Add transition effect
+            chatBox.style.animation = 'chatFadeOut 0.5s forwards';
+            
+            setTimeout(() => {
+                chatBox.innerHTML = `
+                    <div class="welcome-message">
+                        <h3>NEW QUANTUM CHANNEL OPENED</h3>
+                        <p>Begin new conversation with Neon Gemini AI.</p>
+                    </div>
+                `;
+                chatBox.style.animation = 'chatFadeIn 0.5s forwards';
+                currentChatId = Date.now().toString();
+            }, 500);
+        }
+
+        // Send message to server
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (message === '' || isWaitingForResponse) return;
+
+            // Add sending animation
+            sendButton.style.animation = 'sendButtonClick 0.5s ease';
+            setTimeout(() => {
+                sendButton.style.animation = 'sendButtonPulse 2s infinite ease-in-out';
+            }, 500);
+
+            // Append user message
+            appendMessage(message, 'user');
+            userInput.value = '';
+            
+            // Show typing indicator
+            const typingElement = showTypingIndicator();
+            isWaitingForResponse = true;
+
+            try {
+                // Send message to server
+                const response = await fetch('/send_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Chat-ID': currentChatId
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Quantum link unstable');
+                }
+
+                const data = await response.json();
+                
+                // Remove welcome message if it's the first response
+                const welcomeMessage = chatBox.querySelector('.welcome-message');
+                if (welcomeMessage) {
+                    welcomeMessage.style.animation = 'welcomeFadeOut 0.5s forwards';
+                    setTimeout(() => welcomeMessage.remove(), 500);
+                }
+
+                // Append bot response with random delay for effect
+                setTimeout(() => {
+                    appendMessage(data.response, 'bot');
+                }, Math.random() * 500 + 300);
+            } catch (error) {
+                console.error('Quantum error:', error);
+                appendMessage("ERROR: Quantum communication link failed. Attempting to reconnect...", 'bot');
+            } finally {
+                hideTypingIndicator(typingElement);
+                isWaitingForResponse = false;
+            }
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        newChatButton.addEventListener('click', startNewChat);
+        clearChatButton.addEventListener('click', clearChat);
+
+        // Initialize
+        window.addEventListener('load', () => {
+            initCosmicBackground();
+            createAIParticles();
+            userInput.focus();
+            
+            // Add keyframe animations dynamically
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes messageDisintegrate {
+                    to { opacity: 0; transform: translateY(20px) scale(0.5); }
+                }
+                @keyframes chatFadeOut {
+                    to { opacity: 0; transform: scale(0.95); }
+                }
+                @keyframes chatFadeIn {
+                    from { opacity: 0; transform: scale(0.95); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                @keyframes welcomeFadeOut {
+                    to { opacity: 0; transform: scale(0.9); }
+                }
+                @keyframes sendButtonClick {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(0.9); }
+                    100% { transform: scale(1); }
+                }
+                @keyframes glitchEffect {
+                    0% { transform: translate(0); }
+                    20% { transform: translate(-3px, 3px); }
+                    40% { transform: translate(-3px, -3px); }
+                    60% { transform: translate(3px, 3px); }
+                    80% { transform: translate(3px, -3px); }
+                    100% { transform: translate(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
