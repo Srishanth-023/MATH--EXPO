@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D Scroll Carousel Centered</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='navigation.css') }}">
+
+  {% include 'navigation.html' %}
+
+  <style>
+body {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;         /* full screen width */
+    max-width: 1400px;   /* allow it bigger */
+    overflow: hidden;
+}
+
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    padding: 40px 20px;
+    perspective: 1000px;
+    scroll-behavior: smooth;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+}
+
+.carousel-item {
+    flex: 0 0 auto;
+    width: 250px;
+    background: linear-gradient(to bottom, #cacaca, #ffffff, #343242);
+    color: black;
+    border-radius: 12px;
+    padding: 100px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    scroll-snap-align: center;
+    text-align: center;
+    transform: rotateY(0deg);
+    transition: transform 0.5s, background 0.3s;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+}
+
+.carousel-item:hover {
+    transform: rotateY(10deg) translateZ(30px);
+    background: #f0f0f0;
+}
+
+.carousel-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.carousel-button {
+    background: rgba(141, 140, 140, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    pointer-events: all;
+    transition: background 0.3s;
+}
+
+.carousel-button:hover {
+    background: white;
+}
+  </style>
+</head>
+<body>
+
+  <div class="carousel-container">
+    <div class="carousel-track" id="carousel">
+      <button class="carousel-item" onclick="location.href='/basic'">✨<br>Basic</button>
+      <button class="carousel-item" onclick="location.href='/algebra'">🧮<br>Algebra</button>
+      <button class="carousel-item" onclick="location.href='/trigonometry'">📐<br>Trigonometry</button>
+      <button class="carousel-item" onclick="location.href='/calculus'">∑∫<br>Calculus</button>
+      <button class="carousel-item" onclick="location.href='/statistics'">📊<br>Statistics</button>
+      <button class="carousel-item" onclick="location.href='/matrices'">🧩<br>Matrices</button>
+      <button class="carousel-item" onclick="location.href='/characters'">🔤<br>Characters</button>
+    </div>
+  </div>
+  
+
+    <div class="carousel-buttons">
+      <button class="carousel-button" onclick="scrollLeft()">&#10094;</button>
+      <button class="carousel-button" onclick="scrollRight()">&#10095;</button>
+    </div>
+  </div>
+
+  <script>
+    const carousel = document.getElementById('carousel');
+
+    function scrollLeft() {
+      carousel.scrollBy({ left: -270, behavior: 'smooth' });
+    }
+
+    function scrollRight() {
+      carousel.scrollBy({ left: 270, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

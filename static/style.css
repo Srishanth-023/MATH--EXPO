@@ -1,0 +1,153 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Background Animation */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* important for smooth scrolling */
+    background-size: cover; /* make it cover the entire screen */
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* Overlay Effect */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: flow 30s linear infinite;
+    z-index: 1;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    z-index: 5;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Text Animation */
+.content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: fadeInDown 1s ease forwards;
+}
+
+.content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    animation: fadeInUp 1.5s ease forwards;
+}
+
+/* Button */
+.btn {
+    background-color: #6A5ACD;
+    padding: 15px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background-color: #836FFF;
+}
+
+/* Keyframes for Background Flow */
+@keyframes flow {
+    0% {
+        transform: translate(-25%, -25%) scale(1);
+    }
+    50% {
+        transform: translate(-30%, -30%) scale(1.1);
+    }
+    100% {
+        transform: translate(-25%, -25%) scale(1);
+    }
+}
+
+/* Keyframes for Text Fade Animations */
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Floating Symbols */
+.floating-symbols {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.floating-symbols span {
+    position: absolute;
+    font-size: 10rem;
+    color: rgba(255, 255, 255, 0.1);
+    animation: floatSymbols 15s linear infinite;
+}
+
+/* Different starting positions */
+.floating-symbols span:nth-child(1) { top: 10%; left: 20%; animation-delay: 5s;}
+.floating-symbols span:nth-child(2) { top: 30%; left: 80%; animation-delay: 4.5s;}
+.floating-symbols span:nth-child(3) { top: 50%; left: 30%; animation-delay: 2.5s;}
+.floating-symbols span:nth-child(4) { top: 70%; left: 10%; animation-delay: 6.5s;}
+.floating-symbols span:nth-child(5) { top: 20%; left: 60%; animation-delay: 3s;}
+.floating-symbols span:nth-child(6) { top: 78%; left: 30%; animation-delay: 2s;}
+.floating-symbols span:nth-child(7) { top: 75%; left: 60%; animation-delay: 4.8s;}
+.floating-symbols span:nth-child(8) { top: 25%; left: 90%; animation-delay: 2.8s;}
+.floating-symbols span:nth-child(9) { top: 40%; left: 10%; animation-delay: 3.5s;}
+.floating-symbols span:nth-child(10) { top: 65%; left: 90%; animation-delay: 4.75s;}
+
+
+/* Floating Animation */
+@keyframes floatSymbols {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+    50% { transform: translateY(-100vh) rotate(180deg); opacity: 1; }
+    100% { transform: translateY(0) rotate(360deg); opacity: 0.5; }
+}
+
+
+

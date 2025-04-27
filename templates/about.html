@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navigation.css') }}">
+
+    <title>About Us | MATH X</title>
+    <style>
+    body {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* important for smooth scrolling */
+    background-size: cover; /* make it cover the entire screen */
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    }
+
+    
+        header {
+            background: #0f0f1f;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            box-shadow: 0 0 10px #000;
+        }
+        .container h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .container p {
+            line-height: 1.8;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+
+        {% include 'navigation.html' %}
+
+        <h1 style="font-size: 50px; margin-top: 70px; color: white; text-align: center;">About Math-X</h1>
+
+    </header>
+
+    <div class="container">
+        <h2>About MATH X</h2>
+        <p>
+            Welcome to <strong>MATH X</strong> — your ultimate destination for solving math problems easily and effectively.
+            Our platform provides a wide range of calculators and tools covering everything from Basic Arithmetic, Algebra,
+            Trigonometry, Calculus, Statistics, Matrices, and more.
+        </p>
+        <p>
+            Whether you're a student, a teacher, or a math enthusiast, our goal is to make learning and problem-solving as simple
+            and intuitive as possible. 
+            We are committed to building an interactive, user-friendly experience where you can explore math in a way that's easy to understand.
+        </p>
+        <p>
+            Thank you for choosing <strong>MATH X</strong>! Stay tuned for more exciting features and updates.
+        </p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Basic Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='navigation.css') }}">
+  
+  {% include 'navigation.html' %}
+</head>
+  <style>
+body {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* important for smooth scrolling */
+    background-size: cover; /* make it cover the entire screen */
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    }
+    .calculator {
+      margin: 80px auto;
+      max-width: 800px;
+      background: #1e1e2f;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    input[type="text"] {
+      width: 90%;
+      padding: 10px;
+      font-size: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: none;
+      text-align: right;
+      background: #2c2c3e;
+      color: white;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #3a3a5a;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #5c5c7d;
+    }
+    .special {
+      background: #4caf50;
+    }
+    .special:hover {
+      background: #66bb6a;
+    }
+  </style>
+</head>
+<body>
+
+    <h1 style="font-size: 50px; margin-top: 120px; color: white; text-align: center;">Basic Calculator</h1>
+
+
+<div class="calculator">
+  <input type="text" id="display" readonly>
+  <div class="buttons">
+    <button onclick="append('DEG')">DEG</button>
+    <button onclick="append('x')">x</button>
+    <button onclick="append('y')">y</button>
+    <button onclick="append('(')">(</button>
+    <button onclick="append(')')">)</button>
+
+    <button onclick="append('%')">%</button>
+    <button onclick="append('π')">π</button>
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+
+    <button onclick="append('/')">÷</button>
+    <button onclick="append('log(')">log</button>
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+
+    <button onclick="append('*')">×</button>
+    <button onclick="append('√(')">√</button>
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+
+    <button onclick="append('-')">−</button>
+    <button onclick="append('EXP')">EXP</button>
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button onclick="append('=')">=</button>
+
+    <button onclick="append('+')">+</button>
+    <button onclick="append('>')">></button>
+    <button onclick="append('<')"><</button>
+    <button onclick="clearDisplay()" class="special">CLR</button>
+    <button onclick="calculate()" class="special">➤</button>
+  </div>
+</div>
+
+<script>
+let expression = "";
+
+function append(value) {
+  if (value === "=") {
+    calculate();
+  } else if (value === "π") {
+    expression += Math.PI;
+    updateDisplay();
+  } else if (value === "√(") {
+    expression += "Math.sqrt(";
+    updateDisplay();
+  } else if (value === "log(") {
+    expression += "Math.log10(";
+    updateDisplay();
+  } else if (value === "EXP") {
+    expression += "e";
+    updateDisplay();
+  } else if (value === "DEG") {
+    // DEG mode toggle could be implemented if needed
+    alert('Degree mode not yet implemented.');
+  } else {
+    expression += value;
+    updateDisplay();
+  }
+}
+
+function updateDisplay() {
+  document.getElementById('display').value = expression;
+}
+
+function clearDisplay() {
+  expression = "";
+  updateDisplay();
+}
+
+function calculate() {
+  try {
+    let result = eval(expression.replace(/e/g, "Math.exp(1)"));
+    if (result === true || result === false) {
+      document.getElementById('display').value = result ? "True" : "False";
+    } else {
+      document.getElementById('display').value = result;
+      expression = result.toString(); // allow chaining calculations
+    }
+  } catch (error) {
+    document.getElementById('display').value = "Error";
+    expression = "";
+  }
+}
+</script>
+
+</body>
+</html>
