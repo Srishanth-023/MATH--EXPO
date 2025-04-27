@@ -54,9 +54,9 @@ def statistics():
 def matrices():
     return render_template('matrices.html')
 
-@app.route('/characters')
-def characters():
-    return render_template('characters.html')
+@app.route('/mensuration')
+def mensuration():
+    return render_template('mensuration.html')
 
 @app.route('/about')
 def about():
