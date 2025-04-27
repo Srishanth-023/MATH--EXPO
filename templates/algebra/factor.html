@@ -1,0 +1,83 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0"><i class="fas fa-puzzle-piece me-2"></i>Polynomial Factoring</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" id="factorForm">
+                <div class="mb-3">
+                    <label for="expression" class="form-label">Enter Polynomial:</label>
+                    <input type="text" class="form-control" id="expression" name="expression"
+                           value="{{ request.form.expression if request.method == 'POST' else '' }}"
+                           placeholder="e.g., x^2 - 4 or 2x^3 + 3x^2" required>
+                    <div class="form-text">Use 'x' as variable and ^ for exponents</div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-cogs me-1"></i> Factor
+                </button>
+            </form>
+
+            {% if result %}
+            <div class="result-box mt-4 p-3 bg-light rounded border-start border-4 border-success">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-success">Result:</h5>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('resultContent')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <div id="resultContent" class="math-result mt-2 fs-5">
+                    {{ result }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3 d-flex align-items-center">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <div>{{ error }}</div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-light">
+            <h5 class="h6 mb-2">Examples:</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn" 
+                        onclick="fillExample('x^2 - 4')">x² - 4</button>
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn"
+                        onclick="fillExample('x^3 - 2x^2 + x')">x³ - 2x² + x</button>
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn"
+                        onclick="fillExample('2x^2 + 5x + 3')">2x² + 5x + 3</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function fillExample(example) {
+    document.getElementById('expression').value = example;
+    // Optional: focus the input field after inserting example
+    document.getElementById('expression').focus();
+}
+
+function copyToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+    const range = document.createRange();
+    range.selectNode(element);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    
+    // Optional: Show a brief notification
+    const copyBtn = document.querySelector('[onclick="copyToClipboard(\'' + elementId + '\')"]');
+    const originalHtml = copyBtn.innerHTML;
+    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => {
+        copyBtn.innerHTML = originalHtml;
+    }, 2000);
+}
+</script>
+{% endblock %}

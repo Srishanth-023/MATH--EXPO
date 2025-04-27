@@ -1,0 +1,84 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0"><i class="fas fa-divide me-2"></i> Rational Expression Simplifier</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" id="rationalForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="numerator" class="form-label">Numerator:</label>
+                        <input type="text" class="form-control" id="numerator" name="numerator" 
+                               value="{{ numerator_value }}" placeholder="e.g., x^2 - 1" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="denominator" class="form-label">Denominator:</label>
+                        <input type="text" class="form-control" id="denominator" name="denominator"
+                               value="{{ denominator_value }}" placeholder="e.g., x - 1" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-simplify me-1"></i> Simplify
+                </button>
+                <button type="button" class="btn btn-outline-secondary ms-2" id="clearBtn">Clear</button>
+            </form>
+
+            {% if result %}
+            <div class="result-box mt-4 p-3 bg-light rounded">
+                <h5>Simplified Form:</h5>
+                <div class="math-result">{{ result }}</div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">
+                <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-light">
+            <h5 class="h6 mb-2">Examples:</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn" 
+                        onclick="fillExample('x^2 - 1', 'x - 1')">(x²-1)/(x-1)</button>
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn"
+                        onclick="fillExample('x^3 - 8', 'x - 2')">(x³-8)/(x-2)</button>
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn"
+                        onclick="fillExample('x^2 + 2x + 1', 'x + 1')">(x²+2x+1)/(x+1)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .math-result {
+        font-family: "Cambria Math", serif;
+        font-size: 1.2rem;
+        color: #d63384;
+    }
+    .example-btn {
+        transition: all 0.2s;
+    }
+    .example-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+</style>
+
+<script>
+function fillExample(numerator, denominator) {
+    document.getElementById('numerator').value = numerator;
+    document.getElementById('denominator').value = denominator;
+    document.getElementById('numerator').focus();
+}
+
+document.getElementById('clearBtn').addEventListener('click', function() {
+    document.getElementById('numerator').value = '';
+    document.getElementById('denominator').value = '';
+    document.getElementById('numerator').focus();
+});
+</script>
+{% endblock %}

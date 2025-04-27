@@ -1,0 +1,53 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0"><i class="fas fa-equals me-2"></i> Equation Solver</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" id="equationForm">
+                <div class="mb-3">
+                    <label for="equation" class="form-label">Enter Equation:</label>
+                    <input type="text" class="form-control" id="equation" name="equation"
+                           value="{{ equation_value }}" placeholder="e.g., x^2 - 4 = 0" required>
+                    <div class="form-text">Use '=' sign to separate both sides of the equation</div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-calculator me-1"></i> Solve
+                </button>
+            </form>
+
+            {% if result %}
+            <div class="result-box mt-4 p-3 bg-light rounded">
+                <h5>Solution:</h5>
+                <div class="math-result">{{ result }}</div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">
+                <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-light">
+            <h5 class="h6 mb-2">Examples:</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn"
+                        onclick="fillExample('2*x + 5 = 13')">2x + 5 = 13</button>
+                <button type="button" class="btn btn-sm btn-outline-primary example-btn"
+                        onclick="fillExample('x^2 + 3*x - 4 = 0')">x² + 3x - 4 = 0</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function fillExample(equation) {
+    document.getElementById('equation').value = equation;
+    document.getElementById('equation').focus();
+}
+</script>
+{% endblock %}

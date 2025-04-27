@@ -1,0 +1,49 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <h2 class="text-center mb-4"><i class="fas fa-list-ol"></i> Arithmetic Sequence Calculator</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="first" class="form-label">First Term (a₁):</label>
+                        <input type="number" step="any" class="form-control" id="first" name="first" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="diff" class="form-label">Common Difference (d):</label>
+                        <input type="number" step="any" class="form-control" id="diff" name="diff" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="n" class="form-label">Term Number (n):</label>
+                        <input type="number" min="1" class="form-control" id="n" name="n" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Find Term</button>
+            </form>
+
+            {% if result is not none %}
+            <div class="result-box mt-4 p-3 bg-light rounded">
+                <h5>Term a<sub>{{ request.form.n }}</sub>:</h5>
+                <div class="math-result fs-4">
+                    {{ result }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="examples mt-4">
+        <h5>Examples:</h5>
+        <ul class="list-group">
+            <li class="list-group-item">a₁=3, d=2, n=5 → 11</li>
+            <li class="list-group-item">a₁=10, d=-1, n=4 → 7</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <h2 class="text-center mb-4"><i class="fas fa-parabola"></i> Quadratic Equation Solver</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST" id="quadraticForm">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="a" class="form-label">Coefficient a:</label>
+                        <input type="number" step="any" class="form-control" id="a" name="a" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="b" class="form-label">Coefficient b:</label>
+                        <input type="number" step="any" class="form-control" id="b" name="b" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="c" class="form-label">Coefficient c:</label>
+                        <input type="number" step="any" class="form-control" id="c" name="c" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Find Roots</button>
+                <button type="button" class="btn btn-outline-secondary ms-2" id="clearBtn">Clear</button>
+            </form>
+
+            {% if result is not none %}
+            <div class="result-box mt-4 p-3 bg-light rounded">
+                <h5>Roots:</h5>
+                <div class="math-result fs-4">
+                    {% if result is iterable and result is not string %}
+                        x = {{ result[0]|round(3) }} or x = {{ result[1]|round(3) }}
+                    {% else %}
+                        {{ result }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="examples mt-4">
+        <h5>Examples:</h5>
+        <div class="d-flex flex-wrap gap-2" id="exampleButtons">
+            <button class="btn btn-example" data-a="1" data-b="0" data-c="-9">
+                x² - 9 = 0 → x = -3 or 3
+            </button>
+            <button class="btn btn-example" data-a="1" data-b="-5" data-c="6">
+                x² - 5x + 6 = 0 → x = 2 or 3
+            </button>
+            <button class="btn btn-example" data-a="2" data-b="-4" data-c="-6">
+                2x² - 4x - 6 = 0 → x = -1 or 3
+            </button>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/quadratic.css') }}">
+<script src="{{ url_for('static', filename='js/quadratic.js') }}" defer></script>
+{% endblock %}

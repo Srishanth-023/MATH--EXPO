@@ -1,0 +1,60 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <h2 class="text-center mb-4"><i class="fas fa-chart-line"></i> Linear Equation Calculator</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST" id="linearForm">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="slope" class="form-label">Slope (m):</label>
+                        <input type="number" step="any" class="form-control" id="slope" name="slope" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="intercept" class="form-label">Y-Intercept (c):</label>
+                        <input type="number" step="any" class="form-control" id="intercept" name="intercept" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="x" class="form-label">x Value:</label>
+                        <input type="number" step="any" class="form-control" id="x" name="x" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Calculate y</button>
+                <button type="button" class="btn btn-outline-secondary ms-2" id="clearBtn">Clear</button>
+            </form>
+
+            {% if result is not none %}
+            <div class="result-box mt-4 p-3 bg-light rounded">
+                <h5>Solution:</h5>
+                <div class="math-result fs-4">
+                    y = {{ request.form.slope }} × {{ request.form.x }} + {{ request.form.intercept }} = {{ result }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="examples mt-4">
+        <h5>Try these examples:</h5>
+        <div class="d-flex flex-wrap gap-2" id="exampleButtons">
+            <button class="btn btn-example" data-m="2" data-c="3" data-x="4">
+                m=2, c=3, x=4 → y=11
+            </button>
+            <button class="btn btn-example" data-m="-1" data-c="0" data-x="5">
+                m=-1, c=0, x=5 → y=-5
+            </button>
+            <button class="btn btn-example" data-m="0.5" data-c="-2" data-x="6">
+                m=0.5, c=-2, x=6 → y=1
+            </button>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/linear_equation.css') }}">
+<script src="{{ url_for('static', filename='js/linear_equation.js') }}" defer></script>
+{% endblock %}

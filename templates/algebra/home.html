@@ -1,0 +1,132 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="hero-section text-center py-5 bg-light rounded-3">
+    <h1 class="display-4 fw-bold mb-4">Algebra Toolkit</h1>
+    <p class="lead fs-4 mb-5">Complete algebra solution with 11 powerful tools</p>
+    
+    <div class="row g-4">
+        <!-- Dynamically generated tool cards -->
+        <div class="col-md-4 col-6">
+            <a href="/algebra/simplify" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-primary mb-3">
+                        <i class="fas fa-bolt fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Simplify</h5>
+                    <p class="card-text small">Simplify complex expressions</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-6">
+            <a href="algebra/solve_equation" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-success mb-3">
+                        <i class="fas fa-equals fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Solve Equations</h5>
+                    <p class="card-text small">Find equation solutions</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-6">
+            <a href="algebra/factor" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-info mb-3">
+                        <i class="fas fa-puzzle-piece fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Factor</h5>
+                    <p class="card-text small">Factor polynomials</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Add all 11 tools following the same pattern -->
+        <div class="col-md-4 col-6">
+            <a href="algebra/function" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-warning mb-3">
+                        <i class="fas fa-function fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Function Evaluator</h5>
+                    <p class="card-text small">Calculate f(x) values</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-6">
+            <a href="algebra/linear" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-danger mb-3">
+                        <i class="fas fa-chart-line fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Linear Equations</h5>
+                    <p class="card-text small">Solve y = mx + b</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-6">
+            <a href="algebra/quadratic" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-primary mb-3">
+                        <i class="fas fa-parabola fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Quadratic Equations</h5>
+                    <p class="card-text small">Solve ax² + bx + c</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-6">
+            <a href="algebra/exponents" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-success mb-3">
+                        <i class="fas fa-superscript fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Exponents</h5>
+                    <p class="card-text small">Calculate powers</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-6">
+            <a href="algebra/radicals" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-info mb-3">
+                        <i class="fas fa-square-root-alt fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Radicals</h5>
+                    <p class="card-text small">Calculate roots</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-6">
+            <a href="algebra/rational" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-warning mb-3">
+                        <i class="fas fa-divide fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Rational Expressions</h5>
+                    <p class="card-text small">Simplify fractions</p>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-md-4 col-6">
+            <a href="algebra/system_equations" class="card tool-card h-100 text-decoration-none glow-hover">
+                <div class="card-body">
+                    <div class="icon-circle bg-primary mb-3">
+                        <i class="fas fa-brackets-curly fs-3"></i>
+                    </div>
+                    <h5 class="card-title">Systems of Equations</h5>
+                    <p class="card-text small">Solve multiple equations</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

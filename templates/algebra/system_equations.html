@@ -1,0 +1,68 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h2><i class="fas fa-equals me-2"></i> System of Equations Solver</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="/system_equations">
+            <div class="mb-3">
+                <label class="form-label">Equation 1:</label>
+                <input type="text" class="form-control equation-input" name="eq1" 
+                       value="{{ eq1_value }}" placeholder="e.g., 2x + 3y = 5" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Equation 2:</label>
+                <input type="text" class="form-control equation-input" name="eq2" 
+                       value="{{ eq2_value }}" placeholder="e.g., x - y = 1" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Equation 3 (optional):</label>
+                <input type="text" class="form-control equation-input" name="eq3" 
+                       value="{{ eq3_value }}" placeholder="e.g., 3x + 2y - z = 4">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-calculator me-1"></i> Solve System
+            </button>
+        </form>
+
+        {% if error %}
+            <div class="alert alert-danger mt-4">{{ error }}</div>
+        {% endif %}
+
+        {% if result %}
+            <div class="mt-4 p-3 result-box">
+                <h5>Solution:</h5>
+                {% if result is string %}
+                    <p>{{ result }}</p>
+                {% else %}
+                    {% for sol in result %}
+                        <p>{{ sol }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="card-footer bg-light">
+        <h6>Examples:</h6>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <button type="button" class="btn btn-sm btn-outline-primary example-btn" 
+                    onclick="fillExample(['2x+3y=5', 'x-y=1', ''])">2x+3y=5</button>
+            <button type="button" class="btn btn-sm btn-outline-primary example-btn"
+                    onclick="fillExample(['x+y+z=6', '2x+y-z=1', 'x+2y+z=8'])">x+y+z=6</button>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+function fillExample(equations) {
+    const inputs = document.querySelectorAll('.equation-input');
+    equations.forEach((eq, i) => {
+        if (inputs[i]) inputs[i].value = eq;
+    });
+}
+</script>
+{% endblock %}

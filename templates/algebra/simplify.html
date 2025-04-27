@@ -1,0 +1,70 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <h2 class="text-center mb-4"><i class="fas fa-bolt"></i> Expression Simplifier</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="expression" class="form-label">Enter Expression:</label>
+                    <input type="text" class="form-control" id="expression" name="expression" 
+                           placeholder="e.g., (x+2)(x-3) or x^2 + 2x + 1" required>
+                    <div class="form-text">Supports ^ for exponents and implied multiplication (2x = 2*x)</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Simplify</button>
+                <button type="button" class="btn btn-outline-secondary ms-2" onclick="document.getElementById('expression').value=''">Clear</button>
+            </form>
+
+            {% if result %}
+            <div class="result-box mt-4 p-3 bg-light rounded">
+                <h5>Simplified Form:</h5>
+                <div class="math-result fs-4" id="result">{{ result }}</div>
+                <button class="btn btn-sm btn-outline-primary mt-2" onclick="copyResult()">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="examples mt-4">
+        <h5>Try these examples:</h5>
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                <button class="btn btn-example w-100" 
+                        onclick="fillExample('(x+2)*(x-3)')">
+                    <code>(x+2)(x-3)</code>
+                </button>
+            </div>
+            <div class="col-md-4 mb-2">
+                <button class="btn btn-example w-100" 
+                        onclick="fillExample('x^2 + 2x + 1')">
+                    <code>x² + 2x + 1</code>
+                </button>
+            </div>
+            <div class="col-md-4 mb-2">
+                <button class="btn btn-example w-100" 
+                        onclick="fillExample('2*(x + x) + x^2')">
+                    <code>2(x+x) + x²</code>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function fillExample(expr) {
+    document.getElementById('expression').value = expr;
+}
+function copyResult() {
+    const resultText = document.getElementById('result').innerText;
+    navigator.clipboard.writeText(resultText);
+    alert('Copied to clipboard!');
+}
+</script>
+{% endblock %}

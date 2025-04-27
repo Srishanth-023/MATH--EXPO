@@ -1,0 +1,72 @@
+{% extends "algebra/base.html" %}
+
+{% block content %}
+<div class="tool-container">
+    <h2 class="text-center mb-4"><i class="fas fa-square-root-alt"></i> Algebraic Roots Calculator</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST" id="radicalsForm">
+                <div class="mb-3">
+                    <label for="expression" class="form-label">Expression:</label>
+                    <input type="text" class="form-control" id="expression" name="expression"
+                           value="{{ expression_value }}" placeholder="e.g., x^2-4" required>
+                </div>
+                <div class="mb-3">
+                    <label for="root" class="form-label">Root (n):</label>
+                    <input type="text" class="form-control" id="root" name="root"
+                           value="{{ root_value }}" placeholder="2 for square root" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Calculate</button>
+            </form>
+
+            {% if result %}
+            <div class="result-box mt-4 p-3 bg-light rounded">
+                <h5>Solution:</h5>
+                <div class="math-result fs-4">
+                    {{ result }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">
+                <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="examples mt-4">
+        <h5>Examples:</h5>
+        <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-example" onclick="fillExample('16x^4', '2')">√16x^4</button>
+            <button class="btn btn-example" onclick="fillExample('x^2 + 2x + 1', '2')">√(x^2 + 2x + 1)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function fillExample(expr, root) {
+    document.getElementById('expression').value = expr;
+    document.getElementById('root').value = root;
+    document.getElementById('expression').focus();
+}
+</script>
+
+<style>
+.btn-example {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+}
+.btn-example:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+}
+.math-result {
+    font-family: 'Courier New', monospace;
+}
+</style>
+{% endblock %}
