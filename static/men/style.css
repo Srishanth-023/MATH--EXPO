@@ -1,0 +1,99 @@
+body {
+    background: linear-gradient(to bottom, #2c2476, #302b63, #24243e);
+    font-family: Arial, sans-serif;
+    margin: 0; /* Important: Remove margin that was pushing content down */
+    padding: 0;
+    overflow-x: hidden; /* Prevents unwanted horizontal scroll */
+    position: relative; /* Required for ::after effect */
+    min-height: 100vh;
+}
+
+/* Create moving glowing nebula effect */
+body::after {
+    content: "";
+    position: fixed; /* Changed to fixed for full page background */
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: flow 15s linear infinite;
+    z-index: -1; /* Send it behind all content */
+    pointer-events: none;
+}
+
+/* Animation for background movement */
+@keyframes flow {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(-25%, -25%);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* Keep your existing custom container styles */
+.custom-container {
+    max-width: 600px;
+    margin: 150px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-heading {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.custom-formula {
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.custom-form .form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.custom-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-button:hover {
+    background-color: #218838;
+}
+
+.custom-alert {
+    background-color: #e7f3fe;
+    color: #31708f;
+    padding: 15px;
+    margin-top: 20px;
+    border: 1px solid #bce8f1;
+    border-radius: 8px;
+}

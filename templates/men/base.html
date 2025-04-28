@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mensuration Calculator</title>
+
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='men/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navigation.css') }}">
+    
+    {% include 'navigation.html' %}
+    
+    <!-- Cosmic Background Animation -->
+    <style>
+        /* Animate the background */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
+            background-size: 400% 400%;
+            animation: animateBackground 10s ease infinite;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes animateBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Extra: Ensure your container sits well on background */
+        .custom-main-container {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="custom-main-container">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

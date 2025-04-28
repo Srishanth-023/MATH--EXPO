@@ -1,10 +1,104 @@
 <header class="navbar">
-    <div class="logo">MATH X</div>
-    <nav class="nav-links">
-        <a href="/">Home</a>
-        <a href="/items">Categories</a>
-        <a href ="/chat">Chatbot</a>
-        <a href ="/about">About</a>
-        <a href="/contact">Contact</a>
-    </nav>
+    <div class="logo-container" style="
+    display: inline-block;
+    position: relative;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4fc3f7;
+    padding: 0 12px;
+    letter-spacing: 1.5px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    text-shadow: 
+        0 0 10px rgba(79, 195, 247, 0.8),
+        0 0 20px rgba(79, 195, 247, 0.4);
+    overflow: hidden;
+">
+    <span class="logo-text">MATH X</span>
+    <div class="shine-effect" style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.9) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: skewX(-20deg);
+        animation: shine 3s infinite ease-in-out;
+        opacity: 0.8;
+    "></div>
+</div>
+
+<style>
+    @keyframes shine {
+        0% { left: -50%; opacity: 0; }
+        20% { opacity: 0.8; }
+        90% { opacity: 0; }
+        100% { left: 150%; }
+    }
+    
+    .logo-text {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .logo-container:hover .shine-effect {
+        opacity: 1;
+        animation-duration: 2s;
+    }
+    
+    .logo-container:hover {
+        text-shadow: 
+            0 0 15px rgba(79, 195, 247, 1),
+            0 0 30px rgba(79, 195, 247, 0.6);
+    }
+</style>    
+<nav class="nav-links" style="
+    display: flex;
+    gap: 25px;
+    padding: 15px;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+    /* Original size preserved */
+    height: auto;
+    width: auto;
+    box-sizing: border-box;
+">
+    <a href="/" class="nav-link active">Home</a>
+    <a href="/items" class="nav-link">Categories</a>
+    <a href="/chat" class="nav-link">Chatbot</a>
+    <a href="/about" class="nav-link">About</a>
+    <a href="/contact" class="nav-link">Contact</a>
+</nav>
+
+<style>
+    .nav-link {
+        color: #4fc3f7;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0; /* Remove padding to maintain original size */
+        margin: 0; /* Remove margins */
+        transition: text-shadow 0.3s ease; /* Only animate the glow */
+        /* Original text size preserved */
+        font-size: inherit;
+        line-height: inherit;
+        /* Base glow - very subtle */
+        text-shadow: 0 0 3px rgba(79, 195, 247, 0.2);
+    }
+    
+    .nav-link:hover {
+        /* Hover glow effect */
+        text-shadow: 0 0 8px rgba(79, 195, 247, 0.7);
+        /* No size changes */
+        transform: none;
+    }
+    
+    .nav-link.active {
+        /* Active page glow */
+        text-shadow: 0 0 10px rgba(79, 195, 247, 0.9);
+    }
+</style>
 </header>

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Mensuration Calculator Heading -->
+<div style="display: flex; justify-content: center; align-items: center; margin-top: 100px; margin-bottom: 50px;">
+    <h1 style="text-align: center; 
+    font-size: 58px; 
+    color: #fefefe;
+    text-shadow: 0 0 5px #4fc3f7,
+                 0 0 10px #4fc3f7,
+                 0 0 20px #4fc3f7,
+                 0 0 40px rgba(183, 10, 206, 0.5);
+    z-index: 2;
+    margin: 20px 0;
+    font-weight: 700;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite alternate;">
+Mensuration Calculator
+</h1>
+
+<style>
+@keyframes pulse {
+ from {
+     text-shadow: 0 0 5px #4fc3f7,
+                   0 0 10px #9708ef,
+                   0 0 20px #4fc3f7,
+                   0 0 40px rgba(79, 195, 247, 0.5);
+ }
+ to {
+     text-shadow: 0 0 10px #4fc3f7,
+                  0 0 20px #4fc3f7,
+                  0 0 30px #a329f4,
+                  0 0 50px rgba(161, 20, 248, 0.8);
+ }
+}
+
+</style></div>
+
+<!-- Calculator Options -->
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 0 20px; z-index: 2;">
+
+    {% for shape, calcs in shapes.items() %}
+        {% for calc in calcs %}
+            <div style="flex: 1 1 300px; max-width: 400px; text-align: center;">
+                <a href="{{ url_for('mensuration.calculator', shape=shape, calculation=calc) }}" 
+                   style="padding: 2rem; 
+                          background: rgba(15, 10, 25, 0.8); 
+                          color: #4fc3f7; 
+                          text-decoration: none; 
+                          display: block; 
+                          border-radius: 15px; 
+                          font-size: 20px; 
+                          font-weight: bold; 
+                          border: 2px solid #f507e985;
+                          box-shadow: 0 0 10px rgba(92, 6, 249, 0.5), 
+                                      0 0 20px rgba(239, 239, 240, 0.3),
+                                      0 0 30px rgba(129, 2, 239, 0.2);
+                          transition: all 0.3s ease;
+                          position: relative;
+                          overflow: hidden;">
+                    {{ calc.capitalize() }} of {{ shape.capitalize() }}
+                    <span style="position: absolute; 
+                                top: -50%; 
+                                left: -50%; 
+                                width: 200%; 
+                                height: 200%; 
+                                background: linear-gradient(transparent, rgba(79, 195, 247, 0.2), transparent);
+                                transform: rotate(30deg);
+                                animation: shine 3s infinite linear;"></span>
+                </a>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+</div>
+
+<style>
+    @keyframes shine {
+        from {
+            left: -50%;
+            top: -50%;
+        }
+        to {
+            left: 150%;
+            top: 150%;
+        }
+    }
+    
+    a:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 15px #4f4ff7, 
+                    0 0 30px #4f4ff7,
+                    0 0 45px #4fc3f7 !important;
+    }
+</style>
+
+{% endblock %}

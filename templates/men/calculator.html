@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="custom-container">
+
+    <h2 class="custom-heading">{{ calculation.capitalize() }} of {{ shape.replace('_', ' ').capitalize() }}</h2>
+    <p class="custom-formula">{{ formula }}</p>
+
+    <form method="POST" class="custom-form">
+        <div class="form-group">
+            {% if shape == "circle" %}
+                <label>Radius (r):</label>
+                <input type="number" step="any" name="r" class="custom-input" required>
+
+            {% elif shape == "square" %}
+                <label>Side (a):</label>
+                <input type="number" step="any" name="a" class="custom-input" required>
+
+            {% elif shape == "rectangle" %}
+                <label>Length:</label>
+                <input type="number" step="any" name="length" class="custom-input" required>
+                <label>Breadth:</label>
+                <input type="number" step="any" name="breadth" class="custom-input" required>
+
+            {% elif shape == "triangle" %}
+                <label>Base:</label>
+                <input type="number" step="any" name="base" class="custom-input" required>
+                <label>Height:</label>
+                <input type="number" step="any" name="height" class="custom-input" required>
+
+            {% elif shape == "trapezium" %}
+                {% if calculation == "area" %}
+                    <label>Side a:</label>
+                    <input type="number" step="any" name="a" class="custom-input" required>
+                    <label>Side b:</label>
+                    <input type="number" step="any" name="b" class="custom-input" required>
+                    <label>Height:</label>
+                    <input type="number" step="any" name="height" class="custom-input" required>
+                {% elif calculation == "perimeter" %}
+                    <label>Side a:</label>
+                    <input type="number" step="any" name="a" class="custom-input" required>
+                    <label>Side b:</label>
+                    <input type="number" step="any" name="b" class="custom-input" required>
+                    <label>Side c:</label>
+                    <input type="number" step="any" name="c" class="custom-input" required>
+                    <label>Side d:</label>
+                    <input type="number" step="any" name="d" class="custom-input" required>
+                {% endif %}
+
+            {% elif shape == "parallelogram" %}
+                <label>Base:</label>
+                <input type="number" step="any" name="base" class="custom-input" required>
+                <label>Height:</label>
+                <input type="number" step="any" name="height" class="custom-input" required>
+
+            {% elif shape == "sector" %}
+                <label>Radius (r):</label>
+                <input type="number" step="any" name="r" class="custom-input" required>
+                <label>Angle (θ in degrees):</label>
+                <input type="number" step="any" name="theta" class="custom-input" required>
+
+            {% elif shape == "cone" %}
+                <label>Radius (r):</label>
+                <input type="number" step="any" name="r" class="custom-input" required>
+                <label>Height (h):</label>
+                <input type="number" step="any" name="h" class="custom-input" required>
+
+            {% elif shape == "cylinder" %}
+                <label>Radius (r):</label>
+                <input type="number" step="any" name="r" class="custom-input" required>
+                <label>Height (h):</label>
+                <input type="number" step="any" name="h" class="custom-input" required>
+
+            {% elif shape == "cube" %}
+                <label>Side (a):</label>
+                <input type="number" step="any" name="a" class="custom-input" required>
+
+            {% elif shape == "cuboid" %}
+                <label>Length (l):</label>
+                <input type="number" step="any" name="l" class="custom-input" required>
+                <label>Breadth (b):</label>
+                <input type="number" step="any" name="b" class="custom-input" required>
+                <label>Height (h):</label>
+                <input type="number" step="any" name="h" class="custom-input" required>
+
+            {% elif shape == "prism" %}
+                <label>Base Area:</label>
+                <input type="number" step="any" name="base_area" class="custom-input" required>
+                <label>Height:</label>
+                <input type="number" step="any" name="height" class="custom-input" required>
+
+            {% elif shape == "sphere" %}
+                <label>Radius (r):</label>
+                <input type="number" step="any" name="r" class="custom-input" required>
+
+            {% elif shape == "rhombus" %}
+                {% if calculation == "area" %}
+                    <label>Diagonal 1 (p):</label>
+                    <input type="number" step="any" name="p" class="custom-input" required>
+                    <label>Diagonal 2 (q):</label>
+                    <input type="number" step="any" name="q" class="custom-input" required>
+                {% else %}
+                    <label>Side (a):</label>
+                    <input type="number" step="any" name="a" class="custom-input" required>
+                {% endif %}
+
+            {% elif shape == "pentagon" or shape == "hexagon" %}
+                <label>Side (a):</label>
+                <input type="number" step="any" name="a" class="custom-input" required>
+
+            {% elif shape == "arc" %}
+                <label>Radius (r):</label>
+                <input type="number" step="any" name="r" class="custom-input" required>
+                <label>Angle (θ in degrees):</label>
+                <input type="number" step="any" name="theta" class="custom-input" required>
+
+            {% elif shape == "ellipse" %}
+                <label>Semi-Major Axis (a):</label>
+                <input type="number" step="any" name="a" class="custom-input" required>
+                <label>Semi-Minor Axis (b):</label>
+                <input type="number" step="any" name="b" class="custom-input" required>
+
+            {% endif %}
+        </div>
+
+        <button type="submit" class="custom-button">Calculate</button>
+    </form>
+
+    {% if result is not none %}
+    <div class="custom-alert">
+        <strong>Result:</strong> {{ result }}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

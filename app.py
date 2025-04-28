@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+from mensuration import mensuration
+
 
 #FOR ALGEBRA----------------------------------------------------------------------------------------------------------------------------
 from flask import Flask, render_template, request
@@ -574,6 +576,10 @@ def system_equations():
                          eq3_value=input_values['eq3'])
 
 #---------------------------------------------------------- ALGEBRA ROUTES END------------------------------------------------------------------
+
+from mensuration import mensuration  # <-- import mensuration blueprint
+app.register_blueprint(mensuration, url_prefix='/men')
+
 
 
 if __name__ == '__main__':
