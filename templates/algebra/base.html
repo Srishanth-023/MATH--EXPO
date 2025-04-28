@@ -7,6 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='/algebra/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navigation.css') }}">    
+
+
 </head>
 <body>
     <!-- In the navbar section, replace the dropdown with full links -->
@@ -58,21 +61,7 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white mt-5">
-        <div class="container py-3">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Algebra Toolkit</h5>
-                    <p>A comprehensive algebra solution for students and educators.</p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <a href="#" class="text-white me-2"><i class="fab fa-github"></i></a>
-                    <a href="#" class="text-white"><i class="fas fa-envelope"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='algebra/script.js') }}"></script>
