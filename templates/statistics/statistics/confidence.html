@@ -1,0 +1,248 @@
+{% extends "statistics/base.html" %}
+
+{% block title %}Confidence Intervals{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-sliders me-2"></i>Confidence Intervals</h4>
+            <span class="badge bg-light text-primary fs-6">Estimation</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <form method="POST" action="/statistics/confidence">
+                    <div class="card border-primary mb-4">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-gear me-2"></i>Interval Configuration
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="ci_type" name="ci_type" onchange="updateForm()">
+                                            <option value="mean" {% if request.form.get('ci_type', 'mean') == 'mean' %}selected{% endif %}>Mean</option>
+                                            <option value="proportion" {% if request.form.get('ci_type') == 'proportion' %}selected{% endif %}>Proportion</option>
+                                        </select>
+                                        <label for="ci_type">Interval Type</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="confidence" name="confidence" 
+                                            value="{{ request.form.get('confidence', '95') }}" min="80" max="99" required>
+                                        <label for="confidence">Confidence Level (%)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mean Parameters -->
+                    <div id="meanParams" class="card border-primary mb-4 {% if request.form.get('ci_type', 'mean') != 'mean' %}d-none{% endif %}">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-calculator me-2"></i>Mean Parameters
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="sample_mean" name="sample_mean" 
+                                            value="{{ request.form.get('sample_mean', '0') }}" required>
+                                        <label for="sample_mean">Sample Mean (x̄)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="sample_std" name="sample_std" 
+                                            value="{{ request.form.get('sample_std', '1') }}" min="0.01" required>
+                                        <label for="sample_std">Sample Std Dev (s)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="sample_size" name="sample_size" 
+                                            value="{{ request.form.get('sample_size', '30') }}" min="2" required>
+                                        <label for="sample_size">Sample Size (n)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="pop_std" name="pop_std" 
+                                            value="{{ request.form.get('pop_std', '') }}" min="0.01">
+                                        <label for="pop_std">Population Std Dev (σ, if known)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Proportion Parameters -->
+                    <div id="proportionParams" class="card border-primary mb-4 {% if request.form.get('ci_type', 'mean') == 'mean' %}d-none{% endif %}">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-percent me-2"></i>Proportion Parameters
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="0.01" class="form-control" id="sample_proportion" name="sample_proportion" 
+                                            value="{{ request.form.get('sample_proportion', '0.5') }}" min="0" max="1" required>
+                                        <label for="sample_proportion">Sample Proportion (p̂)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="prop_sample_size" name="sample_size" 
+                                            value="{{ request.form.get('sample_size', '100') }}" min="10" required>
+                                        <label for="prop_sample_size">Sample Size (n)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="alert alert-info mb-0">
+                                        <i class="bi bi-info-circle me-2"></i>Ensure np̂ ≥ 10 and n(1-p̂) ≥ 10 for valid results
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-calculator me-2"></i>Calculate Interval
+                        </button>
+                    </div>
+                </form>
+
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-primary sticky-top" style="top: 20px;">
+                    <div class="card-header bg-light text-primary">
+                        <i class="bi bi-info-circle me-2"></i>About Confidence Intervals
+                    </div>
+                    <div class="card-body">
+                        <h6 class="text-primary">Interpretation:</h6>
+                        <p class="small">We are 95% confident that the true parameter lies between the lower and upper bounds.</p>
+                        
+                        <h6 class="text-primary mt-3">Mean CI Formula:</h6>
+                        <div class="formula-box small mb-3">
+                            x̄ ± z*(σ/√n) <small>(σ known)</small><br>
+                            x̄ ± t*(s/√n) <small>(σ unknown)</small>
+                        </div>
+                        
+                        <h6 class="text-primary">Proportion CI Formula:</h6>
+                        <div class="formula-box small">
+                            p̂ ± z*√(p̂(1-p̂)/n)
+                        </div>
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-lightbulb me-2"></i>
+                            <small>Higher confidence → Wider interval</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="mt-5">
+            <h5 class="text-primary mb-4"><i class="bi bi-graph-up me-2"></i>Results</h5>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>{{ result.type }} Confidence Interval</span>
+                        <span class="badge bg-light text-success">{{ result.confidence }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Point Estimate</th>
+                                            <td class="text-end fw-bold text-success">{{ result.estimate }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Lower Bound</th>
+                                            <td class="text-end fw-bold text-success">{{ result.lower }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Upper Bound</th>
+                                            <td class="text-end fw-bold text-success">{{ result.upper }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Margin of Error</th>
+                                            <td class="text-end fw-bold text-success">{{ result.margin }}</td>
+                                        </tr>
+                                        {% if result.method %}
+                                        <tr>
+                                            <th scope="row">Method</th>
+                                            <td class="text-end">{{ result.method }}</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success"><i class="bi bi-lightbulb me-2"></i>Interpretation</h6>
+                                    <p class="card-text">
+                                        We are {{ result.confidence }} confident that the true 
+                                        {% if result.type == 'Mean' %}population mean{% else %}proportion{% endif %} 
+                                        lies between {{ result.lower }} and {{ result.upper }}.
+                                    </p>
+                                    <div class="progress mt-3" style="height: 30px;">
+                                        <div class="progress-bar bg-secondary" style="width: 10%;"></div>
+                                        <div class="progress-bar bg-info" style="width: 40%;"></div>
+                                        <div class="progress-bar bg-success" style="width: 40%;"></div>
+                                        <div class="progress-bar bg-secondary" style="width: 10%;"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <small class="text-muted">Lower</small>
+                                        <small class="fw-bold">{{ result.lower }}</small>
+                                        <small class="fw-bold text-success">{{ result.estimate }}</small>
+                                        <small class="fw-bold">{{ result.upper }}</small>
+                                        <small class="text-muted">Upper</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateForm() {
+        const ciType = document.getElementById('ci_type').value;
+        if (ciType === 'mean') {
+            document.getElementById('meanParams').classList.remove('d-none');
+            document.getElementById('proportionParams').classList.add('d-none');
+        } else {
+            document.getElementById('meanParams').classList.add('d-none');
+            document.getElementById('proportionParams').classList.remove('d-none');
+        }
+    }
+    
+    // Initialize form on page load
+    document.addEventListener('DOMContentLoaded', updateForm);
+</script>
+{% endblock %}

@@ -1,0 +1,237 @@
+{% extends "statistics/base.html" %}
+
+{% block title %}Hypothesis Testing{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-clipboard-check me-2"></i>Hypothesis Testing</h4>
+            <span class="badge bg-light text-primary fs-6">Statistical Significance</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <form method="POST" action="/statistics/hypothesis">
+                    <div class="card border-primary mb-4">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-gear me-2"></i>Test Configuration
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="test_type" name="test_type" onchange="updateForm()">
+                                            <option value="z_test" {% if request.form.get('test_type', 'z_test') == 'z_test' %}selected{% endif %}>Z-Test</option>
+                                            <option value="t_test" {% if request.form.get('test_type') == 't_test' %}selected{% endif %}>T-Test</option>
+                                        </select>
+                                        <label for="test_type">Test Type</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="0.01" class="form-control" id="alpha" name="alpha" 
+                                            value="{{ request.form.get('alpha', '0.05') }}" min="0.001" max="0.2" required>
+                                        <label for="alpha">Significance Level (α)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="pop_mean" name="pop_mean" 
+                                            value="{{ request.form.get('pop_mean', '0') }}" required>
+                                        <label for="pop_mean">Population Mean (μ₀)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Z-Test Parameters -->
+                    <div id="zTestParams" class="card border-primary mb-4 {% if request.form.get('test_type', 'z_test') != 'z_test' %}d-none{% endif %}">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-graph-up me-2"></i>Z-Test Parameters
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="sample_mean" name="sample_mean" 
+                                            value="{{ request.form.get('sample_mean', '0') }}" required>
+                                        <label for="sample_mean">Sample Mean (x̄)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="pop_std" name="pop_std" 
+                                            value="{{ request.form.get('pop_std', '1') }}" min="0.01" required>
+                                        <label for="pop_std">Population Std Dev (σ)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="sample_size" name="sample_size" 
+                                            value="{{ request.form.get('sample_size', '30') }}" min="2" required>
+                                        <label for="sample_size">Sample Size (n)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- T-Test Parameters -->
+                    <div id="tTestParams" class="card border-primary mb-4 {% if request.form.get('test_type', 'z_test') == 'z_test' %}d-none{% endif %}">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-graph-up me-2"></i>T-Test Parameters
+                        </div>
+                        <div class="card-body">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="sample_data" name="sample_data" style="height: 120px" 
+                                    placeholder="Enter sample values">{{ request.form.sample_data if request.form.sample_data }}</textarea>
+                                <label for="sample_data">Sample Data (comma-separated)</label>
+                            </div>
+                            <div class="mt-2 text-muted">
+                                <small>Example: 98.2, 99.5, 101.3, 102.1, 100.8</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-clipboard-data me-2"></i>Run Test
+                        </button>
+                    </div>
+                </form>
+
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-primary sticky-top" style="top: 20px;">
+                    <div class="card-header bg-light text-primary">
+                        <i class="bi bi-info-circle me-2"></i>Test Information
+                    </div>
+                    <div class="card-body">
+                        <h6 class="text-primary">When to use:</h6>
+                        <div class="mb-3">
+                            <span class="badge bg-primary me-2">Z-Test</span>
+                            <small>Known σ, large n (≥30)</small>
+                        </div>
+                        <div class="mb-3">
+                            <span class="badge bg-success me-2">T-Test</span>
+                            <small>Unknown σ, small n (<30)</small>
+                        </div>
+                        
+                        <h6 class="text-primary mt-4">Null Hypothesis (H₀):</h6>
+                        <p class="small">μ = μ₀ (no difference)</p>
+                        
+                        <h6 class="text-primary">Alternative (H₁):</h6>
+                        <p class="small">μ ≠ μ₀ (two-tailed test)</p>
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-lightbulb me-2"></i>
+                            <small>Reject H₀ if p-value < α</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="mt-5">
+            <h5 class="text-primary mb-4"><i class="bi bi-clipboard-data me-2"></i>Test Results</h5>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>{{ result.test }} Results</span>
+                        <span class="badge {% if result.significant %}bg-danger{% else %}bg-secondary{% endif %}">
+                            {% if result.significant %}Significant{% else %}Not Significant{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Test Statistic</th>
+                                            <td class="text-end fw-bold text-success">
+                                                {% if result.test == 'One-Sample Z-Test' %}
+                                                    z = {{ result.z_score }}
+                                                {% else %}
+                                                    t = {{ result.t_score }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% if result.test == 'One-Sample T-Test' %}
+                                        <tr>
+                                            <th scope="row">Degrees of Freedom</th>
+                                            <td class="text-end fw-bold">{{ result.df }}</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <th scope="row">p-value</th>
+                                            <td class="text-end fw-bold text-success">{{ result.p_value }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">α Level</th>
+                                            <td class="text-end fw-bold">{{ result.alpha }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success"><i class="bi bi-check-circle me-2"></i>Conclusion</h6>
+                                    <div class="alert {% if result.significant %}alert-danger{% else %}alert-success{% endif %}">
+                                        <i class="bi bi-{% if result.significant %}exclamation-triangle{% else %}check-circle{% endif %}-fill me-2"></i>
+                                        <strong>{{ result.conclusion }}</strong>
+                                        <hr>
+                                        <p class="mb-0">
+                                            {% if result.significant %}
+                                                p-value ({{ result.p_value }}) < α ({{ result.alpha }})<br>
+                                                Reject the null hypothesis
+                                            {% else %}
+                                                p-value ({{ result.p_value }}) ≥ α ({{ result.alpha }})<br>
+                                                Fail to reject the null hypothesis
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateForm() {
+        const testType = document.getElementById('test_type').value;
+        if (testType === 'z_test') {
+            document.getElementById('zTestParams').classList.remove('d-none');
+            document.getElementById('tTestParams').classList.add('d-none');
+        } else {
+            document.getElementById('zTestParams').classList.add('d-none');
+            document.getElementById('tTestParams').classList.remove('d-none');
+        }
+    }
+    
+    // Initialize form on page load
+    document.addEventListener('DOMContentLoaded', updateForm);
+</script>
+{% endblock %}

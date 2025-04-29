@@ -1,0 +1,177 @@
+{% extends "statistics/base.html" %}
+
+{% block title %}Sampling Distributions{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-collection me-2"></i>Sampling Distributions</h4>
+            <span class="badge bg-light text-primary fs-6">Central Limit Theorem</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <form method="POST" action="/statistics/sampling">
+                    <div class="card border-primary mb-4">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-sliders me-2"></i>Distribution Parameters
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="pop_mean" name="pop_mean" 
+                                            value="{{ request.form.get('pop_mean', '100') }}" required>
+                                        <label for="pop_mean">Population Mean (μ)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="pop_std" name="pop_std" 
+                                            value="{{ request.form.get('pop_std', '15') }}" min="0.01" required>
+                                        <label for="pop_std">Population Std Dev (σ)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="sample_size" name="sample_size" 
+                                            value="{{ request.form.get('sample_size', '30') }}" min="1" required>
+                                        <label for="sample_size">Sample Size (n)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="any" class="form-control" id="sample_mean" name="sample_mean" 
+                                            value="{{ request.form.get('sample_mean', '105') }}" required>
+                                        <label for="sample_mean">Sample Mean (x̄)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-calculator me-2"></i>Analyze
+                        </button>
+                    </div>
+                </form>
+
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-primary sticky-top" style="top: 20px;">
+                    <div class="card-header bg-light text-primary">
+                        <i class="bi bi-info-circle me-2"></i>About Sampling Distributions
+                    </div>
+                    <div class="card-body">
+                        <h6 class="text-primary">Central Limit Theorem:</h6>
+                        <p class="small">For large enough n, the sampling distribution of the mean will be approximately normal, regardless of the population distribution.</p>
+                        
+                        <h6 class="text-primary mt-3">Standard Error:</h6>
+                        <div class="formula-box small mb-3">
+                            SE = σ / √n
+                        </div>
+                        
+                        <h6 class="text-primary">Z-score Formula:</h6>
+                        <div class="formula-box small">
+                            z = (x̄ - μ) / SE
+                        </div>
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-lightbulb me-2"></i>
+                            <small>As sample size increases, standard error decreases.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="mt-5">
+            <h5 class="text-primary mb-4"><i class="bi bi-graph-up me-2"></i>Analysis Results</h5>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Sampling Distribution Analysis</span>
+                        <span class="badge bg-light text-success">n = {{ result.sample_size }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Population Mean (μ)</th>
+                                            <td class="text-end">{{ result.pop_mean }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Population Std Dev (σ)</th>
+                                            <td class="text-end">{{ result.pop_std }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Sample Mean (x̄)</th>
+                                            <td class="text-end fw-bold text-success">{{ result.sample_mean }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Standard Error</th>
+                                            <td class="text-end fw-bold">{{ result.std_error }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Z-score</th>
+                                            <td class="text-end fw-bold text-success">{{ result.z_score }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">p-value</th>
+                                            <td class="text-end fw-bold">{{ result.p_value }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success"><i class="bi bi-lightbulb me-2"></i>Interpretation</h6>
+                                    <p class="card-text">
+                                        The probability of observing a sample mean of {{ result.sample_mean }} or more extreme, 
+                                        given a population mean of {{ result.pop_mean }} and standard deviation of {{ result.pop_std }}, 
+                                        is {{ result.p_value|round(6) }}.
+                                    </p>
+                                    
+                                    {% if result.p_value < 0.05 %}
+                                    <div class="alert alert-danger">
+                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                        <strong>Statistically Significant</strong> (p < 0.05)
+                                        <hr>
+                                        The observed sample mean is unlikely under the null hypothesis.
+                                    </div>
+                                    {% else %}
+                                    <div class="alert alert-success">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        <strong>Not Statistically Significant</strong> (p ≥ 0.05)
+                                        <hr>
+                                        The observed sample mean is reasonably likely under the null hypothesis.
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Probability Calculator{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4><i class="bi bi-dice-5"></i> Probability Calculator</h4>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            Calculate probabilities of combined events. Enter probabilities (between 0 and 1) and select an operation.
+        </p>
+        
+        <form method="POST" action="{{ url_for('probability_calculator') }}">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="event_a" class="form-label">P(A)</label>
+                    <input type="number" class="form-control" id="event_a" name="event_a" 
+                           step="0.01" min="0" max="1" required
+                           value="{% if request.method == 'POST' %}{{ request.form.get('event_a', '') }}{% endif %}">
+                </div>
+                <div class="col-md-4">
+                    <label for="event_b" class="form-label">P(B)</label>
+                    <input type="number" class="form-control" id="event_b" name="event_b" 
+                           step="0.01" min="0" max="1" required
+                           value="{% if request.method == 'POST' %}{{ request.form.get('event_b', '') }}{% endif %}">
+                </div>
+                <div class="col-md-4">
+                    <label for="operation" class="form-label">Operation</label>
+                    <select class="form-select" id="operation" name="operation">
+                        <option value="independent" {% if request.method == 'POST' and request.form.get('operation') == 'independent' %}selected{% endif %}>
+                            Independent (A and B)
+                        </option>
+                        <option value="union" {% if request.method == 'POST' and request.form.get('operation') == 'union' %}selected{% endif %}>
+                            Union (A or B)
+                        </option>
+                        <option value="conditional" {% if request.method == 'POST' and request.form.get('operation') == 'conditional' %}selected{% endif %}>
+                            Conditional (A given B)
+                        </option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row mb-3" id="jointProbContainer" style="display: none;">
+                <div class="col-md-12">
+                    <label for="joint_prob" class="form-label">P(A and B)</label>
+                    <input type="number" class="form-control" id="joint_prob" name="joint_prob" 
+                           step="0.01" min="0" max="1"
+                           value="{% if request.method == 'POST' %}{{ request.form.get('joint_prob', '') }}{% endif %}">
+                    <small class="text-muted">Only required for conditional probability</small>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-calculator"></i> Calculate Probability
+            </button>
+        </form>
+        
+        {% if error %}
+            <div class="alert alert-danger mt-3">
+                <i class="bi bi-exclamation-triangle"></i> {{ error }}
+            </div>
+        {% endif %}
+        
+        {% if result %}
+            <div class="result-box mt-4">
+                <h5><i class="bi bi-graph-up-arrow"></i> Probability Results</h5>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>Operation</th>
+                            <td>{{ result.operation }}</td>
+                        </tr>
+                        <tr>
+                            <th>Result</th>
+                            <td class="stat-value">{{ result.probability }}</td>
+                        </tr>
+                        <tr>
+                            <th>Explanation</th>
+                            <td>{{ result.explanation }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+        
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5><i class="bi bi-info-circle"></i> Probability Rules</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Independent Events:</strong> P(A and B) = P(A) × P(B)
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Union of Events:</strong> P(A or B) = P(A) + P(B) - P(A and B)
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Conditional Probability:</strong> P(A|B) = P(A and B) / P(B)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show/hide joint probability field based on operation selection
+    document.getElementById('operation').addEventListener('change', function() {
+        const jointProbContainer = document.getElementById('jointProbContainer');
+        if (this.value === 'conditional') {
+            jointProbContainer.style.display = 'block';
+            document.getElementById('joint_prob').required = true;
+        } else {
+            jointProbContainer.style.display = 'none';
+            document.getElementById('joint_prob').required = false;
+        }
+    });
+    
+    // Trigger change event on page load if conditional was selected
+    window.addEventListener('load', function() {
+        if (document.getElementById('operation').value === 'conditional') {
+            document.getElementById('jointProbContainer').style.display = 'block';
+            document.getElementById('joint_prob').required = true;
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends "statistics/base.html" %}
+
+{% block title %}Linear Regression{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-bezier2 me-2"></i>Linear Regression</h4>
+            <span class="badge bg-light text-primary fs-6">Modeling</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <form method="POST" action="/statistics/regression">
+                    <div class="card border-primary mb-4">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-input-cursor-text me-2"></i>Data Input
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="x_data" name="x_data" style="height: 120px" 
+                                            placeholder="Enter X values">{{ request.form.x_data if request.form.x_data }}</textarea>
+                                        <label for="x_data">X Values (Independent)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="y_data" name="y_data" style="height: 120px" 
+                                            placeholder="Enter Y values">{{ request.form.y_data if request.form.y_data }}</textarea>
+                                        <label for="y_data">Y Values (Dependent)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="alert alert-info mb-0">
+                                        <i class="bi bi-info-circle me-2"></i>Enter comma-separated values for both X and Y (same number of values)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-calculator me-2"></i>Calculate Regression
+                        </button>
+                    </div>
+                </form>
+
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-primary sticky-top" style="top: 20px;">
+                    <div class="card-header bg-light text-primary">
+                        <i class="bi bi-info-circle me-2"></i>About Linear Regression
+                    </div>
+                    <div class="card-body">
+                        <h6 class="text-primary">Regression Equation:</h6>
+                        <div class="formula-box mb-3">
+                            ŷ = b₀ + b₁x
+                        </div>
+                        
+                        <h6 class="text-primary">Key Terms:</h6>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Slope (b₁)
+                                <span class="badge bg-primary rounded-pill">Change rate</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Intercept (b₀)
+                                <span class="badge bg-primary rounded-pill">Baseline</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                R²
+                                <span class="badge bg-primary rounded-pill">Fit quality</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-lightbulb me-2"></i>
+                            <small>R² closer to 1 indicates better fit</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="mt-5">
+            <h5 class="text-primary mb-4"><i class="bi bi-graph-up me-2"></i>Regression Results</h5>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Simple Linear Regression</span>
+                        <span class="badge bg-light text-success">{{ result.n }} points</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Regression Equation</th>
+                                            <td class="text-end fw-bold text-success">{{ result.equation }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Slope (b₁)</th>
+                                            <td class="text-end fw-bold text-success">{{ result.slope }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Intercept (b₀)</th>
+                                            <td class="text-end fw-bold text-success">{{ result.intercept }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">R-squared</th>
+                                            <td class="text-end fw-bold text-success">{{ result.r_squared }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Standard Error</th>
+                                            <td class="text-end fw-bold">{{ result.std_error }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success"><i class="bi bi-lightbulb me-2"></i>Interpretation</h6>
+                                    <p class="card-text">
+                                        For each unit increase in X, Y changes by {{ result.slope }} units.<br><br>
+                                        The model explains {{ (result.r_squared * 100)|round(1) }}% of the variability in Y.
+                                    </p>
+                                    <div class="progress mt-3">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                            style="width: {{ result.r_squared * 100 }}%" 
+                                            aria-valuenow="{{ result.r_squared * 100 }}" 
+                                            aria-valuemin="0" aria-valuemax="100">
+                                            {{ (result.r_squared * 100)|round(1) }}%
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">R-squared value</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Preview -->
+            <div class="card border-primary mt-4">
+                <div class="card-header bg-light text-primary">
+                    <i class="bi bi-table me-2"></i>Data Preview
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>X Value</th>
+                                    <th>Y Value</th>
+                                    <th>Predicted ŷ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set x_values = request.form.x_data.split(',') %}
+                                {% set y_values = request.form.y_data.split(',') %}
+                                {% for i in range(5 if x_values|length > 5 else x_values|length) %}
+                                <tr>
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{ x_values[i].strip() }}</td>
+                                    <td>{{ y_values[i].strip() }}</td>
+                                    <td class="text-success fw-bold">
+                                        {{ (result.intercept + result.slope * x_values[i].strip()|float)|round(3) }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% if x_values|length > 5 %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">
+                                        <i class="bi bi-ellipsis"></i> Showing 5 of {{ x_values|length }} rows
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

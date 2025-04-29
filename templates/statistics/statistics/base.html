@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Solutions | {% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 2rem;
+            border: none;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+        .result-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--secondary-color);
+            border-left: 3px solid transparent;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            border-left: 3px solid var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 0.5rem;
+            width: 1.2rem;
+            text-align: center;
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .formula-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 1rem;
+            font-family: "Courier New", monospace;
+            margin: 1rem 0;
+        }
+        
+        .progress {
+            border-radius: 10px;
+        }
+        
+        .progress-bar {
+            border-radius: 10px;
+        }
+        
+        .badge {
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-calculator"></i> StatsPro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statistics/descriptive">Descriptive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statistics/distributions">Distributions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statistics/hypothesis">Hypothesis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statistics/regression">Regression</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="sidebar sticky-top">
+                    <h5 class="mb-3"><i class="bi bi-menu-button-wide"></i> Statistics Tools</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/descriptive' %}active{% endif %}" href="/statistics/descriptive">
+                                <i class="bi bi-bar-chart-line"></i> Descriptive Stats
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/distributions' %}active{% endif %}" href="/statistics/distributions">
+                                <i class="bi bi-graph-up"></i> Probability Distributions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/hypothesis' %}active{% endif %}" href="/statistics/hypothesis">
+                                <i class="bi bi-clipboard-check"></i> Hypothesis Tests
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/confidence' %}active{% endif %}" href="/statistics/confidence">
+                                <i class="bi bi-sliders"></i> Confidence Intervals
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/regression' %}active{% endif %}" href="/statistics/regression">
+                                <i class="bi bi-bezier2"></i> Linear Regression
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/chi_square' %}active{% endif %}" href="/statistics/chi_square">
+                                <i class="bi bi-grid-3x3-gap"></i> Chi-Square Tests
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/anova' %}active{% endif %}" href="/statistics/anova">
+                                <i class="bi bi-clipboard-data"></i> ANOVA
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/correlation' %}active{% endif %}" href="/statistics/correlation">
+                                <i class="bi bi-arrow-left-right"></i> Correlation
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/probability' %}active{% endif %}" href="/statistics/probability">
+                                <i class="bi bi-dice-5"></i> Probability
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/sampling' %}active{% endif %}" href="/statistics/sampling">
+                                <i class="bi bi-collection"></i> Sampling
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/statistics/runge_kutta' %}active{% endif %}" href="/statistics/runge_kutta">
+                                <i class="bi bi-graph-up-arrow"></i> Runge-Kutta
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Statistics Solutions &copy; 2023 | Built with Flask and Bootstrap</p>
+            <p class="mb-0">
+                <small>For educational purposes only</small>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+    
+</body>
+</html>

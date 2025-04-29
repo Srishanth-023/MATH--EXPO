@@ -1,0 +1,224 @@
+{% extends "statistics/base.html" %}
+
+{% block title %}Chi-Square Tests{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-grid-3x3-gap me-2"></i>Chi-Square Tests</h4>
+            <span class="badge bg-light text-primary fs-6">Categorical Data</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <form method="POST" action="/statistics/chi_square">
+                    <div class="card border-primary mb-4">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-gear me-2"></i>Test Configuration
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Test Type</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="chi_test_type" id="goodnessFit" 
+                                        value="goodness" {% if request.form.get('chi_test_type', 'goodness') == 'goodness' %}checked{% endif %}>
+                                    <label class="form-check-label" for="goodnessFit">
+                                        Goodness of Fit Test
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="chi_test_type" id="independenceTest" 
+                                        value="independence" {% if request.form.get('chi_test_type') == 'independence' %}checked{% endif %}>
+                                    <label class="form-check-label" for="independenceTest">
+                                        Test of Independence
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="alpha" class="form-label">Significance Level (α)</label>
+                                <input type="number" step="0.01" class="form-control" id="alpha" name="alpha" 
+                                    value="{{ request.form.get('alpha', '0.05') }}" min="0.001" max="0.2" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Goodness of Fit Test -->
+                    <div id="goodnessParams" class="card border-primary mb-4 {% if request.form.get('chi_test_type', 'goodness') != 'goodness' %}d-none{% endif %}">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-check-square me-2"></i>Goodness of Fit Parameters
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="observed" name="observed" style="height: 120px" 
+                                            placeholder="Enter observed values">{{ request.form.observed if request.form.observed }}</textarea>
+                                        <label for="observed">Observed Frequencies</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="expected" name="expected" style="height: 120px" 
+                                            placeholder="Enter expected values">{{ request.form.expected if request.form.expected }}</textarea>
+                                        <label for="expected">Expected Frequencies</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="alert alert-info mb-0">
+                                        <i class="bi bi-info-circle me-2"></i>Enter comma-separated values (same number for both)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test of Independence -->
+                    <div id="independenceParams" class="card border-primary mb-4 {% if request.form.get('chi_test_type', 'goodness') == 'goodness' %}d-none{% endif %}">
+                        <div class="card-header bg-light text-primary">
+                            <i class="bi bi-table me-2"></i>Contingency Table
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                Contingency table input not implemented in this example
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-calculator me-2"></i>Perform Test
+                        </button>
+                    </div>
+                </form>
+
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-primary sticky-top" style="top: 20px;">
+                    <div class="card-header bg-light text-primary">
+                        <i class="bi bi-info-circle me-2"></i>About Chi-Square Tests
+                    </div>
+                    <div class="card-body">
+                        <h6 class="text-primary">Goodness of Fit:</h6>
+                        <p class="small">Tests if sample data matches a population distribution.</p>
+                        
+                        <h6 class="text-primary mt-3">Test of Independence:</h6>
+                        <p class="small">Tests if two categorical variables are related.</p>
+                        
+                        <h6 class="text-primary mt-3">Test Statistic:</h6>
+                        <div class="formula-box small">
+                            χ² = Σ[(O-E)²/E]
+                        </div>
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-lightbulb me-2"></i>
+                            <small>Expected frequencies should be ≥5 for valid results</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="mt-5">
+            <h5 class="text-primary mb-4"><i class="bi bi-clipboard-data me-2"></i>Test Results</h5>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>{{ result.test }}</span>
+                        <span class="badge {% if 'No solution' not in result.conclusion and 'Reject' in result.conclusion %}bg-danger{% else %}bg-secondary{% endif %}">
+                            {% if 'No solution' not in result.conclusion %}
+                                {% if 'Reject' in result.conclusion %}Significant{% else %}Not Significant{% endif %}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Chi-Square Statistic</th>
+                                            <td class="text-end fw-bold text-success">{{ result.chi2 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Degrees of Freedom</th>
+                                            <td class="text-end fw-bold">{{ result.df }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">p-value</th>
+                                            <td class="text-end fw-bold text-success">{{ result.p_value }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">α Level</th>
+                                            <td class="text-end fw-bold">{{ result.alpha }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success"><i class="bi bi-check-circle me-2"></i>Conclusion</h6>
+                                    {% if 'No solution' in result.conclusion %}
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        <strong>{{ result.conclusion }}</strong>
+                                    </div>
+                                    {% else %}
+                                    <div class="alert {% if 'Reject' in result.conclusion %}alert-danger{% else %}alert-success{% endif %}">
+                                        <i class="bi bi-{% if 'Reject' in result.conclusion %}exclamation-triangle{% else %}check-circle{% endif %}-fill me-2"></i>
+                                        <strong>{{ result.conclusion }}</strong>
+                                        <hr>
+                                        <p class="mb-0">
+                                            {% if 'Reject' in result.conclusion %}
+                                                p-value ({{ result.p_value }}) < α ({{ result.alpha }})<br>
+                                                Distributions are not the same
+                                            {% else %}
+                                                p-value ({{ result.p_value }}) ≥ α ({{ result.alpha }})<br>
+                                                Distributions are similar
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Show/hide parameters based on test type
+    document.querySelectorAll('input[name="chi_test_type"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'goodness') {
+                document.getElementById('goodnessParams').classList.remove('d-none');
+                document.getElementById('independenceParams').classList.add('d-none');
+            } else {
+                document.getElementById('goodnessParams').classList.add('d-none');
+                document.getElementById('independenceParams').classList.remove('d-none');
+            }
+        });
+    });
+</script>
+{% endblock %}
