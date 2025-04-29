@@ -592,7 +592,7 @@ app.register_blueprint(mensuration, url_prefix='/men')
 
 #---------------------------------------------------------- MATRIX ROUTES START------------------------------------------------------------------
 
-@app.route('/matrices')
+@app.route('/matrices/')
 def home_matrix():
     return render_template('matrix/home.html')
 
@@ -865,7 +865,7 @@ def calc_trace():
     
     return render_template('matrix/trace.html', result=result)
 
-@app.route('/matrices/generate_matrix', methods=['POST'])
+@app.route('/generate_matrix', methods=['POST'])
 def generate_matrix():
     rows = int(request.form['rows'])
     cols = int(request.form['cols'])
