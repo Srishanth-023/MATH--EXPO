@@ -2,8 +2,6 @@ from flask import Flask, render_template, request, jsonify
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
-from mensuration import mensuration
-
 
 #FOR ALGEBRA----------------------------------------------------------------------------------------------------------------------------
 from flask import Flask, render_template, request
@@ -589,10 +587,12 @@ def system_equations():
 from mensuration import mensuration  # <-- import mensuration blueprint
 app.register_blueprint(mensuration, url_prefix='/men')
 
+#---------------------------------------------------------- MENSURATION ROUTES END------------------------------------------------------------------
+
 
 #---------------------------------------------------------- MATRIX ROUTES START------------------------------------------------------------------
 
-@app.route('/matrices/')
+@app.route('/matrices')
 def home_matrix():
     return render_template('matrix/home.html')
 
@@ -865,7 +865,7 @@ def calc_trace():
     
     return render_template('matrix/trace.html', result=result)
 
-@app.route('/generate_matrix', methods=['POST'])
+@app.route('/matrices/generate_matrix', methods=['POST'])
 def generate_matrix():
     rows = int(request.form['rows'])
     cols = int(request.form['cols'])
@@ -874,6 +874,14 @@ def generate_matrix():
     return render_template('matrix/matrix_input.html', rows=rows, cols=cols, matrix_id=matrix_id)
 
 #---------------------------------------------------------- MATRIX ROUTES END------------------------------------------------------------------
+
+
+from statistics import statistics_bp
+app.register_blueprint(statistics_bp, url_prefix='/statistics')
+
+#---------------------------------------------------------- STATISTICS ROUTES END------------------------------------------------------------------
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
