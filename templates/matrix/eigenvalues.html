@@ -160,4 +160,36 @@ document.addEventListener('DOMContentLoaded', function() {
         colsA.addEventListener('change', syncDimensions);
     });
     </script>
+    <script>
+        function generateMatrix() {
+            const rows = document.getElementById('rows').value;
+            const cols = document.getElementById('cols').value;
+            
+            fetch('/generate_matrix', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `rows=${rows}&cols=${cols}&matrix_id=matrix`
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('matrix_container').innerHTML = html;
+            });
+        }
+        
+        // CHANGED: Simplified random matrix function
+        function fillRandomMatrix() {
+            const inputs = document.querySelectorAll('#matrix .matrix-table input');
+            inputs.forEach(input => {
+                input.value = Math.floor(Math.random() * 21) - 10; // Random value between -10 and 10
+            });
+        }
+        
+        // CHANGED: Removed unnecessary dimension sync code for transpose
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize with default matrix
+            generateMatrix();
+        });
+        </script>
 {% endblock %}
