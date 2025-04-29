@@ -1,0 +1,97 @@
+{% extends "matrix/base.html" %}
+
+{% block title %}Matrix Calculator - Inverse{% endblock %}
+
+{% block header %}Matrix Inverse{% endblock %}
+
+{% block content %}
+<div class="operation-description">
+    <p>The inverse of a square matrix $A$, denoted by $A^{-1}$, is another matrix such that $A \times A^{-1} = A^{-1} \times A = I$ (the identity matrix). Not all matrices have inverses - only non-singular (determinant ≠ 0) square matrices.</p>
+</div>
+
+<form class="matrix-form" method="POST">
+    <div class="matrix-dimensions">
+        <div class="dimension-control square-only">
+            <label>Matrix Size:</label>
+            <div class="dimension-inputs">
+                <input type="number" id="size" name="size" min="1" max="10" value="2" required>
+                <span>×</span>
+                <input type="number" id="size_display" value="2" disabled>
+                <button type="button" class="generate-btn" onclick="generateMatrix()">Generate</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="matrices-container">
+        <div class="matrix-wrapper full-width">
+            <h3>Matrix</h3>
+            <div id="matrix_container">
+                <!-- Matrix will be inserted here -->
+                <div class="matrix-input-container" id="matrix">
+                    <table class="matrix-table">
+                        {% for i in range(2) %}
+                        <tr>
+                            {% for j in range(2) %}
+                            <td>
+                                <input type="number" step="any" name="matrix_{{ i }}_{{ j }}" placeholder="0" required>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button type="submit" class="calculate-btn">Calculate</button>
+        <button type="reset" class="reset-btn">Reset</button>
+    </div>
+    
+    {% if result %}
+    <div class="result-container">
+        <h3>Result:</h3>
+        <div class="matrix-result">
+            <table class="matrix-table">
+                {% for row in result %}
+                <tr>
+                    {% for element in row %}
+                    <td>{{ "%.4f"|format(element) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</form>
+
+<script>
+function generateMatrix() {
+    const size = document.getElementById('size').value;
+    document.getElementById('size_display').value = size;
+    
+    fetch('/generate_matrix', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `rows=${size}&cols=${size}&matrix_id=matrix`
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('matrix_container').innerHTML = html;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sizeInput = document.getElementById('size');
+    const sizeDisplay = document.getElementById('size_display');
+    
+    sizeInput.addEventListener('input', function() {
+        sizeDisplay.value = this.value;
+    });
+});
+</script>
+{% endblock %}

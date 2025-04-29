@@ -1,0 +1,109 @@
+{% extends "matrix/base.html" %}
+
+{% block title %}Matrix Calculator - Eigenvalues & Eigenvectors{% endblock %}
+
+{% block header %}Eigenvalues & Eigenvectors{% endblock %}
+
+{% block content %}
+<div class="operation-description">
+    <p>Eigenvalues and eigenvectors are important concepts in linear algebra. For a square matrix $A$, an eigenvector $v$ is a non-zero vector such that $Av = \lambda v$ for some scalar $\lambda$, which is called an eigenvalue of $A$.</p>
+</div>
+
+<form class="matrix-form" method="POST">
+    <div class="matrix-dimensions">
+        <div class="dimension-control square-only">
+            <label>Matrix Size:</label>
+            <div class="dimension-inputs">
+                <input type="number" id="size" name="size" min="1" max="10" value="2" required>
+                <span>×</span>
+                <input type="number" id="size_display" value="2" disabled>
+                <button type="button" class="generate-btn" onclick="generateMatrix()">Generate</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="matrices-container">
+        <div class="matrix-wrapper full-width">
+            <h3>Matrix</h3>
+            <div id="matrix_container">
+                <!-- Matrix will be inserted here -->
+                <div class="matrix-input-container" id="matrix">
+                    <table class="matrix-table">
+                        {% for i in range(2) %}
+                        <tr>
+                            {% for j in range(2) %}
+                            <td>
+                                <input type="number" step="any" name="matrix_{{ i }}_{{ j }}" placeholder="0" required>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button type="submit" class="calculate-btn">Calculate</button>
+        <button type="reset" class="reset-btn">Reset</button>
+    </div>
+    
+    {% if result %}
+    <div class="result-container">
+        <h3>Eigenvalues:</h3>
+        <div class="eigenvalues-result">
+            <ul>
+                {% for value in result.eigenvalues %}
+                <li>λ = {{ "%.4f"|format(value|float) }} {% if value.imag != 0 %}{{ "%.4f"|format(value.imag|float) }}i{% endif %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <h3>Eigenvectors:</h3>
+        <div class="eigenvectors-result">
+            {% for i in range(result.eigenvectors|length) %}
+            <div class="eigenvector">
+                <h4>Eigenvector {{ i+1 }}:</h4>
+                <table class="matrix-table">
+                    {% for element in result.eigenvectors[i] %}
+                    <tr>
+                        <td>{{ "%.4f"|format(element|float) }} {% if element.imag != 0 %}{{ "%.4f"|format(element.imag|float) }}i{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</form>
+
+<script>
+function generateMatrix() {
+    const size = document.getElementById('size').value;
+    document.getElementById('size_display').value = size;
+    
+    fetch('/generate_matrix', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `rows=${size}&cols=${size}&matrix_id=matrix`
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('matrix_container').innerHTML = html;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sizeInput = document.getElementById('size');
+    const sizeDisplay = document.getElementById('size_display');
+    
+    sizeInput.addEventListener('input', function() {
+        sizeDisplay.value = this.value;
+    });
+});
+</script>
+{% endblock %}

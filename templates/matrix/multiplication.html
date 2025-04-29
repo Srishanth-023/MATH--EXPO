@@ -1,0 +1,155 @@
+{% extends "matrix/base.html" %}
+
+{% block title %}Matrix Calculator - Multiplication{% endblock %}
+
+{% block header %}Matrix Multiplication{% endblock %}
+
+{% block content %}
+<div class="operation-description">
+    <p>Matrix multiplication computes the product of two matrices. For matrices $A$ and $B$, the product $C = A \times B$ is defined only if the number of columns in $A$ equals the number of rows in $B$.</p>
+</div>
+
+<form class="matrix-form" method="POST">
+    <div class="matrix-dimensions">
+        <div class="dimension-control">
+            <label>Matrix A Dimensions:</label>
+            <div class="dimension-inputs">
+                <input type="number" id="rows_a" name="rows_a" min="1" max="10" value="2" required>
+                <span>×</span>
+                <input type="number" id="cols_a" name="cols_a" min="1" max="10" value="2" required>
+                <button type="button" class="generate-btn" onclick="generateMatrixA()">Generate</button>
+            </div>
+        </div>
+        
+        <div class="dimension-control">
+            <label>Matrix B Dimensions:</label>
+            <div class="dimension-inputs">
+                <input type="number" id="rows_b" name="rows_b" min="1" max="10" value="2" required>
+                <span>×</span>
+                <input type="number" id="cols_b" name="cols_b" min="1" max="10" value="2" required>
+                <button type="button" class="generate-btn" onclick="generateMatrixB()">Generate</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="matrices-container">
+        <div class="matrix-wrapper">
+            <h3>Matrix A</h3>
+            <div id="matrix_a_container">
+                <!-- Matrix A will be inserted here -->
+                <div class="matrix-input-container" id="a">
+                    <table class="matrix-table">
+                        {% for i in range(2) %}
+                        <tr>
+                            {% for j in range(2) %}
+                            <td>
+                                <input type="number" step="any" name="a_{{ i }}_{{ j }}" placeholder="0" required>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="operation-symbol">×</div>
+        
+        <div class="matrix-wrapper">
+            <h3>Matrix B</h3>
+            <div id="matrix_b_container">
+                <!-- Matrix B will be inserted here -->
+                <div class="matrix-input-container" id="b">
+                    <table class="matrix-table">
+                        {% for i in range(2) %}
+                        <tr>
+                            {% for j in range(2) %}
+                            <td>
+                                <input type="number" step="any" name="b_{{ i }}_{{ j }}" placeholder="0" required>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button type="submit" class="calculate-btn">Calculate</button>
+        <button type="reset" class="reset-btn">Reset</button>
+    </div>
+    
+    {% if result %}
+    <div class="result-container">
+        <h3>Result:</h3>
+        <div class="matrix-result">
+            <table class="matrix-table">
+                {% for row in result %}
+                <tr>
+                    {% for element in row %}
+                    <td>{{ "%.4f"|format(element) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</form>
+
+<script>
+function generateMatrixA() {
+    const rows = document.getElementById('rows_a').value;
+    const cols = document.getElementById('cols_a').value;
+    
+    fetch('/generate_matrix', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `rows=${rows}&cols=${cols}&matrix_id=a`
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('matrix_a_container').innerHTML = html;
+    });
+}
+
+function generateMatrixB() {
+    const rows = document.getElementById('rows_b').value;
+    const cols = document.getElementById('cols_b').value;
+    
+    fetch('/generate_matrix', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `rows=${rows}&cols=${cols}&matrix_id=b`
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('matrix_b_container').innerHTML = html;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // For multiplication, cols of A must equal rows of B
+    const colsA = document.getElementById('cols_a');
+    const rowsB = document.getElementById('rows_b');
+    
+    function syncMultiplicationDimensions() {
+        rowsB.value = colsA.value;
+    }
+    
+    colsA.addEventListener('change', syncMultiplicationDimensions);
+    rowsB.addEventListener('change', function() {
+        colsA.value = rowsB.value;
+    });
+    
+    // Initialize
+    syncMultiplicationDimensions();
+});
+</script>
+{% endblock %}
