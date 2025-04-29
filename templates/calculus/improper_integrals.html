@@ -1,0 +1,45 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Improper Integrals{% endblock %}
+{% block heading %}Improper Integrals Calculator{% endblock %}
+{% block subheading %}Evaluate integrals with infinite limits or unbounded integrands{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Improper Integrals</h2>
+        <p class="subtitle">Compute ∫<sub>a</sub><sup>∞</sup> f(x) dx or ∫<sub>-∞</sub><sup>b</sup> f(x) dx</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Function f(x):</label>
+                <input type="text" class="form-control" name="function" 
+                       placeholder="e.g., 1/x**2 or exp(-x)" required>
+            </div>
+
+            <div class="range-group">
+                <div class="form-group">
+                    <label>Lower Limit:</label>
+                    <input type="text" class="form-control" name="lower_limit" 
+                           placeholder="e.g., 1" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Evaluate Integral
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Result</h4>
+        <div class="result-box">
+            <p>∫<sub>{{ lower_limit }}</sub><sup>∞</sup> f(x) dx = <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

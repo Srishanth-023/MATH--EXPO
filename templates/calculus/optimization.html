@@ -1,0 +1,54 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Derivative Tests{% endblock %}
+{% block heading %}First & Second Derivative Tests{% endblock %}
+{% block subheading %}Analyze critical points and concavity of functions{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>First & Second Derivative Tests</h2>
+        <p class="subtitle">Find critical points and determine local maxima/minima</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Function f(x):</label>
+                <input type="text" class="form-control" name="function" 
+                       placeholder="e.g., x^3 - 3x^2 + 2, exp(-x^2)" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-graph-up"></i> Analyze Function
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-container">
+        <h4>Analysis Results</h4>
+        <div class="result-box">
+            <div class="result-item">
+                <h5>Critical Points:</h5>
+                <p class="result-value">{{ result['critical_points'] }}</p>
+            </div>
+            <div class="result-item">
+                <h5>Second Derivative:</h5>
+                <p class="result-value">f''(x) = {{ result['second_derivative'] }}</p>
+            </div>
+            {% if result['classification'] %}
+            <div class="result-item">
+                <h5>Classification:</h5>
+                <ul class="classification-list">
+                    {% for point, class in result['classification'].items() %}
+                    <li>x = {{ point }}: {{ class }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

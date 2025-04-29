@@ -1,0 +1,42 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Partial Derivatives{% endblock %}
+{% block heading %}Partial Derivatives Calculator{% endblock %}
+{% block subheading %}Compute ∂f/∂x and ∂f/∂y for multivariable functions{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Partial Derivatives</h2>
+        <p class="subtitle">Calculate ∂f/∂x and ∂f/∂y simultaneously</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Function f(x, y):</label>
+                <input type="text" class="form-control" name="expression" 
+                       placeholder="e.g., x**2*y + y**2, exp(x*y), sin(x)+cos(y)" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Compute Derivatives
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-container">
+        <h4>Partial Derivatives</h4>
+        <div class="result-box">
+            <div class="derivative-result">
+                <p>∂f/∂x = <span class="result-value">{{ result[0] }}</span></p>
+            </div>
+            <div class="derivative-result">
+                <p>∂f/∂y = <span class="result-value">{{ result[1] }}</span></p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

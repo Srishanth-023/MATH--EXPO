@@ -1,0 +1,37 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Implicit Differentiation{% endblock %}
+{% block heading %}Implicit Differentiation Calculator{% endblock %}
+{% block subheading %}Find dy/dx for implicitly defined functions{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Implicit Differentiation</h2>
+        <p class="subtitle">Compute dy/dx for equations of the form F(x,y) = 0</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Equation (in x and y):</label>
+                <input type="text" class="form-control" name="expression" 
+                       placeholder="e.g., x**2 + y**2 - 1" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Differentiate
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-container">
+        <h4>Result</h4>
+        <div class="result-box">
+            <p>dy/dx = <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
