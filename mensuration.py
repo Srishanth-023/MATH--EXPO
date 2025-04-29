@@ -2,15 +2,6 @@ from flask import Blueprint, render_template, request
 
 mensuration = Blueprint('mensuration', __name__, template_folder='templates/men')
 
-
-@mensuration.route('/calculator/<shape>/<calculation>', methods=['GET', 'POST'])
-def mensuration_calculator(shape, calculation):
-    # Your form processing logic
-    return render_template('men/calculator.html', shape=shape, calculation=calculation)
-
-
-
-
 # Define available shapes and their formulas
 shapes = {
     "circle": {"area": "Area = π × r²", "perimeter": "Perimeter = 2πr"},
@@ -50,10 +41,17 @@ shapes = {
     "ellipsoid": {"volume": "Volume = (4/3)πabc", "area": "Approximate Area = 4π((a^p b^p + a^p c^p + b^p c^p)/3)^(1/p)"},
 }
 
+# Home route showing shape options
 @mensuration.route('/')
 def home():
-    return render_template('home.html', shapes=shapes)
+    return render_template('men/home.html', shapes=shapes)
 
+# General calculator page (lists all shapes)
+@mensuration.route('/calculator')
+def calculator_home():
+    return render_template('men/home.html', shapes=shapes)
+
+# Core calculator with GET and POST
 @mensuration.route('/calculator/<shape>/<calculation>', methods=['GET', 'POST'])
 def calculator(shape, calculation):
     formula = shapes.get(shape, {}).get(calculation, "Formula not found")
@@ -63,17 +61,11 @@ def calculator(shape, calculation):
         try:
             if shape == "circle":
                 r = float(request.form['r'])
-                if calculation == "area":
-                    result = 3.1416 * r * r
-                elif calculation == "perimeter":
-                    result = 2 * 3.1416 * r
+                result = 3.1416 * r * r if calculation == "area" else 2 * 3.1416 * r
 
             elif shape == "square":
                 a = float(request.form['a'])
-                if calculation == "area":
-                    result = a * a
-                elif calculation == "perimeter":
-                    result = 4 * a
+                result = a * a if calculation == "area" else 4 * a
 
             elif shape == "triangle" and calculation == "area":
                 base = float(request.form['base'])
@@ -83,10 +75,7 @@ def calculator(shape, calculation):
             elif shape == "rectangle":
                 length = float(request.form['length'])
                 breadth = float(request.form['breadth'])
-                if calculation == "area":
-                    result = length * breadth
-                elif calculation == "perimeter":
-                    result = 2 * (length + breadth)
+                result = length * breadth if calculation == "area" else 2 * (length + breadth)
 
             elif shape == "trapezium":
                 if calculation == "area":
@@ -94,7 +83,7 @@ def calculator(shape, calculation):
                     b = float(request.form['b'])
                     height = float(request.form['height'])
                     result = 0.5 * (a + b) * height
-                elif calculation == "perimeter":
+                else:
                     a = float(request.form['a'])
                     b = float(request.form['b'])
                     c = float(request.form['c'])
@@ -111,33 +100,26 @@ def calculator(shape, calculation):
                 theta = float(request.form['theta'])
                 if calculation == "area":
                     result = (theta / 360) * 3.1416 * r * r
-                elif calculation == "perimeter":
-                    arc_length = (theta / 360) * 2 * 3.1416 * r
-                    result = arc_length + 2 * r
+                else:
+                    result = ((theta / 360) * 2 * 3.1416 * r) + 2 * r
 
             elif shape == "cone":
                 r = float(request.form['r'])
                 h = float(request.form['h'])
                 l = (r**2 + h**2) ** 0.5
-                if calculation == "area":
-                    result = 3.1416 * r * (l + r)
-                elif calculation == "volume":
-                    result = (1/3) * 3.1416 * r * r * h
+                result = 3.1416 * r * (l + r) if calculation == "area" else (1/3) * 3.1416 * r * r * h
 
             elif shape == "cylinder":
                 r = float(request.form['r'])
                 h = float(request.form['h'])
-                if calculation == "area":
-                    result = 2 * 3.1416 * r * (h + r)
-                elif calculation == "volume":
-                    result = 3.1416 * r * r * h
+                result = 2 * 3.1416 * r * (h + r) if calculation == "area" else 3.1416 * r * r * h
 
             elif shape == "cube":
                 a = float(request.form['a'])
                 if calculation == "area":
                     result = 6 * a * a
                 elif calculation == "volume":
-                    result = a * a * a
+                    result = a**3
                 elif calculation == "perimeter":
                     result = 12 * a
 
@@ -145,10 +127,7 @@ def calculator(shape, calculation):
                 l = float(request.form['l'])
                 b = float(request.form['b'])
                 h = float(request.form['h'])
-                if calculation == "area":
-                    result = 2 * (l*b + b*h + h*l)
-                elif calculation == "volume":
-                    result = l * b * h
+                result = 2 * (l*b + b*h + h*l) if calculation == "area" else l * b * h
 
             elif shape == "prism" and calculation == "volume":
                 base_area = float(request.form['base_area'])
@@ -157,57 +136,38 @@ def calculator(shape, calculation):
 
             elif shape == "sphere":
                 r = float(request.form['r'])
-                if calculation == "area":
-                    result = 4 * 3.1416 * r * r
-                elif calculation == "volume":
-                    result = (4/3) * 3.1416 * r * r * r
+                result = 4 * 3.1416 * r * r if calculation == "area" else (4/3) * 3.1416 * r**3
 
             elif shape == "rhombus":
                 if calculation == "area":
                     p = float(request.form['p'])
                     q = float(request.form['q'])
                     result = (p * q) / 2
-                elif calculation == "perimeter":
+                else:
                     a = float(request.form['a'])
                     result = 4 * a
 
             elif shape == "pentagon":
                 a = float(request.form['a'])
-                if calculation == "area":
-                    import math
-                    result = (5/4) * a**2 * (1 / math.tan(math.pi/5))
-                elif calculation == "perimeter":
-                    result = 5 * a
+                import math
+                result = (5/4) * a**2 * (1 / math.tan(math.pi/5)) if calculation == "area" else 5 * a
 
             elif shape == "hexagon":
                 a = float(request.form['a'])
-                if calculation == "area":
-                    import math
-                    result = (3 * (3)**0.5 / 2) * a * a
-                elif calculation == "perimeter":
-                    result = 6 * a
+                import math
+                result = (3 * (3)**0.5 / 2) * a * a if calculation == "area" else 6 * a
 
             elif shape == "arc" and calculation == "length":
                 r = float(request.form['r'])
                 theta = float(request.form['theta'])
-                result = (theta/360) * 2 * 3.1416 * r
+                result = (theta / 360) * 2 * 3.1416 * r
 
             elif shape == "ellipse":
                 a = float(request.form['a'])
                 b = float(request.form['b'])
-                if calculation == "area":
-                    result = 3.1416 * a * b
-                elif calculation == "perimeter":
-                    result = 2 * 3.1416 * ((a**2 + b**2)/2)**0.5
+                result = 3.1416 * a * b if calculation == "area" else 2 * 3.1416 * ((a**2 + b**2)/2)**0.5
 
-            # Similarly, you can add for conical frustum, spherical cap, spherical segment, ellipsoid etc.
-            
         except Exception as e:
             result = f"Error: {str(e)}"
 
     return render_template('men/calculator.html', shape=shape, calculation=calculation, formula=formula, result=result)
-
-# ROUTE 2
-@mensuration.route('/calculator')
-def calculator_home():    # <-- changed name to calculator_home
-    return render_template('men/home.html', shapes=shapes)
