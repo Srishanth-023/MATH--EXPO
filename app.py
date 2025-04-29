@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
-from mensuration import mensuration
 
 #FOR ALGEBRA----------------------------------------------------------------------------------------------------------------------------
 from flask import Flask, render_template, request
@@ -875,6 +874,14 @@ def generate_matrix():
     return render_template('matrix/matrix_input.html', rows=rows, cols=cols, matrix_id=matrix_id)
 
 #---------------------------------------------------------- MATRIX ROUTES END------------------------------------------------------------------
+
+
+from statistics import statistics_bp
+app.register_blueprint(statistics_bp, url_prefix='/statistics')
+
+#---------------------------------------------------------- STATISTICS ROUTES END------------------------------------------------------------------
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Blueprint, render_template, request
 from sympy import symbols, Eq, solve, simplify, expand, factor, parse_expr, Function, dsolve, Derivative
 from sympy.stats import Normal, P, E, variance, sample
 import numpy as np
@@ -8,15 +8,16 @@ import io
 import base64
 import matplotlib.pyplot as plt
 
-app = Flask(__name__)
+# Create Blueprint
+statistics_bp = Blueprint('statistics', __name__, template_folder='templates/statistics')
 
 # Home
-@app.route('/', methods=['GET', 'POST'])
-def statistics():
-    return render_template('/statistics/base.html')
+@statistics_bp.route('/base')
+def home():
+    return render_template('statistics/base.html')
 
 # 1. Descriptive Statistics
-@app.route('/statistics/descriptive', methods=['GET', 'POST'])
+@statistics_bp.route('/descriptive', methods=['GET', 'POST'])
 def descriptive_stats():
     result = None
     error = None
@@ -48,8 +49,8 @@ def descriptive_stats():
                 modes = [k for k, v in freq.items() if v == max_freq]
                 
                 # Variance and Standard Deviation
-                variance = sum((x - mean)**2 for x in data) / (n - 1)  # Sample variance
-                std_dev = math.sqrt(variance)
+                variance_val = sum((x - mean)**2 for x in data) / (n - 1)  # Sample variance
+                std_dev = math.sqrt(variance_val)
                 
                 # Quartiles
                 q1 = np.percentile(data, 25)
@@ -66,7 +67,7 @@ def descriptive_stats():
                     'mean': round(mean, 4),
                     'median': round(median, 4),
                     'mode': modes,
-                    'variance': round(variance, 4),
+                    'variance': round(variance_val, 4),
                     'std_dev': round(std_dev, 4),
                     'q1': round(q1, 4),
                     'q3': round(q3, 4),
@@ -84,7 +85,7 @@ def descriptive_stats():
     return render_template('statistics/descriptive.html', result=result, error=error)
 
 # 2. Probability Distributions
-@app.route('/statistics/distributions', methods=['GET', 'POST'])
+@statistics_bp.route('/distributions', methods=['GET', 'POST'])
 def probability_distributions():
     result = None
     error = None
@@ -149,7 +150,7 @@ def probability_distributions():
     return render_template('statistics/distributions.html', result=result, error=error)
 
 # 3. Hypothesis Testing
-@app.route('/statistics/hypothesis', methods=['GET', 'POST'])
+@statistics_bp.route('/hypothesis', methods=['GET', 'POST'])
 def hypothesis_testing():
     result = None
     error = None
@@ -215,7 +216,7 @@ def hypothesis_testing():
     return render_template('statistics/hypothesis.html', result=result, error=error)
 
 # 4. Confidence Intervals
-@app.route('/statistics/confidence', methods=['GET', 'POST'])
+@statistics_bp.route('/confidence', methods=['GET', 'POST'])
 def confidence_intervals():
     result = None
     error = None
@@ -288,7 +289,7 @@ def confidence_intervals():
     return render_template('statistics/confidence.html', result=result, error=error)
 
 # 5. Linear Regression
-@app.route('/statistics/regression', methods=['GET', 'POST'])
+@statistics_bp.route('/regression', methods=['GET', 'POST'])
 def linear_regression():
     result = None
     error = None
@@ -346,7 +347,7 @@ def linear_regression():
     return render_template('statistics/regression.html', result=result, error=error)
 
 # 6. Chi-Square Test
-@app.route('/statistics/chi_square', methods=['GET', 'POST'])
+@statistics_bp.route('/chi_square', methods=['GET', 'POST'])
 def chi_square_test():
     result = None
     error = None
@@ -376,8 +377,6 @@ def chi_square_test():
                     
             elif test_type == 'independence':
                 # Test for independence
-                # This would require a more complex input (contingency table)
-                # Simplified for example purposes
                 error = "Contingency table input not implemented in this example"
                 
         except ValueError:
@@ -388,7 +387,7 @@ def chi_square_test():
     return render_template('statistics/chi_square.html', result=result, error=error)
 
 # 7. ANOVA
-@app.route('/statistics/anova', methods=['GET', 'POST'])
+@statistics_bp.route('/anova', methods=['GET', 'POST'])
 def anova_test():
     result = None
     error = None
@@ -425,7 +424,7 @@ def anova_test():
     return render_template('statistics/anova.html', result=result, error=error)
 
 # 8. Correlation
-@app.route('/statistics/correlation', methods=['GET', 'POST'])
+@statistics_bp.route('/correlation', methods=['GET', 'POST'])
 def correlation():
     result = None
     error = None
@@ -478,7 +477,7 @@ def interpret_correlation(r):
     return f"{direction} {strength} correlation"
 
 # 9. Probability Calculator
-@app.route('/statistics/probability', methods=['GET', 'POST'])
+@statistics_bp.route('/probability', methods=['GET', 'POST'])
 def probability_calculator():
     result = None
     error = None
@@ -525,7 +524,7 @@ def probability_calculator():
     return render_template('statistics/probability.html', result=result, error=error)
 
 # 10. Sampling Distributions
-@app.route('/statistics/sampling', methods=['GET', 'POST'])
+@statistics_bp.route('/sampling', methods=['GET', 'POST'])
 def sampling_distributions():
     result = None
     error = None
@@ -568,7 +567,7 @@ def sampling_distributions():
     return render_template('statistics/sampling.html', result=result, error=error)
 
 # 11. Runge-Kutta Method (4th Order)
-@app.route('/statistics/runge_kutta', methods=['GET', 'POST'])
+@statistics_bp.route('/runge_kutta', methods=['GET', 'POST'])
 def runge_kutta():
     result = None
     error = None
@@ -658,6 +657,3 @@ def runge_kutta():
                          initial_y_value=request.form.get('initial_y', '1'),
                          step_size_value=request.form.get('step_size', '0.1'),
                          steps_value=request.form.get('steps', '10'))
-
-if __name__ == '__main__':
-    app.run(debug=True)
