@@ -581,6 +581,5 @@ from mensuration import mensuration  # <-- import mensuration blueprint
 app.register_blueprint(mensuration, url_prefix='/men')
 
 
-
 if __name__ == '__main__':
     app.run(debug=True)
