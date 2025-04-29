@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 from mensuration import mensuration
+from calculus import calculus
 
 
 #FOR ALGEBRA----------------------------------------------------------------------------------------------------------------------------
@@ -579,6 +580,8 @@ def system_equations():
 
 from mensuration import mensuration  # <-- import mensuration blueprint
 app.register_blueprint(mensuration, url_prefix='/men')
+
+#---------------------------------------------------------- MENSURATION ROUTES END------------------------------------------------------------------
 
 
 if __name__ == '__main__':
