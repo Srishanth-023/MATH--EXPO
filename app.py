@@ -3,8 +3,6 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 from mensuration import mensuration
-from calculus import calculus
-
 
 #FOR ALGEBRA----------------------------------------------------------------------------------------------------------------------------
 from flask import Flask, render_template, request
