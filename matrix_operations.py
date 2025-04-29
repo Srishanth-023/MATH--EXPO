@@ -83,13 +83,28 @@ def eigenvalues_eigenvectors(matrix):
     except Exception as e:
         raise ValueError(f"Error calculating eigenvalues and eigenvectors: {str(e)}")
 
+import numpy as np
+from numpy.linalg import matrix_rank
+
+import numpy as np
+from numpy.linalg import svd
+
 def matrix_rank(matrix):
-    """Calculate the rank of a matrix."""
+    """Calculate the rank of a matrix with enhanced numerical stability."""
     try:
-        a = np.array(matrix)
-        return int(matrix_rank(a))
+        a = np.array(matrix, dtype=np.float64)
+        
+        # Convert very small numbers to zero
+        a[np.abs(a) < 1e-12] = 0
+        
+        # Manual SVD-based rank calculation
+        s = svd(a, compute_uv=False)
+        # Tolerance based on matrix size and data type
+        tol = max(a.shape) * np.spacing(np.linalg.norm(s, np.inf))
+        rank = np.sum(s > tol)
+        return int(rank)
     except Exception as e:
-        raise ValueError(f"Error calculating rank: {str(e)}")
+        raise ValueError(f"Rank calculation error: {str(e)}")
 
 def adjoint_matrix(matrix):
     """Calculate the adjoint (adjugate) of a matrix."""

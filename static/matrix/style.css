@@ -560,4 +560,120 @@ input:focus, button:focus {
 
 .matrix-input-container:hover, .matrix-result:hover {
     animation: borderGlow 2s infinite;
+}/* Rank-specific styles */
+.rank-result {
+    padding: 15px;
+    border-radius: 8px;
+    background: var(--card-bg);
+    box-shadow: 0 3px 10px var(--shadow-color);
+}
+
+.rank-value {
+    font-size: 1.5em;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.full-rank {
+    color: var(--success-color);
+    margin-top: 8px;
+}
+
+.rank-deficient {
+    color: var(--error-color);
+    margin-top: 8px;
+}
+
+/* Hover effects */
+.matrix-cell:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 8px var(--primary-light);
+    z-index: 1;
+}
+
+.hover-effect:hover {
+    transform: translateY(-2px);
+    filter: brightness(110%);
+}
+
+.random-matrix-btn {
+    background: var(--secondary-color);
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.random-matrix-btn:hover {
+    transform: rotate(15deg) scale(1.1);
+    background: var(--primary-light);
+}
+/* Button Styles */
+.generate-btn {
+    background-color: var(--primary-color);
+    margin-right: 5px;
+}
+
+.random-btn {
+    background-color: var(--secondary-color);
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3);
+}
+
+.random-btn:hover {
+    transform: rotate(10deg) scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 206, 201, 0.3);
+}
+
+/* Input Animation */
+.matrix-table input {
+    transition: all 0.3s ease;
+}
+
+.matrix-table input:focus {
+    transform: scale(1.05);
+    box-shadow: 0 0 5px var(--primary-light);
+}
+.random-btn {
+    background-color: var(--secondary-color);
+    margin-left: 5px;
+}
+
+.random-btn:hover {
+    transform: rotate(15deg) scale(1.1);
+    background-color: var(--primary-light);
+}
+/* Diagonal cell highlighting */
+.diagonal-cell {
+    background-color: rgba(0, 206, 201, 0.1);
+}
+
+.diagonal-cell input {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Trace result styling */
+.trace-value {
+    font-size: 1.3em;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.trace-details {
+    margin-top: 10px;
+    color: var(--text-color);
+    font-family: monospace;
+}
+
+.random-btn {
+    background-color: var(--secondary-color);
+    margin-left: 8px;
+    transition: all 0.3s;
+}
+
+.random-btn:hover {
+    transform: rotate(15deg) scale(1.1);
+    background-color: var(--primary-light);
 }

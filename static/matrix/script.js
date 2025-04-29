@@ -111,47 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Add quick fill buttons for identity matrix and zero matrix
-    const generateButtons = document.querySelectorAll('.generate-btn');
-    generateButtons.forEach(button => {
-        const controlsContainer = button.parentElement;
-        
-        // Don't add these buttons for non-square matrices
-        if (!controlsContainer.closest('.square-only')) {
-            return;
-        }
-        
-        const fillIdentityBtn = document.createElement('button');
-        fillIdentityBtn.type = 'button';
-        fillIdentityBtn.className = 'generate-btn';
-        fillIdentityBtn.textContent = 'Identity Matrix';
-        fillIdentityBtn.addEventListener('click', function() {
-            const table = controlsContainer.parentElement.querySelector('.matrix-table');
-            const rows = table.rows.length;
-            const cols = table.rows[0].cells.length;
-            for (let i = 0; i < rows; i++) {
-                for (let j = 0; j < cols; j++) {
-                    table.rows[i].cells[j].querySelector('input').value = (i === j) ? 1 : 0;
-                }
-            }
-        });
-
-        const fillZeroBtn = document.createElement('button');
-        fillZeroBtn.type = 'button';
-        fillZeroBtn.className = 'generate-btn';
-        fillZeroBtn.textContent = 'Zero Matrix';
-        fillZeroBtn.addEventListener('click', function() {
-            const table = controlsContainer.parentElement.querySelector('.matrix-table');
-            const rows = table.rows.length;
-            const cols = table.rows[0].cells.length;
-            for (let i = 0; i < rows; i++) {
-                for (let j = 0; j < cols; j++) {
-                    table.rows[i].cells[j].querySelector('input').value = 0;
-                }
-            }
-        });
-
-        controlsContainer.appendChild(fillIdentityBtn);
-        controlsContainer.appendChild(fillZeroBtn);
-    });
+    // Removed all identity matrix and zero matrix related code
+    // This section previously contained the quick fill buttons code which has been removed
 });

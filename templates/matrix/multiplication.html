@@ -18,6 +18,7 @@
                 <span>×</span>
                 <input type="number" id="cols_a" name="cols_a" min="1" max="10" value="2" required>
                 <button type="button" class="generate-btn" onclick="generateMatrixA()">Generate</button>
+                <button type="button" class="generate-btn" onclick="generateRandomMatrix('a')">Generate Random A</button>
             </div>
         </div>
         
@@ -28,6 +29,7 @@
                 <span>×</span>
                 <input type="number" id="cols_b" name="cols_b" min="1" max="10" value="2" required>
                 <button type="button" class="generate-btn" onclick="generateMatrixB()">Generate</button>
+                <button type="button" class="generate-btn" onclick="generateRandomMatrix('b')">Generate Random A</button>
             </div>
         </div>
     </div>
@@ -152,4 +154,57 @@ document.addEventListener('DOMContentLoaded', function() {
     syncMultiplicationDimensions();
 });
 </script>
+<script>
+    // Generate a random integer between min and max (inclusive)
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    // Generate a random matrix and fill the inputs
+    function generateRandomMatrix(matrixId) {
+        const rows = parseInt(document.getElementById(`rows_${matrixId}`).value);
+        const cols = parseInt(document.getElementById(`cols_${matrixId}`).value);
+        
+        let matrixHTML = `
+            <div class="matrix-input-container" id="${matrixId}">
+                <table class="matrix-table">
+        `;
+        
+        for (let i = 0; i < rows; i++) {
+            matrixHTML += `<tr>`;
+            for (let j = 0; j < cols; j++) {
+                const randomValue = getRandomInt(-10, 10); // Random integer between -10 and 10
+                matrixHTML += `
+                    <td>
+                        <input type="number" step="any" name="${matrixId}_${i}_${j}" value="${randomValue}" required>
+                    </td>
+                `;
+            }
+            matrixHTML += `</tr>`;
+        }
+        
+        matrixHTML += `
+                </table>
+            </div>
+        `;
+        
+        document.getElementById(`matrix_${matrixId}_container`).innerHTML = matrixHTML;
+    }
+    
+    // Sync dimensions for addition (Matrix B matches Matrix A)
+    document.addEventListener('DOMContentLoaded', function() {
+        const rowsA = document.getElementById('rows_a');
+        const colsA = document.getElementById('cols_a');
+        const rowsB = document.getElementById('rows_b');
+        const colsB = document.getElementById('cols_b');
+        
+        function syncDimensions() {
+            rowsB.value = rowsA.value;
+            colsB.value = colsA.value;
+        }
+        
+        rowsA.addEventListener('change', syncDimensions);
+        colsA.addEventListener('change', syncDimensions);
+    });
+    </script>
 {% endblock %}

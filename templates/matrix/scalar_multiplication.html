@@ -23,6 +23,7 @@
                 <span>×</span>
                 <input type="number" id="cols" name="cols" min="1" max="10" value="2" required>
                 <button type="button" class="generate-btn" onclick="generateMatrix()">Generate</button>
+                <button type="button" class="generate-btn random-btn" onclick="fillRandomMatrix()">🎲 Random Fill</button>
             </div>
         </div>
     </div>
@@ -90,4 +91,89 @@ function generateMatrix() {
     });
 }
 </script>
+<script>
+    // Generate a random integer between min and max (inclusive)
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    // Generate a random matrix and fill the inputs
+    function generateRandomMatrix(matrixId) {
+        const rows = parseInt(document.getElementById(`rows_${matrixId}`).value);
+        const cols = parseInt(document.getElementById(`cols_${matrixId}`).value);
+        
+        let matrixHTML = `
+            <div class="matrix-input-container" id="${matrixId}">
+                <table class="matrix-table">
+        `;
+        
+        for (let i = 0; i < rows; i++) {
+            matrixHTML += `<tr>`;
+            for (let j = 0; j < cols; j++) {
+                const randomValue = getRandomInt(-10, 10); // Random integer between -10 and 10
+                matrixHTML += `
+                    <td>
+                        <input type="number" step="any" name="${matrixId}_${i}_${j}" value="${randomValue}" required>
+                    </td>
+                `;
+            }
+            matrixHTML += `</tr>`;
+        }
+        
+        matrixHTML += `
+                </table>
+            </div>
+        `;
+        
+        document.getElementById(`matrix_${matrixId}_container`).innerHTML = matrixHTML;
+    }
+    
+    // Sync dimensions for addition (Matrix B matches Matrix A)
+    document.addEventListener('DOMContentLoaded', function() {
+        const rowsA = document.getElementById('rows_a');
+        const colsA = document.getElementById('cols_a');
+        const rowsB = document.getElementById('rows_b');
+        const colsB = document.getElementById('cols_b');
+        
+        function syncDimensions() {
+            rowsB.value = rowsA.value;
+            colsB.value = colsA.value;
+        }
+        
+        rowsA.addEventListener('change', syncDimensions);
+        colsA.addEventListener('change', syncDimensions);
+    });
+    </script>
+    <script>
+        function generateMatrix() {
+            const rows = document.getElementById('rows').value;
+            const cols = document.getElementById('cols').value;
+            
+            fetch('/generate_matrix', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `rows=${rows}&cols=${cols}&matrix_id=matrix`
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('matrix_container').innerHTML = html;
+            });
+        }
+        
+        // CHANGED: Simplified random matrix function
+        function fillRandomMatrix() {
+            const inputs = document.querySelectorAll('#matrix .matrix-table input');
+            inputs.forEach(input => {
+                input.value = Math.floor(Math.random() * 21) - 10; // Random value between -10 and 10
+            });
+        }
+        
+        // CHANGED: Removed unnecessary dimension sync code for transpose
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize with default matrix
+            generateMatrix();
+        });
+        </script>
 {% endblock %}
