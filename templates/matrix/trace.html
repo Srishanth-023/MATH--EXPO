@@ -1,0 +1,133 @@
+{% extends "matrix/base.html" %}
+
+{% block title %}Matrix Calculator - Trace{% endblock %}
+
+{% block header %}Matrix Trace{% endblock %}
+
+{% block content %}
+<div class="operation-description">
+    <p>The trace of a square matrix is the sum of elements on its main diagonal.</p>
+</div>
+
+<form class="matrix-form" method="POST">
+    <div class="matrix-dimensions">
+        <div class="dimension-control square-only">
+            <label>Matrix Size:</label>
+            <div class="dimension-inputs">
+                <input type="number" id="size" name="size" min="1" max="10" value="2" required>
+                <span>×</span>
+                <input type="number" id="size_display" value="2" disabled>
+                <button type="button" class="generate-btn" onclick="generateEmptyMatrix()">Generate</button>
+                <button type="button" class="generate-btn random-btn" onclick="generateRandomMatrix()">🎲 Random</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="matrices-container">
+        <div class="matrix-wrapper full-width">
+            <h3>Matrix</h3>
+            <div id="matrix_container">
+                <div class="matrix-input-container" id="matrix">
+                    <table class="matrix-table">
+                        {% for i in range(2) %}
+                        <tr>
+                            {% for j in range(2) %}
+                            <td>
+                                <input type="number" step="any" name="matrix_{{ i }}_{{ j }}" 
+                                       placeholder="0" required class="{% if i == j %}diagonal-cell{% endif %}">
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button type="submit" class="calculate-btn">Calculate Trace</button>
+        <button type="reset" class="reset-btn">Reset</button>
+    </div>
+    
+    {% if result is not none %}
+    <div class="result-container">
+        <h3>Result:</h3>
+        <div class="scalar-result">
+            <p>Trace = <span class="highlight">{{ "%.4f"|format(result) }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</form>
+
+<script>
+// Generate empty matrix structure
+function generateEmptyMatrix() {
+    const size = document.getElementById('size').value;
+    document.getElementById('size_display').value = size;
+    
+    fetch('/generate_matrix', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `rows=${size}&cols=${size}&matrix_id=matrix`
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('matrix_container').innerHTML = html;
+        highlightDiagonal();
+    });
+}
+
+// Generate and fill matrix with random values
+function generateRandomMatrix() {
+    const size = document.getElementById('size').value;
+    document.getElementById('size_display').value = size;
+    
+    let matrixHTML = `
+    <div class="matrix-input-container" id="matrix">
+        <table class="matrix-table">`;
+    
+    for (let i = 0; i < size; i++) {
+        matrixHTML += `<tr>`;
+        for (let j = 0; j < size; j++) {
+            const randomVal = (Math.random() * 20 - 10).toFixed(1); // -10 to 10
+            matrixHTML += `
+            <td>
+                <input type="number" step="any" name="matrix_${i}_${j}" 
+                       value="${randomVal}" required class="${i === j ? 'diagonal-cell' : ''}">
+            </td>`;
+        }
+        matrixHTML += `</tr>`;
+    }
+    
+    matrixHTML += `</table></div>`;
+    document.getElementById('matrix_container').innerHTML = matrixHTML;
+    highlightDiagonal();
+}
+
+// Highlight diagonal cells
+function highlightDiagonal() {
+    document.querySelectorAll('.matrix-table tr').forEach((row, i) => {
+        const cell = row.cells[i];
+        if (cell) {
+            cell.classList.add('diagonal-cell');
+            cell.querySelector('input').classList.add('diagonal-input');
+        }
+    });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    const sizeInput = document.getElementById('size');
+    const sizeDisplay = document.getElementById('size_display');
+    
+    sizeInput.addEventListener('input', function() {
+        sizeDisplay.value = this.value;
+    });
+    
+    generateEmptyMatrix(); // Generate default 2x2 matrix
+});
+</script>
+{% endblock %}

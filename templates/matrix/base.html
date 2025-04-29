@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Matrix Calculator{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='matrix/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script>
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <a href="/">Matrix<span>Calc</span></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/matrices">Home</a></li>
+                <li><a href="/matrices/addition">Addition</a></li>
+                <li><a href="/matrices/subtraction">Subtraction</a></li>
+                <li><a href="/matrices/multiplication">Multiplication</a></li>
+                <li><a href="/matrices/scalar_multiplication">Scalar Mult.</a></li>
+                <li><a href="/matrices/determinant">Determinant</a></li>
+                <li><a href="/matrices/inverse">Inverse</a></li>
+                <li><a href="/matrices/transpose">Transpose</a></li>
+                <li><a href="/matrices/eigenvalues">Eigenvalues</a></li>
+                <li><a href="/matrices/rank">Rank</a></li>
+                <li><a href="/matrices/adjoint">Adjoint</a></li>
+                <li><a href="/matrices/trace">Trace</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <h1>{% block header %}Matrix Calculator{% endblock %}</h1>
+                </div>
+                <div class="card-body">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Matrix Calculator | Developed by Matrix Math Team</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='matrix/script.js') }}"></script>
+</body>
+</html>

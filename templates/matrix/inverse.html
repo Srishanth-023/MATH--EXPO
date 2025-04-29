@@ -1,0 +1,151 @@
+{% extends "matrix/base.html" %}
+
+{% block title %}Matrix Calculator - Inverse{% endblock %}
+
+{% block header %}Matrix Inverse{% endblock %}
+
+{% block content %}
+<div class="operation-description">
+    <p>The inverse of a square matrix $A$, denoted by $A^{-1}$, is another matrix such that $A \times A^{-1} = A^{-1} \times A = I$ (the identity matrix). Not all matrices have inverses - only non-singular (determinant ≠ 0) square matrices.</p>
+</div>
+
+<form class="matrix-form" method="POST">
+    <div class="matrix-dimensions">
+        <div class="dimension-control square-only">
+            <label>Matrix Size:</label>
+            <div class="dimension-inputs">
+                <input type="number" id="size" name="size" min="1" max="10" value="2" required>
+                <span>×</span>
+                <input type="number" id="size_display" value="2" disabled>
+                <button type="button" class="generate-btn" onclick="generateMatrix()">Generate</button>
+                <button type="button" class="generate-btn random-btn" onclick="fillRandomMatrix()">🎲 Random Fill</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="matrices-container">
+        <div class="matrix-wrapper full-width">
+            <h3>Matrix</h3>
+            <div id="matrix_container">
+                <!-- Matrix will be inserted here -->
+                <div class="matrix-input-container" id="matrix">
+                    <table class="matrix-table">
+                        {% for i in range(2) %}
+                        <tr>
+                            {% for j in range(2) %}
+                            <td>
+                                <input type="number" step="any" name="matrix_{{ i }}_{{ j }}" placeholder="0" required>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button type="submit" class="calculate-btn">Calculate</button>
+        <button type="reset" class="reset-btn">Reset</button>
+    </div>
+    
+    {% if result %}
+    <div class="result-container">
+        <h3>Result:</h3>
+        <div class="matrix-result">
+            <table class="matrix-table">
+                {% for row in result %}
+                <tr>
+                    {% for element in row %}
+                    <td>{{ "%.4f"|format(element) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</form>
+
+<script>
+function generateMatrix() {
+    const size = document.getElementById('size').value;
+    document.getElementById('size_display').value = size;
+    
+    fetch('/generate_matrix', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `rows=${size}&cols=${size}&matrix_id=matrix`
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('matrix_container').innerHTML = html;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sizeInput = document.getElementById('size');
+    const sizeDisplay = document.getElementById('size_display');
+    
+    sizeInput.addEventListener('input', function() {
+        sizeDisplay.value = this.value;
+    });
+});
+</script>
+<script>
+    // Generate a random integer between min and max (inclusive)
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    // Generate a random matrix and fill the inputs
+    function generateRandomMatrix(matrixId) {
+        const rows = parseInt(document.getElementById(`rows_${matrixId}`).value);
+        const cols = parseInt(document.getElementById(`cols_${matrixId}`).value);
+        
+        let matrixHTML = `
+            <div class="matrix-input-container" id="${matrixId}">
+                <table class="matrix-table">
+        `;
+        
+        for (let i = 0; i < rows; i++) {
+            matrixHTML += `<tr>`;
+            for (let j = 0; j < cols; j++) {
+                const randomValue = getRandomInt(-10, 10); // Random integer between -10 and 10
+                matrixHTML += `
+                    <td>
+                        <input type="number" step="any" name="${matrixId}_${i}_${j}" value="${randomValue}" required>
+                    </td>
+                `;
+            }
+            matrixHTML += `</tr>`;
+        }
+        
+        matrixHTML += `
+                </table>
+            </div>
+        `;
+        
+        document.getElementById(`matrix_${matrixId}_container`).innerHTML = matrixHTML;
+    }
+    
+    // Sync dimensions for addition (Matrix B matches Matrix A)
+    document.addEventListener('DOMContentLoaded', function() {
+        const rowsA = document.getElementById('rows_a');
+        const colsA = document.getElementById('cols_a');
+        const rowsB = document.getElementById('rows_b');
+        const colsB = document.getElementById('cols_b');
+        
+        function syncDimensions() {
+            rowsB.value = rowsA.value;
+            colsB.value = colsA.value;
+        }
+        
+        rowsA.addEventListener('change', syncDimensions);
+        colsA.addEventListener('change', syncDimensions);
+    });
+    </script>
+{% endblock %}

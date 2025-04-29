@@ -1,0 +1,13 @@
+<div class="matrix-input-container" id="{{ matrix_id }}">
+    <table class="matrix-table">
+        {% for i in range(rows) %}
+        <tr>
+            {% for j in range(cols) %}
+            <td>
+                <input type="number" step="any" name="{{ matrix_id }}_{{ i }}_{{ j }}" placeholder="0" required>
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
