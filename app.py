@@ -889,5 +889,6 @@ app.register_blueprint(calculus_bp, url_prefix='/calculus')
 from trig import trig_bp
 app.register_blueprint(trig_bp, url_prefix='/trig')
 
+
 if __name__ == '__main__':
     app.run(debug=True)
