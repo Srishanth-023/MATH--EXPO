@@ -62,9 +62,9 @@ def basic():
 def algebra():
     return render_template('algebra.html')'''
 
-@app.route('/trigonometry')
+'''@app.route('/trigonometry')
 def trigonometry():
-    return render_template('trigonometry.html')
+    return render_template('trigonometry.html')'''
 
 @app.route('/calculus')
 def calculus():
@@ -887,7 +887,7 @@ app.register_blueprint(calculus_bp, url_prefix='/calculus')
 #---------------------------------------------------------- CALCULUS ROUTES END------------------------------------------------------------------
 
 from trig import trig_bp
-app.register_blueprint(trig_bp, url_prefix='/trig')
+app.register_blueprint(trig_bp, url_prefix='/trigonometry')
 
 
 if __name__ == '__main__':
