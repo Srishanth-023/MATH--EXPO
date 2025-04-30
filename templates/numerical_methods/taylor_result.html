@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Taylor Series Method Results</h2>
+    </div>
+    <div class="card-body">
+        <div class="formula-container mb-4">
+            <h4>Solved Equation:</h4>
+            <p>\[ \frac{dy}{dx} = {{ function }} \]</p>
+            <p>With initial condition: \( y({{ x0 }}) = {{ y0 }} \)</p>
+            <p>Step size: \( h = {{ h }} \)</p>
+            <p>Target x value: \( x = {{ target_x }} \)</p>
+            <p>Taylor series order: {{ order }}</p>
+        </div>
+
+        <h4 class="mb-3">Solution Steps:</h4>
+        {% for step in steps %}
+        <div class="card step-card">
+            <div class="card-header">
+                <h5>Step {{ loop.index }}: x = {{ "%.4f"|format(step.x) }}, y = {{ "%.6f"|format(step.y) }}</h5>
+            </div>
+            <div class="card-body">
+                <h6>Derivatives:</h6>
+                <ul>
+                    <li>\( y' = {{ step.derivatives[0].expression }} = {{ "%.6f"|format(step.derivatives[0].value) }} \)</li>
+                    {% if order >= 2 %}
+                    <li>\( y'' = {{ step.derivatives[1].expression }} = {{ "%.6f"|format(step.derivatives[1].value) }} \)</li>
+                    {% endif %}
+                    {% if order >= 3 %}
+                    <li>\( y''' = {{ step.derivatives[2].expression }} = {{ "%.6f"|format(step.derivatives[2].value) }} \)</li>
+                    {% endif %}
+                    {% if order >= 4 %}
+                    <li>\( y'''' = {{ step.derivatives[3].expression }} = {{ "%.6f"|format(step.derivatives[3].value) }} \)</li>
+                    {% endif %}
+                </ul>
+
+                <h6>Taylor Series Terms:</h6>
+                <p>\[ y_{new} = {{ "%.6f"|format(step.y) }} \]</p>
+                {% for expr in step.term_expressions %}
+                <p>\[ {{ expr }} \]</p>
+                {% endfor %}
+                <p>\[ = {{ "%.6f"|format(step.y_new) }} \]</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="alert alert-success mt-4">
+            <h4>Final Result:</h4>
+            <p>At \( x = {{ "%.4f"|format(target_x) }} \), \( y \approx {{ "%.6f"|format(final_y) }} \)</p>
+        </div>
+
+        <a href="{{ url_for('taylor') }}" class="btn btn-primary">Solve Another</a>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Home</a>
+    </div>
+</div>
+{% endblock %}

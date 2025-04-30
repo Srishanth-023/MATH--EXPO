@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Runge-Kutta Method Results</h2>
+    </div>
+    <div class="card-body">
+        <div class="formula-container mb-4">
+            <h4>Solved Equation:</h4>
+            <p>\[ \frac{dy}{dx} = {{ function }} \]</p>
+            <p>With initial condition: \( y({{ x0 }}) = {{ y0 }} \)</p>
+            <p>Step size: \( h = {{ h }} \)</p>
+            <p>Target x value: \( x = {{ target_x }} \)</p>
+        </div>
+
+        <h4 class="mb-3">Solution Steps:</h4>
+        {% for step in steps %}
+        <div class="card step-card">
+            <div class="card-header">
+                <h5>Step {{ loop.index }}: x = {{ "%.4f"|format(step.x) }}, y = {{ "%.6f"|format(step.y) }}</h5>
+            </div>
+            <div class="card-body">
+                <p>\[ \begin{align*}
+                    k_1 &= h \cdot f(x_n, y_n) = {{ h }} \cdot f({{ "%.4f"|format(step.x) }}, {{ "%.6f"|format(step.y) }}) = {{ "%.6f"|format(step.k1) }} \\
+                    k_2 &= h \cdot f(x_n + \frac{h}{2}, y_n + \frac{k_1}{2}) = {{ "%.6f"|format(step.k2) }} \\
+                    k_3 &= h \cdot f(x_n + \frac{h}{2}, y_n + \frac{k_2}{2}) = {{ "%.6f"|format(step.k3) }} \\
+                    k_4 &= h \cdot f(x_n + h, y_n + k_3) = {{ "%.6f"|format(step.k4) }} \\
+                    \Delta y &= \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4) = {{ "%.6f"|format(step.delta_y) }} \\
+                    y_{new} &= y_n + \Delta y = {{ "%.6f"|format(step.y) }} + {{ "%.6f"|format(step.delta_y) }} = {{ "%.6f"|format(step.y_new) }}
+                \end{align*} \]</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="alert alert-success mt-4">
+            <h4>Final Result:</h4>
+            <p>At \( x = {{ "%.4f"|format(target_x) }} \), \( y \approx {{ "%.6f"|format(final_y) }} \)</p>
+        </div>
+
+        <a href="{{ url_for('runge_kutta') }}" class="btn btn-primary">Solve Another</a>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Home</a>
+    </div>
+</div>
+{% endblock %}
