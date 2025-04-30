@@ -4,28 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math X - Solve Everything</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='navigation.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-dark: #0a0e17;
+            --space-darker: #050510;
+            --neon-blue: #0ff0fc;
+            --neon-purple: #8a2be2;
+            --text-light: #e0e0e8;
+        }
 
-    {% include 'navigation.html' %}
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--space-darker);
+            color: var(--text-light);
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
+        /* Space for your navigation bar */
+        .nav-space {
+            height: 70px;
+            width: 100%;
+        }
 
+        /* Animated Space Background - FASTER STARS */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: var(--opacity); }
+        }
+
+        /* Floating Math Elements - FASTER MOVEMENT */
+        .math-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .math-symbol {
+            position: absolute;
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            animation: float linear infinite;
+            text-shadow: 0 0 10px var(--neon-blue);
+            opacity: 0.7;
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(720deg); /* Faster rotation */
+                opacity: 0;
+            }
+        }
+
+        /* Main content */
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 70px);
+            padding: 20px;
+            position: relative;
+        }
+
+        .content {
+            text-align: center;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(10, 14, 23, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            box-shadow: 0 0 30px rgba(15, 240, 252, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(15, 240, 252, 0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(15, 240, 252, 0.1);
+            color: var(--text-light);
+            border: 1px solid var(--neon-blue);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: rgba(15, 240, 252, 0.2);
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: translateY(-3px);
+        }
+    </style>
 </head>
 <body>
-    <div class="floating-symbols">
-        <span>+</span>
-        <span>-</span>
-        <span>×</span>
-        <span>÷</span>
-        <span>=</span>
-        <span>∑</span>
-        <span>%</span>
-        <span>∮</span>
-        <span>≠</span>
-        <span>∞</span>
-    </div>
-    
+    <header>
+        {% include 'navigation.html' %}
+    </header>
+    <!-- Animated Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
 
+    <!-- Floating Math Elements -->
+    <div class="math-elements" id="mathElements"></div>
+
+    <!-- Main content -->
     <div class="hero">
         <div class="content">
             <h1>Master Every Math Problem</h1>
@@ -34,5 +165,105 @@
         </div>
     </div>
 
+    <script>
+        // Create starry background - FASTER TWINKLING
+        function createStars() {
+            const container = document.getElementById('spaceBackground');
+            const starCount = 150; // More stars for faster movement
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random properties with faster timing
+                const size = Math.random() * 3;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const opacity = Math.random() * 0.8 + 0.1;
+                const duration = Math.random() * 2 + 1; // Faster twinkle (1-3s)
+                const delay = Math.random() * 2;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${left}%`;
+                star.style.top = `${top}%`;
+                star.style.setProperty('--opacity', opacity);
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(star);
+            }
+        }
+
+        // Create floating math symbols - FASTER MOVEMENT
+        function createMathElements() {
+            const container = document.getElementById('mathElements');
+            const symbols = ['+', '-', '×', '÷', '=', '∑', '%', '∮', '≠', '∞', 'π', '∫', '√', 'θ', '∆', '≈', '∝', '∩', '∪'];
+            const elementCount = 30; // More symbols
+            
+            for (let i = 0; i < elementCount; i++) {
+                const element = document.createElement('div');
+                element.className = 'math-symbol';
+                element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                // Random properties with faster timing
+                const size = Math.random() * 2 + 1;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 10 + 5; // Faster movement (5-15s)
+                const delay = Math.random() * 3;
+                const tx = Math.random() * 200 - 100;
+                const ty = Math.random() * -300 - 150; // Faster upward movement
+                const hue = Math.random() * 60 + 180;
+                const glowIntensity = Math.random() * 10 + 5;
+                
+                element.style.fontSize = `${size}rem`;
+                element.style.left = `${left}%`;
+                element.style.top = '100%';
+                element.style.setProperty('--tx', `${tx}px`);
+                element.style.setProperty('--ty', `${ty}px`);
+                element.style.animationDuration = `${duration}s`;
+                element.style.animationDelay = `${delay}s`;
+                element.style.color = `hsl(${hue}, 100%, 70%)`;
+                element.style.filter = `drop-shadow(0 0 ${glowIntensity}px hsl(${hue}, 100%, 50%))`;
+                
+                container.appendChild(element);
+            }
+        }
+
+        // Initialize effects
+        window.addEventListener('load', () => {
+            createStars();
+            createMathElements();
+            
+            // Continuous generation of new symbols
+            setInterval(() => {
+                const container = document.getElementById('mathElements');
+                if (container.children.length < 40) { // Keep max 40 symbols on screen
+                    const symbols = ['+', '-', '×', '÷', '=', '∑', '%', '∮', '≠', '∞', 'π', '∫', '√'];
+                    const element = document.createElement('div');
+                    element.className = 'math-symbol';
+                    element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    
+                    const size = Math.random() * 2 + 1;
+                    const left = Math.random() * 100;
+                    const duration = Math.random() * 10 + 5;
+                    const tx = Math.random() * 200 - 100;
+                    const ty = Math.random() * -300 - 150;
+                    const hue = Math.random() * 60 + 180;
+                    
+                    element.style.fontSize = `${size}rem`;
+                    element.style.left = `${left}%`;
+                    element.style.top = '100%';
+                    element.style.setProperty('--tx', `${tx}px`);
+                    element.style.setProperty('--ty', `${ty}px`);
+                    element.style.animationDuration = `${duration}s`;
+                    element.style.color = `hsl(${hue}, 100%, 70%)`;
+                    element.style.filter = `drop-shadow(0 0 8px hsl(${hue}, 100%, 50%))`;
+                    
+                    container.appendChild(element);
+                }
+            }, 800); // Add new symbol every 800ms
+        });
+    </script>
 </body>
 </html>

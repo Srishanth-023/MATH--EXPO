@@ -1,104 +1,505 @@
-<header class="navbar">
-    <div class="logo-container" style="
-    display: inline-block;
-    position: relative;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #4fc3f7;
-    padding: 0 12px;
-    letter-spacing: 1.5px;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    text-shadow: 
-        0 0 10px rgba(79, 195, 247, 0.8),
-        0 0 20px rgba(79, 195, 247, 0.4);
-    overflow: hidden;
-">
-    <span class="logo-text">MATH X</span>
-    <div class="shine-effect" style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 50%;
-        height: 100%;
-        background: linear-gradient(
-            90deg,
-            rgba(255,255,255,0) 0%,
-            rgba(255,255,255,0.9) 50%,
-            rgba(255,255,255,0) 100%
-        );
-        transform: skewX(-20deg);
-        animation: shine 3s infinite ease-in-out;
-        opacity: 0.8;
-    "></div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math-X AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Cosmic Color Palette */
+        :root {
+            --cosmic-dark: #0a0e17;
+            --cosmic-darker: #05080f;
+            --neon-blue: #00f2ff;
+            --neon-purple: #b400ff;
+            --neon-pink: #ff00d4;
+            --star-light: rgba(255, 255, 255, 0.8);
+            --cosmic-text: #e0e0ff;
+        }
 
-<style>
-    @keyframes shine {
-        0% { left: -50%; opacity: 0; }
-        20% { opacity: 0.8; }
-        90% { opacity: 0; }
-        100% { left: 150%; }
-    }
-    
-    .logo-text {
-        position: relative;
-        z-index: 1;
-    }
-    
-    .logo-container:hover .shine-effect {
-        opacity: 1;
-        animation-duration: 2s;
-    }
-    
-    .logo-container:hover {
-        text-shadow: 
-            0 0 15px rgba(79, 195, 247, 1),
-            0 0 30px rgba(79, 195, 247, 0.6);
-    }
-</style>    
-<nav class="nav-links" style="
-    display: flex;
-    gap: 25px;
-    padding: 15px;
-    justify-content: center;
-    font-family: 'Segoe UI', sans-serif;
-    /* Original size preserved */
-    height: auto;
-    width: auto;
-    box-sizing: border-box;
-">
-    <a href="/" class="nav-link active">Home</a>
-    <a href="/items" class="nav-link">Categories</a>
-    <a href="/chat" class="nav-link">Chatbot</a>
-    <a href="/about" class="nav-link">About</a>
-    <a href="/contact" class="nav-link">Contact</a>
-</nav>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-    .nav-link {
-        color: #4fc3f7;
-        text-decoration: none;
-        font-weight: 600;
-        padding: 0; /* Remove padding to maintain original size */
-        margin: 0; /* Remove margins */
-        transition: text-shadow 0.3s ease; /* Only animate the glow */
-        /* Original text size preserved */
-        font-size: inherit;
-        line-height: inherit;
-        /* Base glow - very subtle */
-        text-shadow: 0 0 3px rgba(79, 195, 247, 0.2);
-    }
-    
-    .nav-link:hover {
-        /* Hover glow effect */
-        text-shadow: 0 0 8px rgba(79, 195, 247, 0.7);
-        /* No size changes */
-        transform: none;
-    }
-    
-    .nav-link.active {
-        /* Active page glow */
-        text-shadow: 0 0 10px rgba(79, 195, 247, 0.9);
-    }
-</style>
-</header>
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+            background-color: var(--cosmic-dark);
+            color: var(--cosmic-text);
+            overflow-x: hidden;
+        }
+
+        /* Ultra-Glow Cosmic Navbar */
+        .cosmic-navbar {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(
+                to bottom,
+                rgba(10, 14, 23, 0.95) 0%,
+                rgba(5, 8, 15, 0.98) 100%
+            );
+            border-bottom: 1px solid rgba(0, 242, 255, 0.3);
+            box-shadow: 
+                0 0 30px rgba(0, 242, 255, 0.2),
+                0 0 60px rgba(180, 0, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .cosmic-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Supercharged Animated Logo */
+        .cosmic-logo {
+            display: flex;
+            align-items: center;
+            position: relative;
+            height: 100%;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            overflow: hidden;
+            min-width: 200px;
+        }
+
+        .pulsar-core {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--neon-blue);
+            box-shadow: 
+                0 0 15px var(--neon-blue),
+                0 0 30px var(--neon-blue),
+                0 0 60px var(--neon-blue);
+            animation: pulsar 2s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        .cosmic-rings {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ring {
+            position: absolute;
+            border: 1px solid rgba(0, 242, 255, 0.4);
+            border-radius: 50%;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+        }
+
+        .ring-1 {
+            width: 40px;
+            height: 40px;
+            animation-name: orbit-1;
+        }
+
+        .ring-2 {
+            width: 70px;
+            height: 70px;
+            animation-name: orbit-2;
+            animation-delay: -3s;
+        }
+
+        .ring-3 {
+            width: 100px;
+            height: 100px;
+            animation-name: orbit-3;
+            animation-delay: -6s;
+        }
+
+        .logo-text {
+            position: relative;
+            z-index: 2;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--cosmic-text);
+            text-shadow: 
+                0 0 10px rgba(224, 224, 255, 0.7),
+                0 0 20px rgba(0, 242, 255, 0.5);
+            margin-left: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .logo-accent {
+            color: var(--neon-blue);
+            text-shadow: 
+                0 0 10px var(--neon-blue),
+                0 0 30px var(--neon-blue),
+                0 0 50px var(--neon-blue);
+        }
+
+        .star-field {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, var(--star-light), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, var(--star-light), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, var(--star-light), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 130px 80px, var(--star-light), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 160px 20px, var(--star-light), rgba(0,0,0,0));
+            background-size: 200px 200px;
+            animation: twinkle 4s infinite;
+        }
+
+        /* Hyper-Glow Navigation Links */
+        .nav-main-content {
+            flex-grow: 1;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .cosmic-nav-links {
+            display: flex;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        .cosmic-link {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 0 1.8rem;
+            text-decoration: none;
+            color: var(--cosmic-text);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            min-width: 110px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .cosmic-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(
+                90deg,
+                var(--neon-purple),
+                var(--neon-blue),
+                var(--neon-pink)
+            );
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1;
+            box-shadow: 
+                0 0 10px var(--neon-purple),
+                0 0 20px var(--neon-blue);
+        }
+
+        .cosmic-link::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, var(--neon-blue), transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 0;
+            filter: blur(5px);
+        }
+
+        .cosmic-link:hover {
+            color: white;
+            text-shadow: 
+                0 0 10px white,
+                0 0 20px var(--neon-blue);
+            transform: translateY(-2px);
+        }
+
+        .cosmic-link:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .cosmic-link:hover::after {
+            transform: translate(-50%, -50%) scale(8);
+            opacity: 0.4;
+        }
+
+        .cosmic-link.active {
+            color: white;
+            font-weight: 600;
+            text-shadow: 
+                0 0 15px white,
+                0 0 30px var(--neon-blue);
+        }
+
+        .cosmic-link.active::before {
+            transform: scaleX(1);
+            height: 4px;
+            animation: underline-pulse 1.5s infinite;
+        }
+
+        /* Mega-Glow Action Button */
+        .cosmic-actions {
+            min-width: 160px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .nebula-button {
+            position: relative;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(
+                135deg,
+                rgba(180, 0, 255, 0.3) 0%,
+                rgba(0, 242, 255, 0.3) 50%,
+                rgba(255, 0, 212, 0.3) 100%
+            );
+            color: white;
+            border: 1px solid rgba(0, 242, 255, 0.5);
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 15px rgba(0, 242, 255, 0.3),
+                0 0 30px rgba(180, 0, 255, 0.2);
+        }
+
+        .nebula-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(180, 0, 255, 0.5) 0%,
+                rgba(0, 242, 255, 0.5) 50%,
+                rgba(255, 0, 212, 0.5) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .nebula-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                var(--neon-blue),
+                transparent
+            );
+            transform: translateY(-50%);
+            transition: left 0.7s ease;
+            z-index: 2;
+            filter: blur(1px);
+        }
+
+        .nebula-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 25px rgba(0, 242, 255, 0.5),
+                0 0 50px rgba(180, 0, 255, 0.3);
+        }
+
+        .nebula-button:hover::before {
+            opacity: 1;
+        }
+
+        .nebula-button:hover::after {
+            left: 100%;
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 3;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Animations */
+        @keyframes pulsar {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 
+                    0 0 15px var(--neon-blue),
+                    0 0 30px var(--neon-blue),
+                    0 0 60px var(--neon-blue);
+            }
+            50% {
+                transform: scale(1.3);
+                box-shadow: 
+                    0 0 25px var(--neon-blue),
+                    0 0 50px var(--neon-blue),
+                    0 0 90px var(--neon-blue);
+            }
+        }
+
+        @keyframes orbit-1 {
+            from { transform: rotate(0deg) translateX(20px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
+        }
+
+        @keyframes orbit-2 {
+            from { transform: rotate(120deg) translateX(35px) rotate(-120deg); }
+            to { transform: rotate(480deg) translateX(35px) rotate(-480deg); }
+        }
+
+        @keyframes orbit-3 {
+            from { transform: rotate(240deg) translateX(50px) rotate(-240deg); }
+            to { transform: rotate(600deg) translateX(50px) rotate(-600deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes underline-pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; box-shadow: 0 0 25px var(--neon-blue); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .cosmic-nav-container {
+                padding: 0 1.5rem;
+            }
+            
+            .cosmic-link {
+                padding: 0 1.2rem;
+                min-width: 90px;
+                font-size: 0.9rem;
+            }
+            
+            .nebula-button {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cosmic-navbar {
+                height: auto;
+                padding: 1rem 0;
+            }
+            
+            .cosmic-nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .cosmic-logo {
+                min-width: auto;
+                padding: 0.5rem 0;
+            }
+            
+            .cosmic-nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0.5rem 0;
+            }
+            
+            .cosmic-link {
+                height: 50px;
+                min-width: 80px;
+            }
+            
+            .cosmic-actions {
+                min-width: auto;
+                padding: 0.5rem 0;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ultra-Glow Cosmic Navbar -->
+    <header class="cosmic-navbar">
+        <div class="cosmic-nav-container">
+            <!-- Supercharged Animated Logo -->
+            <div class="cosmic-logo">
+                <div class="pulsar-core"></div>
+                <div class="cosmic-rings">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                </div>
+                <span class="logo-text">MATH<span class="logo-accent">-X</span></span>
+                <div class="star-field"></div>
+            </div>
+
+            <!-- Hyper-Glow Navigation Links -->
+            <div class="nav-main-content">
+                <nav class="cosmic-nav-links">
+                    <a href="/" class="cosmic-link active" data-text="Home">
+                        <span class="link-text">Home</span>
+                    </a>
+                    <a href="/items" class="cosmic-link" data-text="Categories">
+                        <span class="link-text">Categories</span>
+                    </a>
+                    <a href="/chat" class="cosmic-link" data-text="Chatbot">
+                        <span class="link-text">Chatbot</span>
+                    </a>
+                    <a href="/about" class="cosmic-link" data-text="About">
+                        <span class="link-text">About</span>
+                    </a>
+                    <a href="/contact" class="cosmic-link" data-text="Contact">
+                        <span class="link-text">Contact</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Mega-Glow Action Button -->
+            <div class="cosmic-actions">
+                <button class="nebula-button">
+                    <span class="button-text">Compute</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Your page content here -->
+</body>
+</html>
