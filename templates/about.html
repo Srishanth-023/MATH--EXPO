@@ -3,76 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='navigation.css') }}">
-
     <title>About Us | MATH X</title>
     <style>
-    body {
-    font-family: 'Poppins', sans-serif;
-    color: white;
-    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* important for smooth scrolling */
-    background-size: cover; /* make it cover the entire screen */
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
-    }
-
-    
-        header {
-            background: #0f0f1f;
-            padding: 20px;
-            text-align: center;
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776e6;
+            --dark: #0f0c29;
+            --darker: #0a081f;
+            --text: #e0e0e0;
+            --text-dim: #b0b0b0;
         }
-        header h1 {
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            color: var(--text);
             margin: 0;
-            font-size: 36px;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
-        nav {
-            text-align: center;
-            margin-top: 10px;
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1000') no-repeat center center;
+            background-size: cover;
+            opacity: 0.1;
+            z-index: -1;
         }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 18px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
+        
         .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            box-shadow: 0 0 10px #000;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(15, 12, 41, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(110, 72, 170, 0.3);
+            border: 1px solid rgba(110, 72, 170, 0.2);
+            position: relative;
+            overflow: hidden;
         }
-        .container h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
+        
+        .container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(110, 72, 170, 0.1) 0%, transparent 70%);
+            animation: rotate 60s linear infinite;
+            z-index: -1;
         }
-        .container p {
+        
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            text-shadow: 0 0 10px rgba(157, 80, 187, 0.7);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-top: 70px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            box-shadow: 0 0 8px var(--secondary);
+        }
+        
+        p {
+            font-size: 1.1rem;
             line-height: 1.8;
-            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        
+        .team-section, .features-section {
+            margin-top: 50px;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .team-member {
+            background: rgba(25, 20, 60, 0.6);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(110, 72, 170, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(110, 72, 170, 0.4);
+            border-color: var(--primary);
+        }
+        
+        .team-member::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary), var(--primary));
+            background-size: 400%;
+            border-radius: 12px;
+            opacity: 0;
+            transition: 0.5s;
+        }
+        
+        .team-member:hover::before {
+            opacity: 1;
+            animation: animate-border 3s linear infinite;
+        }
+        
+        .member-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin: 15px 0 5px;
+            color: white;
+        }
+        
+        .member-role {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(25, 20, 60, 0.6);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(71, 118, 230, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(71, 118, 230, 0.3);
+            border-color: var(--accent);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: var(--opacity); }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes animate-border {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+        
+        .glow-button {
+            display: inline-block;
+            padding: 12px 30px;
+            margin-top: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(110, 72, 170, 0.4);
+        }
+        
+        .glow-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(110, 72, 170, 0.6);
+        }
+        
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+        
+        .glow-button:hover::before {
+            opacity: 1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(110, 72, 170, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
 
     <header>
-
         {% include 'navigation.html' %}
-
-        <h1 style="font-size: 50px; margin-top: 70px; color: white; text-align: center;">About Math-X</h1>
-
+        <h1>About Math-X</h1>
     </header>
 
     <div class="container">
-        <h2>About MATH X</h2>
+        <h2>Welcome to MATH X</h2>
         <p>
             Welcome to <strong>MATH X</strong> — your ultimate destination for solving math problems easily and effectively.
             Our platform provides a wide range of calculators and tools covering everything from Basic Arithmetic, Algebra,
@@ -80,13 +329,152 @@
         </p>
         <p>
             Whether you're a student, a teacher, or a math enthusiast, our goal is to make learning and problem-solving as simple
-            and intuitive as possible. 
-            We are committed to building an interactive, user-friendly experience where you can explore math in a way that's easy to understand.
+            and intuitive as possible. We are committed to building an interactive, user-friendly experience where you can explore
+            math in a way that's easy to understand.
         </p>
-        <p>
-            Thank you for choosing <strong>MATH X</strong>! Stay tuned for more exciting features and updates.
+        
+        <div class="team-section">
+            <h2>Our Team</h2>
+            <p>MATH X was created by a dedicated team of students from AI & DS-B who are passionate about making mathematics accessible to everyone:</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-name">Santhosh</div>
+                    <div class="member-role">Lead Developer</div>
+                    <p>Responsible for core architecture and algebra modules</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-name">Srishanth</div>
+                    <div class="member-role">UI/UX Designer</div>
+                    <p>Created the intuitive interface and user experience</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-name">Natarajan</div>
+                    <div class="member-role">Backend Specialist</div>
+                    <p>Developed the calculation engines and APIs</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-name">Vinu Karthick</div>
+                    <div class="member-role">Content Creator</div>
+                    <p>Researched and implemented mathematical concepts</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h2>Our Features</h2>
+            <p>MATH X provides comprehensive tools across all major mathematical disciplines:</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">+−×÷</div>
+                    <h3 class="feature-title">Basic Calculator</h3>
+                    <p>Perform fundamental arithmetic operations with our clean, easy-to-use calculator perfect for everyday math.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">x²</div>
+                    <h3 class="feature-title">Algebra</h3>
+                    <p>Solve equations, factor polynomials, work with functions, and explore algebraic concepts with step-by-step solutions.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">∫</div>
+                    <h3 class="feature-title">Calculus</h3>
+                    <p>Compute derivatives, integrals, limits, and analyze functions with our powerful calculus tools.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">θ</div>
+                    <h3 class="feature-title">Trigonometry</h3>
+                    <p>Work with trigonometric functions, identities, solve triangles, and convert between angle measures.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">σ</div>
+                    <h3 class="feature-title">Statistics</h3>
+                    <p>Calculate measures of central tendency, dispersion, probability distributions, and perform statistical tests.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">[ ]</div>
+                    <h3 class="feature-title">Matrices</h3>
+                    <p>Perform matrix operations including addition, multiplication, determinants, inverses, and more.</p>
+                </div>
+            </div>
+            
+            <a href="/" class="glow-button">Explore MATH X Tools</a>
+        </div>
+        
+        <p style="margin-top: 40px;">
+            Thank you for choosing <strong>MATH X</strong>! We're constantly working to add more features and improve your experience.
+            Stay tuned for exciting updates and new mathematical tools.
         </p>
     </div>
+    
+    <footer>
+        &copy; 2023 MATH X | Created by AI & DS-B Team | All Rights Reserved
+    </footer>
 
+    <script>
+        // Create twinkling stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random properties
+                const size = Math.random() * 3;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const opacity = Math.random() * 0.8 + 0.2;
+                const duration = Math.random() * 5 + 3;
+                const delay = Math.random() * 5;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.setProperty('--opacity', opacity);
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Add glow effect to headings on hover
+        function setupHeadingGlow() {
+            const headings = document.querySelectorAll('h1, h2, h3, .member-name');
+            
+            headings.forEach(heading => {
+                heading.addEventListener('mouseenter', () => {
+                    heading.style.textShadow = `0 0 15px rgba(157, 80, 187, 0.9)`;
+                });
+                
+                heading.addEventListener('mouseleave', () => {
+                    heading.style.textShadow = `0 0 10px rgba(157, 80, 187, 0.7)`;
+                });
+            });
+        }
+        
+        // Initialize effects when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            setupHeadingGlow();
+            
+            // Add pulse animation to feature icons
+            const featureIcons = document.querySelectorAll('.feature-icon');
+            featureIcons.forEach(icon => {
+                icon.style.animation = `pulse 2s infinite alternate`;
+            });
+        });
+    </script>
 </body>
 </html>

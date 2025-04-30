@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card animate__animated animate__fadeIn">
+    <div class="card-header bg-primary text-white">
+        <h2>Newton-Raphson Method Solver</h2>
+    </div>
+    <div class="card-body">
+        <div class="formula-container mb-4">
+            <h4>Newton-Raphson Method Formula:</h4>
+            <p>\[ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} \]</p>
+            <p>Where:</p>
+            <ul>
+                <li>\( x_n \) is the current approximation</li>
+                <li>\( f(x_n) \) is the function value at \( x_n \)</li>
+                <li>\( f'(x_n) \) is the derivative at \( x_n \)</li>
+            </ul>
+        </div>
+
+        <form method="POST" action="{{ url_for('newton_raphson') }}">
+            <div class="mb-3">
+                <label for="function" class="form-label">Function f(x):</label>
+                <input type="text" class="form-control" id="function" name="function" 
+                       placeholder="e.g., x**3 - 2*x - 5" required>
+                <div class="form-text">Use 'x' as the variable. Python syntax allowed (e.g., x**2 for x²)</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="x0" class="form-label">Initial guess (x₀):</label>
+                    <input type="number" step="any" class="form-control" id="x0" name="x0" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="tolerance" class="form-label">Tolerance:</label>
+                    <input type="number" step="any" class="form-control" id="tolerance" name="tolerance" 
+                           value="1e-6" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="max_iterations" class="form-label">Max iterations:</label>
+                    <input type="number" class="form-control" id="max_iterations" name="max_iterations" 
+                           value="50" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Solve</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
