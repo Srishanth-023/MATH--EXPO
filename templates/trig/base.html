@@ -40,12 +40,12 @@
                             Basic Trigonometry
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/basic_trig_ratios">Basic Trig Ratios</a></li>
-                            <li><a class="dropdown-item" href="/reciprocal_trig_ratios">Reciprocal Trig Ratios</a></li>
-                            <li><a class="dropdown-item" href="/right_triangle">Right Triangle Solver</a></li>
-                            <li><a class="dropdown-item" href="/special_angles">Special Angles</a></li>
-                            <li><a class="dropdown-item" href="/unit_circle">Unit Circle</a></li>
-                            <li><a class="dropdown-item" href="/complementary_angles">Complementary Angles</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.basic_ratios') }}">Basic Trig Ratios</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.reciprocal_ratios') }}">Reciprocal Trig Ratios</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.right_triangle') }}">Right Triangle Solver</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.special_anglesspecial_angles') }}">Special Angles</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.unit_circle') }}">Unit Circle</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.complementary_angles') }}">Complementary Angles</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -53,12 +53,11 @@
                             Advanced Trigonometry
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/law_of_sines">Law of Sines</a></li>
-                            <li><a class="dropdown-item" href="/law_of_cosines">Law of Cosines</a></li>
-                            <li><a class="dropdown-item" href="/area_triangle">Area of Triangle</a></li>
-                            <li><a class="dropdown-item" href="/inverse_trig">Inverse Trig Functions</a></li>
-                            <li><a class="dropdown-item" href="/solve_trig_equations">Solve Trig Equations</a></li>
-                            <li><a class="dropdown-item" href="/trig_identities">Trig Identities</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.law_of_sines') }}">Law of Sines</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.law_of_cosines') }}">Law of Cosines</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.area_triangle') }}">Area of Triangle</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.inverse_trig') }}">Inverse Trig Functions</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.solve_trig_equations') }}">Solve Trig Equations</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -66,12 +65,12 @@
                             Visualization
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/trig_graphs">Trig Graphs</a></li>
-                            <li><a class="dropdown-item" href="/amplitude_period_phase">Amplitude/Period/Phase</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.trig_graphs') }}">Trig Graphs</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('trig.amplitude_period_phase') }}">Amplitude/Period/Phase</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/complex_numbers">Complex Numbers</a>
+                        <a class="nav-link" href="{{ url_for('trig.complex_numbers') }}">Complex Numbers</a>
                     </li>
                 </ul>
             </div>

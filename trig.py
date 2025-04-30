@@ -30,8 +30,8 @@ def get_inverse_range(function):
     return ranges.get(function, "")
 
 # 1. Trigonometry Home Page
-@trig_bp.route('/home')
-def home():
+@trig_bp.route('/', methods=['GET'])
+def home_trig():
     return render_template('trig/home.html')
 
 # 2. Right Triangle Solver
@@ -93,7 +93,7 @@ def basic_ratios():
             'cos': round(math.cos(radians), 4),
             'tan': round(math.tan(radians), 4) if abs(math.tan(radians)) < 1e10 else "undefined"
         })
-    return render_template('trig/basic_ratios.html')
+    return render_template('trig/basic_trig_ratios.html')
 
 # 4. Reciprocal Trigonometric Ratios
 @trig_bp.route('/reciprocal-ratios', methods=['GET', 'POST'])
@@ -112,11 +112,11 @@ def reciprocal_ratios():
             'sec': round(1/cos_val, 4) if cos_val != 0 else "undefined",
             'cot': round(1/tan_val, 4) if tan_val != 0 else "undefined"
         })
-    return render_template('trig/reciprocal_ratios.html')
+    return render_template('trig/reciprocal_trig_ratios.html')
 
 # 5. Special Angles
 @trig_bp.route('/special-angles', methods=['GET', 'POST'])
-def special_angles():
+def special_anglesspecial_angles():
     if request.method == 'POST':
         data = request.json
         angle = float(data['angle'])
@@ -155,7 +155,7 @@ def complementary_angles():
             'cos(90°-θ)': round(cos_comp, 4),
             'equal': round(sin_val, 4) == round(cos_comp, 4)
         })
-    return render_template('complementary_angles.html')
+    return render_template('trig/complementary_angles.html')
 
 # 7. Unit Circle
 @trig_bp.route('/unit_circle', methods=['GET', 'POST'])
@@ -176,7 +176,7 @@ def unit_circle():
             'cos': round(x, 4),
             'tan': round(y/x, 4) if x != 0 else "undefined"
         })
-    return render_template('unit_circle.html')
+    return render_template('/trig/unit_circle.html')
 
 # 8. Graphs of Trigonometric Functions
 @trig_bp.route('/trig_graphs', methods=['GET', 'POST'])
@@ -210,7 +210,7 @@ def trig_graphs():
             points.append({'x': x, 'y': round(y, 4) if y is not None else None})
         
         return jsonify({'points': points})
-    return render_template('trig_graphs.html')
+    return render_template('trig/trig_graphs.html')
 
 # 9. Amplitude, Period, and Phase Shift
 @trig_bp.route('/amplitude_period_phase', methods=['GET', 'POST'])
@@ -232,7 +232,7 @@ def amplitude_period_phase():
             'vertical_shift': d,
             'equation': f"y = {a} * trig({b}(x {'+' if c >=0 else ''}{c})) {'+' if d >=0 else ''}{d}"
         })
-    return render_template('amplitude_period_phase.html')
+    return render_template('trig/amplitude_period_phase.html')
 
 # 10. Solving Trigonometric Equations
 @trig_bp.route('/solve_trig_equations', methods=['GET', 'POST'])
@@ -269,7 +269,7 @@ def solve_trig_equations():
             'principal_solutions': [round(s, 2) for s in solutions],
             'general_solutions': general
         })
-    return render_template('solve_trig_equations.html')
+    return render_template('trig/solve_trig_equations.html')
 
 # 11. Inverse Trigonometric Functions
 @trig_bp.route('/inverse_trig', methods=['GET', 'POST'])
@@ -298,7 +298,7 @@ def inverse_trig():
             'angle': round(angle, 4) if isinstance(angle, float) else angle,
             'range': get_inverse_range(function)
         })
-    return render_template('inverse_trig.html')
+    return render_template('trig/inverse_trig.html')
 
 def get_inverse_range(function):
     ranges = {
@@ -350,7 +350,7 @@ def law_of_sines():
             'B': round(angle_b, 4) if angle_b else None,
             'C': round(angle_c, 4) if angle_c else None
         })
-    return render_template('law_of_sines.html')
+    return render_template('trig/law_of_sines.html')
 
 # 13. Law of Cosines
 @trig_bp.route('/law_of_cosines', methods=['GET', 'POST'])
@@ -376,7 +376,7 @@ def law_of_cosines():
             'c': round(side_c, 4) if side_c else None,
             'C': round(angle_c, 4) if angle_c else None
         })
-    return render_template('law_of_cosines.html')
+    return render_template('trig/law_of_cosines.html')
 
 # 14. Area of Triangle using Trigonometry
 @trig_bp.route('/area_triangle', methods=['GET', 'POST'])
@@ -398,7 +398,7 @@ def area_triangle():
             'C': round(angle_c, 4) if angle_c else None,
             'area': round(area, 4) if area else None
         })
-    return render_template('area_triangle.html')
+    return render_template('trig/area_triangle.html')
 
 # 15. Trigonometric Form of Complex Numbers
 @trig_bp.route('/complex-numbers', methods=['GET', 'POST'])
