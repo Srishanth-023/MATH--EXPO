@@ -1,144 +1,246 @@
-import numpy as np
-from numpy.linalg import det, inv, eig, matrix_rank
+from flask import Blueprint, render_template, request
+import math
+import sympy as sp
 
-def matrix_addition(matrix_a, matrix_b):
-    """Add two matrices."""
-    try:
-        a = np.array(matrix_a)
-        b = np.array(matrix_b)
-        if a.shape != b.shape:
-            raise ValueError("Matrices must have the same dimensions for addition")
-        return (a + b).tolist()
-    except Exception as e:
-        raise ValueError(f"Error in matrix addition: {str(e)}")
+# Create the blueprint
+numerical_methods_bp = Blueprint('numerical_methods', __name__, 
+                               template_folder='templates/numerical_methods')
 
-def matrix_subtraction(matrix_a, matrix_b):
-    """Subtract matrix_b from matrix_a."""
-    try:
-        a = np.array(matrix_a)
-        b = np.array(matrix_b)
-        if a.shape != b.shape:
-            raise ValueError("Matrices must have the same dimensions for subtraction")
-        return (a - b).tolist()
-    except Exception as e:
-        raise ValueError(f"Error in matrix subtraction: {str(e)}")
+# Home page with method selection
+@numerical_methods_bp.route('/')
+def home():
+    return render_template('numerical_methods/home.html')
 
-def matrix_multiplication(matrix_a, matrix_b):
-    """Multiply two matrices."""
-    try:
-        a = np.array(matrix_a)
-        b = np.array(matrix_b)
-        if a.shape[1] != b.shape[0]:
-            raise ValueError("Number of columns in first matrix must equal number of rows in second matrix")
-        return np.matmul(a, b).tolist()
-    except Exception as e:
-        raise ValueError(f"Error in matrix multiplication: {str(e)}")
-
-def scalar_multiplication(matrix, scalar):
-    """Multiply a matrix by a scalar."""
-    try:
-        a = np.array(matrix)
-        return (scalar * a).tolist()
-    except Exception as e:
-        raise ValueError(f"Error in scalar multiplication: {str(e)}")
-
-def determinant(matrix):
-    """Calculate the determinant of a matrix."""
-    try:
-        a = np.array(matrix)
-        if a.shape[0] != a.shape[1]:
-            raise ValueError("Matrix must be square to calculate determinant")
-        return float(det(a))
-    except Exception as e:
-        raise ValueError(f"Error calculating determinant: {str(e)}")
-
-def inverse_matrix(matrix):
-    """Calculate the inverse of a matrix."""
-    try:
-        a = np.array(matrix)
-        if a.shape[0] != a.shape[1]:
-            raise ValueError("Matrix must be square to calculate inverse")
-        if abs(det(a)) < 1e-10:
-            raise ValueError("Matrix is singular, inverse does not exist")
-        return inv(a).tolist()
-    except Exception as e:
-        raise ValueError(f"Error calculating inverse: {str(e)}")
-
-def transpose_matrix(matrix):
-    """Calculate the transpose of a matrix."""
-    try:
-        a = np.array(matrix)
-        return a.T.tolist()
-    except Exception as e:
-        raise ValueError(f"Error calculating transpose: {str(e)}")
-
-def eigenvalues_eigenvectors(matrix):
-    """Calculate eigenvalues and eigenvectors of a matrix."""
-    try:
-        a = np.array(matrix)
-        if a.shape[0] != a.shape[1]:
-            raise ValueError("Matrix must be square to calculate eigenvalues and eigenvectors")
-        eigenvalues, eigenvectors = eig(a)
-        return eigenvalues.tolist(), eigenvectors.tolist()
-    except Exception as e:
-        raise ValueError(f"Error calculating eigenvalues and eigenvectors: {str(e)}")
-
-import numpy as np
-from numpy.linalg import matrix_rank
-
-import numpy as np
-from numpy.linalg import svd
-
-def matrix_rank(matrix):
-    """Calculate the rank of a matrix with enhanced numerical stability."""
-    try:
-        a = np.array(matrix, dtype=np.float64)
+# Runge-Kutta method route
+@numerical_methods_bp.route('/runge_kutta', methods=['GET', 'POST'])
+def runge_kutta():
+    if request.method == 'POST':
+        # Get form data
+        function = request.form['function']
+        x0 = float(request.form['x0'])
+        y0 = float(request.form['y0'])
+        h = float(request.form['h'])
+        target_x = float(request.form['target_x'])
         
-        # Convert very small numbers to zero
-        a[np.abs(a) < 1e-12] = 0
+        # Initialize variables
+        steps = []
+        x = x0
+        y = y0
         
-        # Manual SVD-based rank calculation
-        s = svd(a, compute_uv=False)
-        # Tolerance based on matrix size and data type
-        tol = max(a.shape) * np.spacing(np.linalg.norm(s, np.inf))
-        rank = np.sum(s > tol)
-        return int(rank)
-    except Exception as e:
-        raise ValueError(f"Rank calculation error: {str(e)}")
-
-def adjoint_matrix(matrix):
-    """Calculate the adjoint (adjugate) of a matrix."""
-    try:
-        a = np.array(matrix)
-        if a.shape[0] != a.shape[1]:
-            raise ValueError("Matrix must be square to calculate adjoint")
-        
-        # Adjoint = Determinant * Inverse (if determinant is non-zero)
-        det_a = det(a)
-        if abs(det_a) < 1e-10:
-            # For a singular matrix, we calculate the adjoint differently
-            n = a.shape[0]
-            adjoint = np.zeros((n, n))
+        # Process steps until we reach or surpass target_x
+        while x < target_x:
+            # Calculate Runge-Kutta coefficients
+            try:
+                k1 = h * eval(function.replace('x', str(x)).replace('y', str(y)))
+                k2 = h * eval(function.replace('x', str(x + h/2)).replace('y', str(y + k1/2)))
+                k3 = h * eval(function.replace('x', str(x + h/2)).replace('y', str(y + k2/2)))
+                k4 = h * eval(function.replace('x', str(x + h)).replace('y', str(y + k3)))
+            except:
+                return render_template('error.html', message="Error evaluating function. Check your input.")
             
-            for i in range(n):
-                for j in range(n):
-                    # Get minor by removing row i and column j
-                    minor = np.delete(np.delete(a, i, axis=0), j, axis=1)
-                    adjoint[j, i] = ((-1) ** (i + j)) * det(minor)
+            # Calculate next y value
+            delta_y = (k1 + 2*k2 + 2*k3 + k4) / 6
+            y_new = y + delta_y
             
-            return adjoint.tolist()
-        else:
-            # For non-singular matrix: adjoint = determinant * inverse
-            return (det_a * inv(a)).tolist()
-    except Exception as e:
-        raise ValueError(f"Error calculating adjoint: {str(e)}")
+            # Record step
+            steps.append({
+                'x': x,
+                'y': y,
+                'k1': k1,
+                'k2': k2,
+                'k3': k3,
+                'k4': k4,
+                'delta_y': delta_y,
+                'y_new': y_new
+            })
+            
+            # Update variables for next iteration
+            x += h
+            y = y_new
+        
+        return render_template('numerical_methods/runge_kutta_result.html', 
+                             function=function,
+                             x0=x0,
+                             y0=y0,
+                             h=h,
+                             target_x=target_x,
+                             steps=steps,
+                             final_y=y)
+    
+    return render_template('numerical_methods/runge_kutta_form.html')
 
-def matrix_trace(matrix):
-    """Calculate the trace of a matrix (sum of diagonal elements)."""
-    try:
-        a = np.array(matrix)
-        if a.shape[0] != a.shape[1]:
-            raise ValueError("Matrix must be square to calculate trace")
-        return float(np.trace(a))
-    except Exception as e:
-        raise ValueError(f"Error calculating trace: {str(e)}")
+# Taylor method
+@numerical_methods_bp.route('/taylor', methods=['GET', 'POST'])
+def taylor():
+    if request.method == 'POST':
+        # Get form data
+        function = request.form['function']
+        x0 = float(request.form['x0'])
+        y0 = float(request.form['y0'])
+        h = float(request.form['h'])
+        target_x = float(request.form['target_x'])
+        order = int(request.form['order'])
+        
+        # Initialize variables
+        steps = []
+        x = x0
+        y = y0
+        
+        # Create symbolic variables
+        x_sym, y_sym = sp.symbols('x y')
+        
+        # Parse the function
+        try:
+            f = sp.sympify(function)
+            f_latex = sp.latex(f)  # Get LaTeX representation of the function
+        except:
+            return render_template('error.html', message="Error parsing function. Check your input.")
+        
+        # Process steps until we reach or surpass target_x
+        while x < target_x:
+            step_details = {
+                'x': x,
+                'y': y,
+                'derivatives': [],
+                'terms': [],
+                'term_expressions': [],  # New field for LaTeX term expressions
+                'y_new': None,
+                'current_expression': f"y({x:.4f}) = {y:.6f}"  # Initial expression
+            }
+            
+            # Calculate Taylor series terms
+            current_y = y
+            taylor_terms = [current_y]
+            current_expression = f"{y:.6f}"
+            
+            # Calculate derivatives
+            df = f
+            derivatives = []
+            for i in range(1, order+1):
+                # Calculate derivative
+                df = sp.diff(df, x_sym) + sp.diff(df, y_sym) * f
+                
+                # Substitute current values
+                try:
+                    df_value = float(df.subs({x_sym: x, y_sym: current_y}))
+                    df_latex = sp.latex(df)  # LaTeX representation of derivative
+                except:
+                    return render_template('error.html', message="Error calculating derivatives. Check your function.")
+                
+                derivatives.append(df_value)
+                
+                # Calculate term
+                term = (df_value * (h**i)) / math.factorial(i)
+                taylor_terms.append(term)
+                
+                # Generate LaTeX expression for the term
+                term_expr = (
+                    f"+ \\frac{{({h:.2f})^{{{i}}}}}{{{i}!}} \\cdot "
+                    f"({df_value:.6f}) = {term:.6f}"
+                )
+                
+                # Build current expression
+                current_expression += f" + \\frac{{({h:.2f})^{{{i}}}}}{{{i}!}} \\cdot {df_value:.6f}"
+                
+                # Store all info for display
+                step_details['derivatives'].append({
+                    'order': i,
+                    'expression': df_latex,
+                    'value': df_value,
+                    'latex': f"y^{'('*(i)}{i}{')'*(i)} = {df_latex} = {df_value:.6f}"
+                })
+                step_details['terms'].append({
+                    'order': i,
+                    'term': term,
+                    'latex': term_expr
+                })
+                step_details['term_expressions'].append(term_expr)
+            
+            # Calculate new y value
+            y_new = sum(taylor_terms)
+            step_details['y_new'] = y_new
+            step_details['current_expression'] = current_expression + f" = {y_new:.6f}"
+            
+            # Record step
+            steps.append(step_details)
+            
+            # Update variables for next iteration
+            x += h
+            y = y_new
+        
+        return render_template('numerical_methods/taylor_result.html', 
+                             function=function,
+                             function_latex=f_latex,
+                             x0=x0,
+                             y0=y0,
+                             h=h,
+                             target_x=target_x,
+                             order=order,
+                             steps=steps,
+                             final_y=y)
+    
+    return render_template('numerical_methods/taylor_form.html')
+
+# Newton-Raphson method
+@numerical_methods_bp.route('/newton_raphson', methods=['GET', 'POST'])
+def newton_raphson():
+    if request.method == 'POST':
+        # Get form data
+        function = request.form['function']
+        x0 = float(request.form['x0'])
+        tolerance = float(request.form['tolerance'])
+        max_iterations = int(request.form['max_iterations'])
+        
+        # Initialize variables
+        steps = []
+        x = x0
+        x_sym = sp.symbols('x')
+        
+        # Parse the function
+        try:
+            f = sp.sympify(function)
+            f_prime = sp.diff(f, x_sym)
+        except:
+            return render_template('error.html', message="Error parsing function. Check your input.")
+        
+        # Perform iterations
+        for i in range(max_iterations):
+            try:
+                f_x = float(f.subs(x_sym, x))
+                f_prime_x = float(f_prime.subs(x_sym, x))
+            except:
+                return render_template('error.html', message="Error evaluating function or its derivative.")
+            
+            if abs(f_prime_x) < 1e-10:
+                return render_template('error.html', message="Derivative is zero. Method failed.")
+            
+            x_new = x - f_x / f_prime_x
+            error = abs(x_new - x)
+            
+            # Record step
+            steps.append({
+                'iteration': i + 1,
+                'x': x,
+                'f_x': f_x,
+                'f_prime_x': f_prime_x,
+                'x_new': x_new,
+                'error': error
+            })
+            
+            # Check for convergence
+            if error < tolerance:
+                break
+                
+            # Update for next iteration
+            x = x_new
+        
+        return render_template('numerical_methods/newton_raphson_result.html', 
+                             function=function,
+                             x0=x0,
+                             tolerance=tolerance,
+                             max_iterations=max_iterations,
+                             steps=steps,
+                             root=x_new,
+                             converged=error < tolerance)
+    
+    return render_template('numerical_methods/newton_raphson_form.html')
