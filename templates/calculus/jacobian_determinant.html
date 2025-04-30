@@ -1,0 +1,46 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Jacobian Determinant{% endblock %}
+{% block heading %}Jacobian Determinant Calculator{% endblock %}
+{% block subheading %}Compute the determinant of the Jacobian matrix for a transformation{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Jacobian Determinant</h2>
+        <p class="subtitle">Calculate ∂(u,v)/∂(x,y) = |∂u/∂x ∂u/∂y|</p>
+        <p class="subtitle">                  |∂v/∂x ∂v/∂y|</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="vector-fields">
+                <div class="form-group">
+                    <label>u(x, y):</label>
+                    <input type="text" class="form-control" name="u" 
+                           placeholder="e.g., x*y, x^2-y^2" required>
+                </div>
+
+                <div class="form-group">
+                    <label>v(x, y):</label>
+                    <input type="text" class="form-control" name="v" 
+                           placeholder="e.g., x+y, sin(x)+cos(y)" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Compute Jacobian
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Result</h4>
+        <div class="result-box">
+            <p>J(u,v) = <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Stokes' Theorem{% endblock %}
+{% block heading %}Stokes' Theorem Calculator{% endblock %}
+{% block subheading %}Compute ∬<sub>S</sub>(∇×F)·dS = ∮<sub>∂S</sub>F·dr{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Stokes' Theorem</h2>
+        <p class="subtitle">Calculate the curl of a vector field F = (F<sub>x</sub>, F<sub>y</sub>, F<sub>z</sub>)</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="vector-fields">
+                <div class="form-group">
+                    <label>F<sub>x</sub>(x,y,z):</label>
+                    <input type="text" class="form-control" name="Fx" 
+                           placeholder="e.g., y*z, x^2, sin(z)" required>
+                </div>
+
+                <div class="form-group">
+                    <label>F<sub>y</sub>(x,y,z):</label>
+                    <input type="text" class="form-control" name="Fy" 
+                           placeholder="e.g., z*x, y^3, cos(x)" required>
+                </div>
+
+                <div class="form-group">
+                    <label>F<sub>z</sub>(x,y,z):</label>
+                    <input type="text" class="form-control" name="Fz" 
+                           placeholder="e.g., x*y, e^z, tan(y)" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-vector-pen"></i> Compute Curl ∇×F
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Curl Result</h4>
+        <div class="result-box">
+            <div class="vector-result">
+                <p>∇×F = (</p>
+                <div class="component">
+                    <span class="result-value">{{ result[0] }}</span>,
+                </div>
+                <div class="component">
+                    <span class="result-value">{{ result[1] }}</span>,
+                </div>
+                <div class="component">
+                    <span class="result-value">{{ result[2] }}</span>)
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

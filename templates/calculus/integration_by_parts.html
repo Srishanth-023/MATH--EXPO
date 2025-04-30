@@ -1,0 +1,43 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Integration by Parts{% endblock %}
+{% block heading %}Integration by Parts Calculator{% endblock %}
+{% block subheading %}Compute ∫u dv = uv - ∫v du{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Integration by Parts</h2>
+        <p class="subtitle">Apply the formula: ∫u dv = uv - ∫v du</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>u(x):</label>
+                <input type="text" class="form-control" name="u" 
+                       placeholder="e.g., x, ln(x)" required>
+            </div>
+
+            <div class="form-group">
+                <label>dv(x):</label>
+                <input type="text" class="form-control" name="dv" 
+                       placeholder="e.g., exp(x), cos(x)" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Compute Integral
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-container">
+        <h4>Result</h4>
+        <div class="result-box">
+            <p>∫u dv = <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

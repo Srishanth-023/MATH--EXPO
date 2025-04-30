@@ -1,0 +1,47 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Ratio Test{% endblock %}
+{% block heading %}Ratio Test Calculator{% endblock %}
+{% block subheading %}Determine series convergence using lim<sub>n→∞</sub> |aₙ₊₁/aₙ|{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Ratio Test</h2>
+        <p class="subtitle">Compute lim<sub>n→∞</sub> |aₙ₊₁/aₙ| to test series convergence</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Sequence aₙ:</label>
+                <input type="text" class="form-control" name="sequence" 
+                       placeholder="e.g., n!/n^n, (2^n)/n!, n^2/3^n" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-infinity"></i> Test Convergence
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-container">
+        <h4>Ratio Test Result</h4>
+        <div class="result-box">
+            <p>lim<sub>n→∞</sub> |aₙ₊₁/aₙ| = <span class="result-value">{{ result.limit }}</span></p>
+            <div class="conclusion">
+                <p>Conclusion: 
+                    <span class="{% if result.convergence == 'Converges' %}text-success{% else %}text-danger{% endif %}">
+                        {{ result.convergence }}
+                    </span>
+                </p>
+                {% if result.convergence == 'Inconclusive' %}
+                <p class="text-muted">The ratio test is inconclusive when the limit equals 1</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Line Integrals{% endblock %}
+{% block heading %}Line Integral Calculator{% endblock %}
+{% block subheading %}Compute ∫<sub>C</sub> f(x,y) ds along a parametric curve{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Line Integrals</h2>
+        <p class="subtitle">Calculate ∫<sub>C</sub> f(x,y) ds = ∫<sub>a</sub><sup>b</sup> f(x(t),y(t))√(x'(t)² + y'(t)²) dt</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Function f(x, y):</label>
+                <input type="text" class="form-control" name="function" 
+                       placeholder="e.g., x**2 + y**2, x*y" required>
+            </div>
+
+            <div class="vector-fields">
+                <div class="form-group">
+                    <label>x(t):</label>
+                    <input type="text" class="form-control" name="x(t)" 
+                           placeholder="e.g., t, cos(t)" required>
+                </div>
+
+                <div class="form-group">
+                    <label>y(t):</label>
+                    <input type="text" class="form-control" name="y(t)" 
+                           placeholder="e.g., t**2, sin(t)" required>
+                </div>
+            </div>
+
+            <div class="range-group">
+                <div class="form-group">
+                    <label>t<sub>0</sub>:</label>
+                    <input type="text" class="form-control" name="t0" 
+                           placeholder="e.g., 0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>t<sub>1</sub>:</label>
+                    <input type="text" class="form-control" name="t1" 
+                           placeholder="e.g., 1, 2*pi" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Compute Integral
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Result</h4>
+        <div class="result-box">
+            <p>∫<sub>C</sub> f(x,y) ds = <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

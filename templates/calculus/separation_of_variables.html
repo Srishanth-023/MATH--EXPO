@@ -1,0 +1,56 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Separation of Variables{% endblock %}
+{% block heading %}Separation of Variables Solver{% endblock %}
+{% block subheading %}Solve differential equations of the form dy/dx = f(x)g(y){% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Separation of Variables</h2>
+        <p class="subtitle">Solve differential equations by separating and integrating</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group equation-input">
+                <label>Differential Equation:</label>
+                <div class="equation-display">
+                    <span>dy/dx = </span>
+                    <input type="text" class="form-control" name="expression" 
+                           placeholder="e.g., x*y, y/(1+x^2), x*e^y" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Initial Condition (optional):</label>
+                <input type="text" class="form-control" name="initial_condition" 
+                       placeholder="e.g., y(0)=1">
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-integral"></i> Solve Differential Equation
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-container">
+        <h4>Solution</h4>
+        <div class="result-box">
+            <p class="solution">y(x) = <span class="result-value">{{ result.solution }}</span></p>
+            {% if result.steps %}
+            <div class="solution-steps">
+                <h5>Solution Steps:</h5>
+                <ol>
+                    {% for step in result.steps %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

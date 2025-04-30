@@ -1,0 +1,33 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Calculus Methods{% endblock %}
+{% block heading %}Choose a Calculus Method{% endblock %}
+{% block subheading %}Select from the following calculus methods{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Choose a Calculus Method</h2>
+    <div class="card-grid">
+        <a class="method-card" href="{{ url_for('calculus.lhopital') }}">L'Hopital's Rule</a>
+        <a class="method-card" href="{{ url_for('calculus.product_rule') }}">Product Rule</a>
+        <a class="method-card" href="{{ url_for('calculus.integration_by_parts') }}">Integration by Parts</a>
+        <a class="method-card" href="{{ url_for('calculus.ratio_test') }}">Ratio Test</a>
+        <a class="method-card" href="{{ url_for('calculus.partial_derivatives') }}">Partial Derivatives</a>
+        <a class="method-card" href="{{ url_for('calculus.separation_of_variables') }}">Separation of Variables</a>
+        <a class="method-card" href="{{ url_for('calculus.optimization') }}">First and Second Derivative Tests</a>
+        <a class="method-card" href="{{ url_for('calculus.implicit_differentiation') }}">Implicit Differentiation</a>
+        <a class="method-card" href="{{ url_for('calculus.related_rates') }}">Related Rates</a>
+        <a class="method-card" href="{{ url_for('calculus.maclaurin_series') }}">Maclaurin Series Expansion</a>
+        <a class="method-card" href="{{ url_for('calculus.directional_derivatives') }}">Directional Derivatives</a>
+        <a class="method-card" href="{{ url_for('calculus.line_integrals') }}">Line Integrals</a>
+        <a class="method-card" href="{{ url_for('calculus.surface_integrals') }}">Surface Integrals</a>
+        <a class="method-card" href="{{ url_for('calculus.vector_calculus') }}">Divergence Theorem</a>
+        <a class="method-card" href="{{ url_for('calculus.greens_theorem') }}">Green's Theorem</a>
+        <a class="method-card" href="{{ url_for('calculus.stokes_theorem') }}">Stokes' Theorem</a>
+        <a class="method-card" href="{{ url_for('calculus.improper_integrals') }}">Improper Integrals</a>
+        <a class="method-card" href="{{ url_for('calculus.partial_derivatives_holding_constant') }}">Partial Derivatives (Hold Const)</a>
+        <a class="method-card" href="{{ url_for('calculus.jacobian_determinant') }}">Jacobian Determinant</a>
+        <a class="method-card" href="{{ url_for('calculus.center_of_mass') }}">Center of Mass</a>
+    </div>
+</div>
+{% endblock %}

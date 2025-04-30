@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card animate__animated animate__fadeIn">
+    <div class="card-header bg-primary text-white">
+        <h2>Newton-Raphson Method Results</h2>
+    </div>
+    <div class="card-body">
+        <div class="formula-container mb-4">
+            <h4>Solved Equation:</h4>
+            <p>\[ f(x) = {{ function }} \]</p>
+            <p>With initial guess: \( x_0 = {{ x0 }} \)</p>
+            <p>Tolerance: \( \epsilon = {{ tolerance }} \)</p>
+            <p>Maximum iterations: {{ max_iterations }}</p>
+        </div>
+
+        <h4 class="mb-3">Iteration Steps:</h4>
+        {% for step in steps %}
+        <div class="card step-card animate__animated animate__fadeInUp">
+            <div class="card-header">
+                <h5>Iteration {{ step.iteration }}</h5>
+            </div>
+            <div class="card-body">
+                <p>\[ \begin{align*}
+                    x_{ {{ step.iteration - 1 }} } &= {{ "%.6f"|format(step.x) }} \\
+                    f(x_{ {{ step.iteration - 1 }} }) &= {{ "%.6f"|format(step.f_x) }} \\
+                    f'(x_{ {{ step.iteration - 1 }} }) &= {{ "%.6f"|format(step.f_prime_x) }} \\
+                    x_{ {{ step.iteration }} } &= x_{ {{ step.iteration - 1 }} } - \frac{f(x_{ {{ step.iteration - 1 }} })}{f'(x_{ {{ step.iteration - 1 }} })} \\
+                    &= {{ "%.6f"|format(step.x) }} - \frac{ {{ "%.6f"|format(step.f_x) }} }{ {{ "%.6f"|format(step.f_prime_x) }} } \\
+                    &= {{ "%.6f"|format(step.x_new) }} \\
+                    \text{Error} &= {{ "%.6f"|format(step.error) }}
+                \end{align*} \]</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="result-highlight mt-4 animate__animated animate__fadeIn">
+            <h4>Final Result:</h4>
+            {% if converged %}
+                <p class="text-success">Converged to solution after {{ steps|length }} iterations:</p>
+                <p>\[ x \approx {{ "%.6f"|format(root) }} \]</p>
+                <p>Final error: \( {{ "%.2e"|format(steps[-1].error) }} \)</p>
+            {% else %}
+                <p class="text-warning">Did not converge within tolerance after {{ max_iterations }} iterations</p>
+                <p>Last approximation: \( x \approx {{ "%.6f"|format(root) }} \)</p>
+                <p>Last error: \( {{ "%.2e"|format(steps[-1].error) }} \)</p>
+            {% endif %}
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ url_for('newton_raphson') }}" class="btn btn-primary">Solve Another</a>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -881,6 +881,12 @@ app.register_blueprint(statistics_bp, url_prefix='/statistics')
 
 #---------------------------------------------------------- STATISTICS ROUTES END------------------------------------------------------------------
 
+from calculus import calculus_bp
+app.register_blueprint(calculus_bp, url_prefix='/calculus')
+
+#---------------------------------------------------------- CALCULUS ROUTES END------------------------------------------------------------------
+
+
 
 
 if __name__ == '__main__':

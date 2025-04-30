@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Taylor Series Method Solver</h2>
+    </div>
+    <div class="card-body">
+        <div class="formula-container mb-4">
+            <h4>Taylor Series Method Formula:</h4>
+            <p>\[ y(x+h) = y(x) + hy'(x) + \frac{h^2}{2!}y''(x) + \frac{h^3}{3!}y'''(x) + \cdots \]</p>
+            <p>Where derivatives are calculated from the ODE:</p>
+            <p>\[ \frac{dy}{dx} = f(x, y) \]</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('taylor') }}">
+            <div class="mb-3">
+                <label for="function" class="form-label">ODE (dy/dx = f(x,y)):</label>
+                <input type="text" class="form-control" id="function" name="function" 
+                       placeholder="e.g., x^2 + y^2" required>
+                <div class="form-text">Use 'x' for independent variable and 'y' for dependent variable</div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="x0" class="form-label">Initial x (x₀):</label>
+                    <input type="number" step="any" class="form-control" id="x0" name="x0" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="y0" class="form-label">Initial y (y₀):</label>
+                    <input type="number" step="any" class="form-control" id="y0" name="y0" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="h" class="form-label">Step size (h):</label>
+                    <input type="number" step="any" class="form-control" id="h" name="h" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="target_x" class="form-label">Target x:</label>
+                    <input type="number" step="any" class="form-control" id="target_x" name="target_x" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="order" class="form-label">Taylor Series Order:</label>
+                <select class="form-select" id="order" name="order" required>
+                    <option value="1">1st Order</option>
+                    <option value="2" selected>2nd Order</option>
+                    <option value="3">3rd Order</option>
+                    <option value="4">4th Order</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Solve</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

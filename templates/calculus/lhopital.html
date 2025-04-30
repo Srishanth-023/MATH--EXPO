@@ -1,0 +1,43 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}L'Hopital's Rule{% endblock %}
+{% block heading %}L'Hôpital's Rule Calculator{% endblock %}
+{% block subheading %}Evaluate limits of indeterminate forms (0/0 or ∞/∞){% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>L'Hôpital's Rule</h2>
+        <p class="subtitle">Compute lim<sub>x→a</sub> f(x)/g(x) = lim<sub>x→a</sub> f'(x)/g'(x)</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Expression (in x):</label>
+                <input type="text" class="form-control" name="expression" 
+                       placeholder="e.g., sin(x)/x, (1-cos(x))/x^2" required>
+            </div>
+
+            <div class="form-group">
+                <label>Point to evaluate limit at:</label>
+                <input type="text" class="form-control" name="point" 
+                       placeholder="e.g., 0, infinity" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Evaluate Limit
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Result</h4>
+        <div class="result-box">
+            <p>lim<sub>x→{{ point }}</sub> f(x) = <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

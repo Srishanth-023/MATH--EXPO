@@ -1,0 +1,48 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Partial Derivatives{% endblock %}
+{% block heading %}Partial Derivatives Calculator{% endblock %}
+{% block subheading %}Compute partial derivatives while holding other variables constant{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Partial Derivatives</h2>
+        <p class="subtitle">Calculate ∂f/∂x, ∂f/∂y, ∂f/∂z while holding other variables constant</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Multivariable Expression:</label>
+                <input type="text" class="form-control" name="expression" 
+                       placeholder="e.g., x**2 + y*z, sin(x)*cos(y), exp(x*y+z)" required>
+            </div>
+
+            <div class="derivative-options">
+                <div class="form-group">
+                    <label>Variable to differentiate:</label>
+                    <select class="form-control" name="variable">
+                        <option value="x">x</option>
+                        <option value="y">y</option>
+                        <option value="z">z</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-partial"></i> Compute Partial Derivative
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Partial Derivative Result</h4>
+        <div class="result-box">
+            <p>∂f/∂{{ variable }} = <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

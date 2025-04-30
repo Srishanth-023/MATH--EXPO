@@ -1,0 +1,56 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Directional Derivatives{% endblock %}
+{% block heading %}Directional Derivatives Calculator{% endblock %}
+{% block subheading %}Calculate the directional derivative of a function{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Directional Derivatives Calculator</h2>
+        <p class="subtitle">Calculate the directional derivative of a function at a point in a given direction</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="calculation-form">
+                <form method="POST" class="calculus-form">
+                    <div class="form-group">
+                        <label for="function">Function f(x,y):</label>
+                        <input type="text" class="form-control" id="function" name="function" 
+                               placeholder="e.g., x^2 + y^2" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="point">Point (x₀,y₀):</label>
+                        <input type="text" class="form-control" id="point" name="point" 
+                               placeholder="e.g., (1, 2)" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="direction">Direction Vector (u,v):</label>
+                        <input type="text" class="form-control" id="direction" name="direction" 
+                               placeholder="e.g., (1/sqrt(2), (1/sqrt(2))" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-calculate">
+                        <i class="bi bi-calculator"></i> Calculate Derivative
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            {% if result %}
+            <div class="result-container">
+                <h4>Result</h4>
+                <div class="result-box">
+                    <p>Directional Derivative D<sub>u</sub>f(x₀,y₀):</p>
+                    <p class="result-value">{{ result }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

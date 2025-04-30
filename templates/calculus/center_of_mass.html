@@ -1,0 +1,52 @@
+{% extends "calculus/base.html" %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Center of Mass Calculator</h2>
+        <p class="subtitle">Find the center of mass for a given density function over a region</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label for="density">Density Function ρ(x, y):</label>
+                <input type="text" id="density" name="density" class="form-control" placeholder="e.g., x + y" required>
+            </div>
+
+            <div class="range-group">
+                <div class="form-group">
+                    <label>x range:</label>
+                    <div class="input-group">
+                        <input type="number" name="x0" class="form-control" placeholder="0" step="any" required>
+                        <span class="input-group-text">to</span>
+                        <input type="number" name="x1" class="form-control" placeholder="1" step="any" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>y range:</label>
+                    <div class="input-group">
+                        <input type="number" name="y0" class="form-control" placeholder="0" step="any" required>
+                        <span class="input-group-text">to</span>
+                        <input type="number" name="y1" class="form-control" placeholder="1" step="any" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Compute Center of Mass
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Result</h4>
+        <div class="result-box">
+            <p>Center of Mass (x̄, ȳ): <span class="result-value">{{ result }}</span></p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

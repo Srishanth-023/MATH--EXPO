@@ -1,0 +1,54 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Divergence Theorem{% endblock %}
+{% block heading %}Divergence Theorem Calculator{% endblock %}
+{% block subheading %}Compute ∭<sub>V</sub>(∇·F)dV = ∯<sub>S</sub>F·dS{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Divergence Theorem</h2>
+        <p class="subtitle">Calculate ∇·F for vector field F = (F<sub>x</sub>, F<sub>y</sub>, F<sub>z</sub>)</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="vector-fields">
+                <div class="form-group">
+                    <label>F<sub>x</sub>(x,y,z):</label>
+                    <input type="text" class="form-control" name="Fx" 
+                           placeholder="e.g., x*y, y^2, sin(z)" required>
+                </div>
+
+                <div class="form-group">
+                    <label>F<sub>y</sub>(x,y,z):</label>
+                    <input type="text" class="form-control" name="Fy" 
+                           placeholder="e.g., y*z, z^2, cos(x)" required>
+                </div>
+
+                <div class="form-group">
+                    <label>F<sub>z</sub>(x,y,z):</label>
+                    <input type="text" class="form-control" name="Fz" 
+                           placeholder="e.g., z*x, x^2, e^y" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-arrow-down-up"></i> Compute Divergence ∇·F
+            </button>
+        </form>
+    </div>
+
+    {% if result is not none %}
+    <div class="result-container">
+        <h4>Divergence Result</h4>
+        <div class="result-box">
+            <p>∇·F = <span class="result-value">{{ result }}</span></p>
+            <p class="theorem-statement">
+                ∭<sub>V</sub>(∇·F)dV = ∯<sub>S</sub>F·dS
+            </p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "calculus/base.html" %}
+
+{% block title %}Product Rule{% endblock %}
+{% block heading %}Product Rule Calculator{% endblock %}
+{% block subheading %}Compute the derivative of product functions (f·g)' = f'·g + f·g'{% endblock %}
+
+{% block content %}
+<div class="calculation-container">
+    <div class="calculation-header">
+        <h2>Product Rule</h2>
+        <p class="subtitle">Calculate (f·g)' = f'·g + f·g'</p>
+    </div>
+
+    <div class="calculation-form">
+        <form method="post" class="calculus-form">
+            <div class="form-group">
+                <label>Function f(x):</label>
+                <input type="text" class="form-control" name="f" 
+                       placeholder="e.g., x**2, exp(x), ln(x)" required>
+            </div>
+
+            <div class="form-group">
+                <label>Function g(x):</label>
+                <input type="text" class="form-control" name="g" 
+                       placeholder="e.g., sin(x), cos(x), √x" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                <i class="bi bi-calculator"></i> Compute Derivative
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-container">
+        <h4>Product Rule Result</h4>
+        <div class="result-box">
+            <p>d/dx [f(x)·g(x)] = <span class="result-value">{{ result }}</span></p>
+            <p class="formula-notation">Where f(x) = {{ f }} and g(x) = {{ g }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
