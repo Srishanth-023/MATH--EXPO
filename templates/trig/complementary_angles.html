@@ -1,0 +1,51 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Complementary Angle Identities</h2>
+    <p>Verify identities like sin(θ) = cos(90°-θ).</p>
+    
+    <form id="complementaryForm">
+        <div class="mb-3">
+            <label for="angle" class="form-label">Angle θ (degrees, ≤90°):</label>
+            <input type="number" class="form-control" id="angle" step="any" min="0" max="90" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter an angle and click Verify to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('complementaryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const angle = document.getElementById('angle').value;
+    
+    fetch('/complementary_angles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({angle: angle})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById('results').innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            return;
+        }
+        
+        let html = `<p>For angle θ = ${data.angle}°:</p>`;
+        html += `<ul><li>Complementary angle: 90° - θ = ${data.complement}°</li>`;
+        html += `<li>sin(θ) = ${data['sin(θ)']}</li>`;
+        html += `<li>cos(90°-θ) = ${data['cos(90°-θ)']}</li>`;
+        html += `<li>These values are ${data.equal ? 'equal' : 'not equal'}</li></ul>`;
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

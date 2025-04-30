@@ -1,0 +1,63 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Area of Triangle using Trigonometry</h2>
+    <p>Calculate the area of a triangle using the formula: Area = ½ × a × b × sin(C)</p>
+    
+    <form id="areaTriangleForm">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="side_a" class="form-label">Side a:</label>
+                <input type="number" class="form-control" id="side_a" step="any" required placeholder="Enter length">
+            </div>
+            <div class="col-md-4">
+                <label for="side_b" class="form-label">Side b:</label>
+                <input type="number" class="form-control" id="side_b" step="any" required placeholder="Enter length">
+            </div>
+            <div class="col-md-4">
+                <label for="angle_c" class="form-label">Angle C (degrees):</label>
+                <input type="number" class="form-control" id="angle_c" step="any" required placeholder="Enter angle">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate Area</button>
+        <button type="reset" class="btn btn-secondary">Clear</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter two sides and the included angle to calculate the area.</p>
+            <div id="calculationResults"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('areaTriangleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        a: document.getElementById('side_a').value,
+        b: document.getElementById('side_b').value,
+        C: document.getElementById('angle_c').value
+    };
+    
+    fetch('/area_triangle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = '<table class="table">';
+        html += `<tr><th>Side a:</th><td>${data.a}</td></tr>`;
+        html += `<tr><th>Side b:</th><td>${data.b}</td></tr>`;
+        html += `<tr><th>Angle C:</th><td>${data.C}°</td></tr>`;
+        html += `<tr><th>Area:</th><td>${data.area}</td></tr>`;
+        html += '</table>';
+        document.getElementById('calculationResults').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

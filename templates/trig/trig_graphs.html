@@ -1,0 +1,84 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Graphs of Trigonometric Functions</h2>
+    <p>Generate points for graphing trigonometric functions with customizable parameters.</p>
+    
+    <form id="trigGraphForm">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="function" class="form-label">Function:</label>
+                <select class="form-select" id="function" required>
+                    <option value="sin">Sine</option>
+                    <option value="cos">Cosine</option>
+                    <option value="tan">Tangent</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="amplitude" class="form-label">Amplitude:</label>
+                <input type="number" class="form-control" id="amplitude" value="1" step="any">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="period" class="form-label">Period (degrees):</label>
+                <input type="number" class="form-control" id="period" value="360" step="any">
+            </div>
+            <div class="col-md-6">
+                <label for="phase_shift" class="form-label">Phase Shift (degrees):</label>
+                <input type="number" class="form-control" id="phase_shift" value="0" step="any">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="vertical_shift" class="form-label">Vertical Shift:</label>
+            <input type="number" class="form-control" id="vertical_shift" value="0" step="any">
+        </div>
+        <button type="submit" class="btn btn-primary">Generate Points</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Graph Points (0° to 720°):</h4>
+        <div id="results">
+            <p>Configure the function and click Generate Points to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('trigGraphForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        function: document.getElementById('function').value,
+        amplitude: document.getElementById('amplitude').value,
+        period: document.getElementById('period').value,
+        phase_shift: document.getElementById('phase_shift').value,
+        vertical_shift: document.getElementById('vertical_shift').value
+    };
+    
+    fetch('/trig_graphs', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = '<p>First 10 points (out of ' + data.points.length + '):</p>';
+        html += '<table class="table"><tr><th>x (degrees)</th><th>y</th></tr>';
+        
+        for (let i = 0; i < Math.min(10, data.points.length); i++) {
+            const point = data.points[i];
+            html += `<tr><td>${point.x}</td><td>${point.y !== null ? point.y : 'undefined'}</td></tr>`;
+        }
+        
+        if (data.points.length > 10) {
+            html += '<tr><td colspan="2">...</td></tr>';
+        }
+        
+        html += '</table>';
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

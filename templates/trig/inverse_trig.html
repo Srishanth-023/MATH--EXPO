@@ -1,0 +1,58 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Inverse Trigonometric Functions</h2>
+    <p>Calculate angles from trigonometric values.</p>
+    
+    <form id="inverseTrigForm">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="function" class="form-label">Function:</label>
+                <select class="form-select" id="function" required>
+                    <option value="">Select function</option>
+                    <option value="asin">sin⁻¹ (arcsine)</option>
+                    <option value="acos">cos⁻¹ (arccosine)</option>
+                    <option value="atan">tan⁻¹ (arctangent)</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="value" class="form-label">Value:</label>
+                <input type="number" class="form-control" id="value" step="any" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Select function, enter value, and click Calculate to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('inverseTrigForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        function: document.getElementById('function').value,
+        value: document.getElementById('value').value
+    };
+    
+    fetch('/inverse_trig', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = `<p>${data.function}(${data.value}) = `;
+        html += `${data.angle !== "undefined" ? data.angle + '°' : 'undefined'}</p>`;
+        html += `<p>Range of ${data.function}: ${data.range}</p>`;
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

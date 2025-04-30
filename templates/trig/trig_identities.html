@@ -1,0 +1,47 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Trigonometric Identities</h2>
+    <p>Verify Pythagorean trigonometric identities.</p>
+    
+    <form id="trigIdentitiesForm">
+        <div class="mb-3">
+            <label for="angle" class="form-label">Angle (degrees):</label>
+            <input type="number" class="form-control" id="angle" step="any" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter an angle and click Verify to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('trigIdentitiesForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const angle = document.getElementById('angle').value;
+    
+    fetch('/trig_identities', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({angle: angle})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = `<p>For angle ${angle}°:</p>`;
+        html += '<table class="table"><tr><th>Identity</th><th>Value</th></tr>';
+        html += `<tr><td>sin²θ + cos²θ</td><td>${data['sin²θ + cos²θ']}</td></tr>`;
+        html += `<tr><td>1 + tan²θ</td><td>${data['1 + tan²θ']}</td></tr>`;
+        html += `<tr><td>1 + cot²θ</td><td>${data['1 + cot²θ']}</td></tr>`;
+        html += '</table>';
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

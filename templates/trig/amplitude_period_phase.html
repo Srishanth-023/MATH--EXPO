@@ -1,0 +1,65 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Amplitude, Period, and Phase Shift</h2>
+    <p>Calculate properties of trigonometric functions from their equations.</p>
+    
+    <form id="appForm">
+        <div class="mb-3">
+            <label for="amplitude" class="form-label">Amplitude (A):</label>
+            <input type="number" class="form-control" id="amplitude" step="any" required>
+        </div>
+        <div class="mb-3">
+            <label for="period_coeff" class="form-label">Period coefficient (B):</label>
+            <input type="number" class="form-control" id="period_coeff" step="any" required>
+        </div>
+        <div class="mb-3">
+            <label for="phase_shift" class="form-label">Phase shift (C):</label>
+            <input type="number" class="form-control" id="phase_shift" step="any" required>
+        </div>
+        <div class="mb-3">
+            <label for="vertical_shift" class="form-label">Vertical shift (D):</label>
+            <input type="number" class="form-control" id="vertical_shift" step="any" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter values and click Calculate to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('appForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        amplitude: document.getElementById('amplitude').value,
+        period_coeff: document.getElementById('period_coeff').value,
+        phase_shift: document.getElementById('phase_shift').value,
+        vertical_shift: document.getElementById('vertical_shift').value
+    };
+    
+    fetch('/amplitude_period_phase', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = '<ul>';
+        html += `<li>Amplitude: ${data.amplitude}</li>`;
+        html += `<li>Period: ${data.period}°</li>`;
+        html += `<li>Phase Shift: ${data.phase_shift}°</li>`;
+        html += `<li>Vertical Shift: ${data.vertical_shift}</li>`;
+        html += `<li>Equation: ${data.equation}</li>`;
+        html += '</ul>';
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Trigonometric Form of Complex Numbers</h2>
+    <p>Convert complex numbers between rectangular and polar (trigonometric) forms.</p>
+    
+    <form id="complexNumbersForm">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="real_part" class="form-label">Real part:</label>
+                <input type="number" class="form-control" id="real_part" step="any" required placeholder="Enter real part">
+            </div>
+            <div class="col-md-6">
+                <label for="imaginary_part" class="form-label">Imaginary part:</label>
+                <input type="number" class="form-control" id="imaginary_part" step="any" required placeholder="Enter imaginary part">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Convert to Polar Form</button>
+        <button type="reset" class="btn btn-secondary">Clear</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter the real and imaginary parts of a complex number to see its polar form.</p>
+            <div id="calculationResults"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('complexNumbersForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        real: document.getElementById('real_part').value,
+        imag: document.getElementById('imaginary_part').value
+    };
+    
+    fetch('/complex_numbers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = '<table class="table">';
+        html += `<tr><th>Rectangular form:</th><td>${data.rectangular}</td></tr>`;
+        html += `<tr><th>Polar form:</th><td>${data.polar}</td></tr>`;
+        html += `<tr><th>Magnitude (r):</th><td>${data.magnitude}</td></tr>`;
+        html += `<tr><th>Angle (θ):</th><td>${data.angle}°</td></tr>`;
+        html += '</table>';
+        document.getElementById('calculationResults').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Reciprocal Trigonometric Ratios</h2>
+    <p>Calculate cosecant, secant, and cotangent for any angle.</p>
+    
+    <form id="reciprocalTrigForm">
+        <div class="mb-3">
+            <label for="angle" class="form-label">Angle (degrees):</label>
+            <input type="number" class="form-control" id="angle" step="any" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter an angle and click Calculate to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('reciprocalTrigForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const angle = document.getElementById('angle').value;
+    
+    fetch('/reciprocal_trig_ratios', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({angle: angle})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = `<p>For angle ${angle}°:</p>`;
+        html += `<ul><li>csc(θ) = ${data.cosec}</li>`;
+        html += `<li>sec(θ) = ${data.sec}</li>`;
+        html += `<li>cot(θ) = ${data.cot}</li></ul>`;
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

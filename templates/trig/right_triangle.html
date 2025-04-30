@@ -1,0 +1,70 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Solving Right Triangles</h2>
+    <p>Enter any two values (sides or angles) to calculate the remaining values.</p>
+    
+    <form id="rightTriangleForm">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="side_a" class="form-label">Side a (opposite angle A)</label>
+                <input type="number" class="form-control" id="side_a" step="any">
+            </div>
+            <div class="col-md-4">
+                <label for="side_b" class="form-label">Side b (opposite angle B)</label>
+                <input type="number" class="form-control" id="side_b" step="any">
+            </div>
+            <div class="col-md-4">
+                <label for="side_c" class="form-label">Side c (hypotenuse)</label>
+                <input type="number" class="form-control" id="side_c" step="any">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="angle_a" class="form-label">Angle A (degrees)</label>
+                <input type="number" class="form-control" id="angle_a" step="any" min="0" max="90">
+            </div>
+            <div class="col-md-6">
+                <label for="angle_b" class="form-label">Angle B (degrees)</label>
+                <input type="number" class="form-control" id="angle_b" step="any" min="0" max="90">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter values and click Calculate to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('rightTriangleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        a: document.getElementById('side_a').value,
+        b: document.getElementById('side_b').value,
+        c: document.getElementById('side_c').value,
+        A: document.getElementById('angle_a').value,
+        B: document.getElementById('angle_b').value
+    };
+    
+    fetch('/right_triangle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = '<table class="table"><tr><th>Side a</th><th>Side b</th><th>Side c</th><th>Angle A</th><th>Angle B</th></tr>';
+        html += `<tr><td>${data.a !== null ? data.a : '-'}</td><td>${data.b !== null ? data.b : '-'}</td><td>${data.c !== null ? data.c : '-'}</td><td>${data.A !== null ? data.A + '°' : '-'}</td><td>${data.B !== null ? data.B + '°' : '-'}</td></tr>`;
+        html += '</table>';
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

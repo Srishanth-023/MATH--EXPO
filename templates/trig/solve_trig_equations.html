@@ -1,0 +1,67 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Solving Trigonometric Equations</h2>
+    <p>Find solutions to basic trigonometric equations.</p>
+    
+    <form id="solveTrigForm">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="type" class="form-label">Equation type:</label>
+                <select class="form-select" id="type" required>
+                    <option value="">Select type</option>
+                    <option value="sin">sin(θ) = value</option>
+                    <option value="cos">cos(θ) = value</option>
+                    <option value="tan">tan(θ) = value</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="value" class="form-label">Value (-1 to 1 for sin/cos):</label>
+                <input type="number" class="form-control" id="value" step="any" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Solve</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Solutions:</h4>
+        <div id="results">
+            <p>Select equation type, enter value, and click Solve to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('solveTrigForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        type: document.getElementById('type').value,
+        value: document.getElementById('value').value
+    };
+    
+    fetch('/solve_trig_equations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = '<h5>Principal Solutions:</h5><ul>';
+        data.principal_solutions.forEach(sol => {
+            html += `<li>${sol}°</li>`;
+        });
+        html += '</ul>';
+        
+        html += '<h5>General Solutions:</h5><ul>';
+        data.general_solutions.forEach(sol => {
+            html += `<li>θ = ${sol}</li>`;
+        });
+        html += '</ul>';
+        
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

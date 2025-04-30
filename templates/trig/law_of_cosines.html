@@ -1,0 +1,73 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Law of Cosines</h2>
+    <p>Calculate missing sides or angles in a triangle when you know either:
+        <ul>
+            <li>Three sides (SSS)</li>
+            <li>Two sides and the included angle (SAS)</li>
+        </ul>
+    </p>
+    
+    <form id="cosineLawForm">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="side_a" class="form-label">Side a:</label>
+                <input type="number" class="form-control" id="side_a" step="any" placeholder="Enter length">
+            </div>
+            <div class="col-md-3">
+                <label for="side_b" class="form-label">Side b:</label>
+                <input type="number" class="form-control" id="side_b" step="any" placeholder="Enter length">
+            </div>
+            <div class="col-md-3">
+                <label for="side_c" class="form-label">Side c:</label>
+                <input type="number" class="form-control" id="side_c" step="any" placeholder="Enter length">
+            </div>
+            <div class="col-md-3">
+                <label for="angle_c" class="form-label">Angle C (degrees):</label>
+                <input type="number" class="form-control" id="angle_c" step="any" placeholder="Enter angle">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+        <button type="reset" class="btn btn-secondary">Clear</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter known values and click Calculate to see results.</p>
+            <div id="calculationResults"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('cosineLawForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        a: document.getElementById('side_a').value || null,
+        b: document.getElementById('side_b').value || null,
+        c: document.getElementById('side_c').value || null,
+        C: document.getElementById('angle_c').value || null
+    };
+    
+    fetch('/law_of_cosines', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = '<table class="table">';
+        html += `<tr><th>Side a:</th><td>${data.a !== null ? data.a : '?'}</td></tr>`;
+        html += `<tr><th>Side b:</th><td>${data.b !== null ? data.b : '?'}</td></tr>`;
+        html += `<tr><th>Side c:</th><td>${data.c !== null ? data.c : '?'}</td></tr>`;
+        html += `<tr><th>Angle C:</th><td>${data.C !== null ? data.C + '°' : '?'}</td></tr>`;
+        html += '</table>';
+        document.getElementById('calculationResults').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

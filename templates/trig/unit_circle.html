@@ -1,0 +1,46 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Unit Circle</h2>
+    <p>Find coordinates and trigonometric values for any angle on the unit circle.</p>
+    
+    <form id="unitCircleForm">
+        <div class="mb-3">
+            <label for="angle" class="form-label">Angle (degrees):</label>
+            <input type="number" class="form-control" id="angle" step="any" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Enter an angle and click Calculate to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('unitCircleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const angle = document.getElementById('angle').value;
+    
+    fetch('/unit_circle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({angle: angle})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = `<p>For angle ${data.angle}° on the unit circle:</p>`;
+        html += `<ul><li>Coordinates: (${data.x}, ${data.y})</li>`;
+        html += `<li>sin(θ) = y = ${data.sin}</li>`;
+        html += `<li>cos(θ) = x = ${data.cos}</li>`;
+        html += `<li>tan(θ) = y/x = ${data.tan}</li></ul>`;
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

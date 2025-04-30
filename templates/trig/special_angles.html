@@ -1,0 +1,59 @@
+{% extends "trig/base.html" %}
+{% block content %}
+<div class="calculator-container">
+    <h2>Trigonometric Ratios of Special Angles</h2>
+    <p>Calculate exact and decimal values for 0°, 30°, 45°, 60°, and 90°.</p>
+    
+    <form id="specialAnglesForm">
+        <div class="mb-3">
+            <label for="angle" class="form-label">Select angle:</label>
+            <select class="form-select" id="angle" required>
+                <option value="">Choose an angle</option>
+                <option value="0">0°</option>
+                <option value="30">30°</option>
+                <option value="45">45°</option>
+                <option value="60">60°</option>
+                <option value="90">90°</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </form>
+    
+    <div class="result-area mt-4">
+        <h4>Results:</h4>
+        <div id="results">
+            <p>Select an angle and click Calculate to see results.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('specialAnglesForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const angle = document.getElementById('angle').value;
+    
+    fetch('/special_angles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({angle: angle})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById('results').innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            return;
+        }
+        
+        let html = `<h5>Angle: ${data.angle}°</h5>`;
+        html += '<table class="table"><tr><th>Function</th><th>Decimal Value</th><th>Exact Value</th></tr>';
+        html += `<tr><td>sin(θ)</td><td>${data.sin}</td><td>${data.exact.sin}</td></tr>`;
+        html += `<tr><td>cos(θ)</td><td>${data.cos}</td><td>${data.exact.cos}</td></tr>`;
+        html += `<tr><td>tan(θ)</td><td>${data.tan}</td><td>${data.exact.tan}</td></tr>`;
+        html += '</table>';
+        document.getElementById('results').innerHTML = html;
+    });
+});
+</script>
+{% endblock %}

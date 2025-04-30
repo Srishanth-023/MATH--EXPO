@@ -1,0 +1,149 @@
+body {
+    background: radial-gradient(circle at center, #e0f7fa, #ffffff);
+    overflow: hidden;
+}
+
+#animationCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Optional soft float animation for trigonometric terms */
+.trig-label {
+    position: absolute;
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.6);
+    animation: floatTrig 8s ease-in-out infinite;
+}
+
+@keyframes floatTrig {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+    100% { transform: translateY(0px) rotate(360deg); }
+}
+
+.animated-title {
+    color: #0d6efd;
+    animation: fadeInDown 1s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.topic-card {
+    background: linear-gradient(135deg, #e0f7fa, #ffffff);
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.topic-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    background: #0d6efd;
+    color: white;
+    font-size: 28px;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Exotic Trigonometric Animations */
+
+/* Circle Animation (representing sine or cosine wave) */
+.circle-animation-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    position: relative;
+}
+
+.circle-animate {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 5px solid #3498db;
+    animation: rotateCircle 4s infinite linear;
+}
+
+@keyframes rotateCircle {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Wave Animation (representing the sine wave) */
+.wave-animation {
+    position: absolute;
+    top: 120px;
+    width: 100%;
+    height: 50px;
+    background-image: url('https://www.svgviewer.dev/snapshot/Sine-Wave.svg');
+    background-size: cover;
+    animation: waveMotion 6s ease-in-out infinite;
+}
+
+@keyframes waveMotion {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Triangle Rotation Animation (representing angle changes) */
+.triangle-rotate {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 100px solid #3498db;
+    animation: rotateTriangle 4s infinite linear;
+}
+
+@keyframes rotateTriangle {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
