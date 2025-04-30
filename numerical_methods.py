@@ -1,16 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request
 import math
 import sympy as sp
 
-app = Flask(__name__)
+# Create the blueprint
+numerical_methods_bp = Blueprint('numerical_methods', __name__, 
+                               template_folder='templates/numerical_methods')
 
 # Home page with method selection
-@app.route('/')
+@numerical_methods_bp.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('numerical_methods/home.html')
 
 # Runge-Kutta method route
-@app.route('/runge_kutta', methods=['GET', 'POST'])
+@numerical_methods_bp.route('/runge_kutta', methods=['GET', 'POST'])
 def runge_kutta():
     if request.method == 'POST':
         # Get form data
@@ -56,7 +58,7 @@ def runge_kutta():
             x += h
             y = y_new
         
-        return render_template('runge_kutta_result.html', 
+        return render_template('numerical_methods/runge_kutta_result.html', 
                              function=function,
                              x0=x0,
                              y0=y0,
@@ -65,11 +67,10 @@ def runge_kutta():
                              steps=steps,
                              final_y=y)
     
-    return render_template('runge_kutta_form.html')
-
+    return render_template('numerical_methods/runge_kutta_form.html')
 
 # Taylor method
-@app.route('/taylor', methods=['GET', 'POST'])
+@numerical_methods_bp.route('/taylor', methods=['GET', 'POST'])
 def taylor():
     if request.method == 'POST':
         # Get form data
@@ -167,7 +168,7 @@ def taylor():
             x += h
             y = y_new
         
-        return render_template('taylor_result.html', 
+        return render_template('numerical_methods/taylor_result.html', 
                              function=function,
                              function_latex=f_latex,
                              x0=x0,
@@ -178,10 +179,10 @@ def taylor():
                              steps=steps,
                              final_y=y)
     
-    return render_template('taylor_form.html')
+    return render_template('numerical_methods/taylor_form.html')
 
 # Newton-Raphson method
-@app.route('/newton_raphson', methods=['GET', 'POST'])
+@numerical_methods_bp.route('/newton_raphson', methods=['GET', 'POST'])
 def newton_raphson():
     if request.method == 'POST':
         # Get form data
@@ -233,7 +234,7 @@ def newton_raphson():
             # Update for next iteration
             x = x_new
         
-        return render_template('newton_raphson_result.html', 
+        return render_template('numerical_methods/newton_raphson_result.html', 
                              function=function,
                              x0=x0,
                              tolerance=tolerance,
@@ -242,8 +243,4 @@ def newton_raphson():
                              root=x_new,
                              converged=error < tolerance)
     
-    return render_template('newton_raphson_form.html')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return render_template('numerical_methods/newton_raphson_form.html')
