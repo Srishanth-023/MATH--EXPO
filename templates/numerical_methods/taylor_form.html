@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "numerical_methods/base.html" %}
 
 {% block content %}
 <div class="card">
@@ -13,7 +13,7 @@
             <p>\[ \frac{dy}{dx} = f(x, y) \]</p>
         </div>
 
-        <form method="POST" action="{{ url_for('taylor') }}">
+        <form method="POST" action="{{ url_for('numerical_methods.taylor') }}">
             <div class="mb-3">
                 <label for="function" class="form-label">ODE (dy/dx = f(x,y)):</label>
                 <input type="text" class="form-control" id="function" name="function" 

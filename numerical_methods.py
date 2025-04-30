@@ -7,13 +7,13 @@ numerical_methods_bp = Blueprint('numerical_methods', __name__,
                                template_folder='templates/numerical_methods')
 
 # Home page with method selection
-@numerical_methods_bp.route('/')
-def home():
+@numerical_methods_bp.route('/home')
+def home_num():
     return render_template('numerical_methods/home.html')
 
 # Runge-Kutta method route
 @numerical_methods_bp.route('/runge_kutta', methods=['GET', 'POST'])
-def runge_kutta():
+def runge_kutta_method():
     if request.method == 'POST':
         # Get form data
         function = request.form['function']

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "numerical_methods/base.html" %}
 
 {% block content %}
 <div class="card animate__animated animate__fadeIn">
@@ -17,7 +17,7 @@
             </ul>
         </div>
 
-        <form method="POST" action="{{ url_for('newton_raphson') }}">
+        <form method="POST" action="{{ url_for('numerical_methods.newton_raphson') }}">
             <div class="mb-3">
                 <label for="function" class="form-label">Function f(x):</label>
                 <input type="text" class="form-control" id="function" name="function" 

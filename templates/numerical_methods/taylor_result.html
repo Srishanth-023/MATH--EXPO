@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "numerical_methods/base.html" %}
 
 {% block content %}
 <div class="card">
@@ -51,8 +51,8 @@
             <p>At \( x = {{ "%.4f"|format(target_x) }} \), \( y \approx {{ "%.6f"|format(final_y) }} \)</p>
         </div>
 
-        <a href="{{ url_for('taylor') }}" class="btn btn-primary">Solve Another</a>
-        <a href="{{ url_for('home') }}" class="btn btn-secondary">Home</a>
+        <a href="{{ url_for('numerical_methods.taylor') }}" class="btn btn-primary">Solve Another</a>
+        <a href="{{ url_for('numerical_methods.home') }}" class="btn btn-secondary">Home</a>
     </div>
 </div>
 {% endblock %}

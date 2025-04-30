@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "numerical_methods/base.html" %}
 
 {% block content %}
 <div class="text-center mb-5 animate__animated animate__fadeIn">
@@ -10,7 +10,7 @@
     <!-- Runge-Kutta Method Card -->
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card method-card h-100 animate__animated animate__fadeInUp" 
-             onclick="window.location.href='{{ url_for('runge_kutta') }}'"
+             onclick="window.location.href='{{ url_for('numerical_methods.runge_kutta_method') }}'"
              data-tilt data-tilt-scale="1.05" data-tilt-glare data-tilt-max-glare="0.2">
             <div class="card-body text-center">
                 <div class="method-icon mb-3">
@@ -42,7 +42,7 @@
     <!-- Taylor Series Method Card -->
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card method-card h-100 animate__animated animate__fadeInUp animate__delay-1s" 
-             onclick="window.location.href='{{ url_for('taylor') }}'"
+             onclick="window.location.href='{{ url_for('numerical_methods.runge_kutta_method') }}'"
              data-tilt data-tilt-scale="1.05" data-tilt-glare data-tilt-max-glare="0.2">
             <div class="card-body text-center">
                 <div class="method-icon mb-3">
@@ -70,7 +70,7 @@
     <!-- Newton-Raphson Method Card -->
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card method-card h-100 animate__animated animate__fadeInUp animate__delay-2s" 
-             onclick="window.location.href='{{ url_for('newton_raphson') }}'"
+             onclick="window.location.href='{{ url_for('numerical_methods.runge_kutta_method') }}'"
              data-tilt data-tilt-scale="1.05" data-tilt-glare data-tilt-max-glare="0.2">
             <div class="card-body text-center">
                 <div class="method-icon mb-3">
@@ -116,21 +116,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr onclick="window.location.href='{{ url_for('runge_kutta') }}'" style="cursor: pointer;">
+                    <tr onclick="window.location.href='/runge_kutta'" style="cursor: pointer;">
                         <td>Runge-Kutta</td>
                         <td>ODE Solver</td>
                         <td>4th Order</td>
                         <td>Initial Value Problems</td>
                         <td>Medium</td>
                     </tr>
-                    <tr onclick="window.location.href='{{ url_for('taylor') }}'" style="cursor: pointer;">
+                    <tr onclick="window.location.href='/taylor'" style="cursor: pointer;">
                         <td>Taylor Series</td>
                         <td>Series Approximation</td>
                         <td>Depends on Order</td>
                         <td>Smooth Functions</td>
                         <td>High</td>
                     </tr>
-                    <tr onclick="window.location.href='{{ url_for('newton_raphson') }}'" style="cursor: pointer;">
+                    <tr onclick="window.location.href='/newton_raphson'" style="cursor: pointer;">
                         <td>Newton-Raphson</td>
                         <td>Root Finder</td>
                         <td>Quadratic</td>
